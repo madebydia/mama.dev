@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Bigger Ramp Jump!</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1a1a2e;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    touch-action: manipulation;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  canvas { display: block; width: 100vw; height: 100vh; }
+
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Score */
+  .score-bar {
+    position: absolute;
+    top: 12px; right: 16px;
+    z-index: 20;
+    display: flex; gap: 6px; align-items: center;
+    pointer-events: none;
+  }
+
+  .trophy { font-size: 28px; }
+
+  .score-num {
+    font-size: 32px;
+    font-weight: 900;
+    color: #f0c040;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  }
+
+  .streak-bar {
+    position: absolute;
+    top: 14px; left: 16px;
+    z-index: 20;
+    display: flex; gap: 5px;
+    pointer-events: none;
+  }
+
+  .streak-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: background 0.3s, transform 0.3s;
+  }
+
+  .streak-dot.lit {
+    background: #4ade80;
+    transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+  }
+
+  .streak-dot.miss {
+    background: #f87171;
+    transform: scale(1.2);
+  }
+
+  .level-badge {
+    position: absolute;
+    bottom: 10px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    padding: 5px 18px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .level-badge:hover { background: rgba(0,0,0,0.6); }
+
+  .level-picker {
+    position: absolute;
+    bottom: 44px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    background: #1a1a2e;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 8px 0;
+    display: none;
+    min-width: 220px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    pointer-events: auto;
+  }
+
+  .level-picker.open { display: block; }
+
+  .level-option {
+    padding: 10px 16px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center; gap: 12px;
+  }
+
+  .level-option:hover { background: rgba(255,255,255,0.1); }
+  .level-option.active { background: rgba(240,192,64,0.15); color: #f0c040; }
+
+  .level-range { font-weight: 400; opacity: 0.6; font-size: 12px; }
+
+  /* Input gate */
+  .num-input-overlay {
+    position: absolute;
+    top: 8%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    pointer-events: auto;
+  }
+
+  .num-input-overlay.hidden { display: none; }
+
+  .gate-prompt {
+    font-size: clamp(18px, 4vw, 28px);
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    text-align: center;
+  }
+
+  .gate-sub {
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: #f0c040;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .ramp-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-end;
+    margin-top: 8px;
+  }
+
+  .ramp-choice {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .ramp-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .ramp-number {
+    font-size: clamp(28px, 7vw, 52px);
+    font-weight: 900;
+    color: #fff;
+    background: rgba(0,0,0,0.3);
+    border: 3px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 8px 20px;
+    min-width: 80px;
+    text-align: center;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  }
+
+  .num-input {
+    width: 90px;
+    height: 50px;
+    font-size: 28px;
+    font-weight: 900;
+    text-align: center;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    outline: none;
+    -webkit-user-select: auto;
+    user-select: auto;
+    font-family: inherit;
+  }
+
+  .num-input:focus {
+    border-color: #f0c040;
+    box-shadow: 0 0 12px rgba(240,192,64,0.3);
+  }
+
+  .num-input.correct {
+    border-color: #4ade80;
+    background: rgba(74, 222, 128, 0.15);
+  }
+
+  .num-input.wrong {
+    border-color: #f87171;
+    animation: shake 0.4s ease;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  /* Tap prompt */
+  .tap-prompt {
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 22;
+    text-align: center;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .tap-prompt.hidden { opacity: 0; }
+
+  .hidden { display: none !important; }
+
+  .tap-prompt-text {
+    font-size: clamp(20px, 4.5vw, 36px);
+    font-weight: 800;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  }
+
+  .tap-prompt-sub {
+    font-size: clamp(14px, 3vw, 22px);
+    color: #f0c040;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  /* Result */
+  .result {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    z-index: 30;
+    text-align: center;
+    pointer-events: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  .result.show { transform: translateX(-50%) scale(1); }
+
+  .result-emoji { font-size: clamp(60px, 15vw, 100px); }
+
+  .result-text {
+    font-size: clamp(24px, 5vw, 40px);
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.5);
+    margin-top: 8px;
+  }
+
+  .result-explain {
+    font-size: clamp(18px, 4vw, 28px);
+    color: #f0c040;
+    font-weight: 700;
+    margin-top: 4px;
+  }
+
+  .confetti-piece {
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+  }
+
+  @keyframes confetti-fall {
+    0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="game"></canvas>
+
+<div class="overlay">
+  <div class="score-bar">
+    <span class="trophy">🏆</span>
+    <span class="score-num" id="score">0</span>
+  </div>
+
+  <div class="streak-bar" id="streak-bar"></div>
+
+  <div class="num-input-overlay" id="num-gate">
+    <div class="gate-prompt">Type the ramp numbers!</div>
+    <div class="gate-sub hidden" id="gate-sub">Which ramp is BIGGER?</div>
+    <div class="ramp-row">
+      <div class="ramp-choice">
+        <div class="ramp-label" id="ramp-label-1">Left Ramp</div>
+        <div class="ramp-number" id="ramp-display-1"></div>
+        <input class="num-input" id="input1" type="number" inputmode="numeric" autocomplete="off">
+      </div>
+      <div class="ramp-choice">
+        <div class="ramp-label" id="ramp-label-2">Right Ramp</div>
+        <div class="ramp-number" id="ramp-display-2"></div>
+        <input class="num-input" id="input2" type="number" inputmode="numeric" autocomplete="off">
+      </div>
+    </div>
+  </div>
+
+  <div class="tap-prompt hidden" id="tap-prompt">
+    <div class="tap-prompt-text">Tap the BIGGER ramp to jump!</div>
+    <div class="tap-prompt-sub">Higher number = bigger jump! 🚗💨</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-text" id="result-text"></div>
+    <div class="result-explain" id="result-explain"></div>
+  </div>
+
+  <div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
+  <div class="level-picker" id="level-picker"></div>
+</div>
+
+<script>
+(function() {
+  // === CONFIG ===
+  const LEVELS = [
+    { name: 'Bunny Hops',       min: 1,   max: 9,    minGap: 3 },
+    { name: 'Getting Air',      min: 1,   max: 20,   minGap: 3 },
+    { name: 'Big Jumps!',       min: 10,  max: 50,   minGap: 5 },
+    { name: 'Stunt Driver',     min: 10,  max: 100,  minGap: 5 },
+    { name: 'Daredevil',        min: 50,  max: 200,  minGap: 10 },
+    { name: 'MEGA LAUNCH',      min: 100, max: 500,  minGap: 15 },
+    { name: 'ULTIMATE!',        min: 100, max: 999,  minGap: 20 },
+  ];
+
+  const CAR_COLORS = ['#e63946','#457b9d','#f77f00','#2a9d8f','#7209b7','#e76f51','#06d6a0','#ef476f'];
+
+  // === STATE ===
+  let score = 0, level = 0, streak = 0, roundHistory = [], roundsAtLevel = 0;
+  let nums = [0, 0], locked = true, gateOpen = false;
+  let phase = 'gate'; // gate, choose, driving, jumping, landing, result
+
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  let W, H;
+
+  // Car state
+  let carX, carY, carAngle, carVX, carVY, carColor;
+  let groundY, rampLeftX, rampRightX, rampLeftH, rampRightH;
+  let chosenRamp = -1; // 0=left, 1=right
+  let jumpPeak = 0;
+  let dustParticles = [];
+  let stars = [];
+  let resultTimer = 0;
+  let driveTarget = 0;
+  let landingY = 0;
+
+  // Elements
+  const scoreEl = document.getElementById('score');
+  const streakBar = document.getElementById('streak-bar');
+  const numGate = document.getElementById('num-gate');
+  const tapPrompt = document.getElementById('tap-prompt');
+  const resultEl = document.getElementById('result');
+  const input1 = document.getElementById('input1');
+  const input2 = document.getElementById('input2');
+  const levelBadge = document.getElementById('level-badge');
+
+  // Streak dots
+  for (let i = 0; i < 5; i++) {
+    const d = document.createElement('div');
+    d.className = 'streak-dot';
+    streakBar.appendChild(d);
+  }
+
+  // Generate stars
+  for (let i = 0; i < 80; i++) {
+    stars.push({
+      x: Math.random(),
+      y: Math.random() * 0.35,
+      size: 0.5 + Math.random() * 1.5,
+      twinkle: Math.random() * Math.PI * 2
+    });
+  }
+
+  // === AUDIO ===
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playEngine() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(80, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.5);
+    osc.frequency.exponentialRampToValueAtTime(350, audioCtx.currentTime + 1.0);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.linearRampToValueAtTime(0.15, audioCtx.currentTime + 0.5);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+    osc.start(); osc.stop(audioCtx.currentTime + 1.5);
+  }
+
+  function playLaunch() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(200, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.4);
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.6);
+    osc.start(); osc.stop(audioCtx.currentTime + 0.6);
+  }
+
+  function playSuccess() {
+    [0, 0.12, 0.24].forEach((delay, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = [523, 659, 784][i];
+      gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
+      gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + delay + 0.05);
+      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + 0.4);
+      osc.start(audioCtx.currentTime + delay);
+      osc.stop(audioCtx.currentTime + delay + 0.4);
+    });
+  }
+
+  function playCrash() {
+    const bufSize = audioCtx.sampleRate * 0.5;
+    const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufSize, 2);
+    const src = audioCtx.createBufferSource();
+    const gain = audioCtx.createGain();
+    src.buffer = buf;
+    src.connect(gain); gain.connect(audioCtx.destination);
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    src.start();
+  }
+
+  // === SIZING ===
+  function resize() {
+    W = canvas.width = window.innerWidth * devicePixelRatio;
+    H = canvas.height = window.innerHeight * devicePixelRatio;
+    canvas.style.width = window.innerWidth + 'px';
+    canvas.style.height = window.innerHeight + 'px';
+    groundY = H * 0.72;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // === HELPERS ===
+  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+
+  function getCeiling(biggest) {
+    if (biggest <= 10) return 10;
+    if (biggest <= 20) return 20;
+    if (biggest <= 50) return 50;
+    if (biggest <= 100) return 100;
+    if (biggest <= 200) return 200;
+    if (biggest <= 500) return 500;
+    return 1000;
+  }
+
+  function generateNumbers() {
+    const lv = LEVELS[level];
+    let a, b;
+    do {
+      a = randInt(lv.min, lv.max);
+      b = randInt(lv.min, lv.max);
+    } while (a === b || Math.abs(a - b) < lv.minGap);
+    return [a, b];
+  }
+
+  function updateStreakBar() {
+    const dots = streakBar.querySelectorAll('.streak-dot');
+    const recent = roundHistory.slice(-5);
+    dots.forEach((d, i) => {
+      d.className = 'streak-dot';
+      if (i < recent.length) d.classList.add(recent[i] ? 'lit' : 'miss');
+    });
+  }
+
+  function confetti() {
+    const colors = ['#f0c040','#e63946','#06d6a0','#457b9d','#f77f00','#7209b7','#ef476f'];
+    for (let i = 0; i < 40; i++) {
+      const c = document.createElement('div');
+      c.className = 'confetti-piece';
+      c.style.left = Math.random() * 100 + 'vw';
+      c.style.top = '-10px';
+      c.style.background = colors[Math.random() * colors.length | 0];
+      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      c.style.width = (6 + Math.random() * 8) + 'px';
+      c.style.height = (6 + Math.random() * 8) + 'px';
+      c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`;
+      c.style.animationDelay = Math.random() * 0.5 + 's';
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 4000);
+    }
+  }
+
+  // === DRAWING ===
+  function drawSky() {
+    const grad = ctx.createLinearGradient(0, 0, 0, groundY);
+    grad.addColorStop(0, '#0f0c29');
+    grad.addColorStop(0.5, '#302b63');
+    grad.addColorStop(1, '#24243e');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, groundY);
+
+    // Stars
+    const t = performance.now() / 1000;
+    ctx.fillStyle = '#fff';
+    for (const s of stars) {
+      const alpha = 0.3 + 0.7 * Math.abs(Math.sin(t + s.twinkle));
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.arc(s.x * W, s.y * H, s.size * devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function drawGround() {
+    // Dirt/grass
+    const grad = ctx.createLinearGradient(0, groundY, 0, H);
+    grad.addColorStop(0, '#8B7355');
+    grad.addColorStop(0.1, '#6B4226');
+    grad.addColorStop(1, '#4a2f1a');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, groundY, W, H - groundY);
+
+    // Road surface
+    ctx.fillStyle = '#444';
+    ctx.fillRect(0, groundY - 4 * devicePixelRatio, W, 8 * devicePixelRatio);
+  }
+
+  function drawRamp(x, h, num, highlight) {
+    const rampW = 120 * devicePixelRatio;
+    const rampH = h * devicePixelRatio;
+    const baseY = groundY;
+
+    // Ramp body
+    ctx.beginPath();
+    ctx.moveTo(x, baseY);
+    ctx.lineTo(x + rampW, baseY);
+    ctx.lineTo(x + rampW, baseY - rampH);
+    ctx.closePath();
+
+    const grad = ctx.createLinearGradient(x, baseY, x, baseY - rampH);
+    if (highlight) {
+      grad.addColorStop(0, '#f0c040');
+      grad.addColorStop(1, '#e6a000');
+    } else {
+      grad.addColorStop(0, '#888');
+      grad.addColorStop(1, '#666');
+    }
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Stripes
+    ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+    ctx.lineWidth = 2 * devicePixelRatio;
+    for (let i = 1; i < 4; i++) {
+      const frac = i / 4;
+      const sx = x + rampW * frac;
+      const sy = baseY - rampH * frac;
+      ctx.beginPath();
+      ctx.moveTo(sx, baseY);
+      ctx.lineTo(sx, sy);
+      ctx.stroke();
+    }
+
+    // Number on ramp
+    ctx.fillStyle = '#fff';
+    ctx.font = `900 ${32 * devicePixelRatio}px system-ui`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    const textX = x + rampW * 0.55;
+    const textY = baseY - rampH * 0.3;
+    ctx.fillText(num, textX, textY);
+  }
+
+  function drawCar(x, y, angle, color) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+
+    const scale = devicePixelRatio;
+    const w = 80 * scale;
+    const h = 35 * scale;
+
+    // Shadow
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(0, h * 0.5 + 4 * scale, w * 0.5, 6 * scale, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Body
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(-w/2, -h/2, w, h, [4*scale, 12*scale, 4*scale, 4*scale]);
+    ctx.fill();
+
+    // Roof
+    ctx.fillStyle = shadeColor(color, -30);
+    ctx.beginPath();
+    ctx.roundRect(-w*0.15, -h/2 - 18*scale, w*0.45, 18*scale, [4*scale, 8*scale, 0, 0]);
+    ctx.fill();
+
+    // Window
+    ctx.fillStyle = 'rgba(135, 206, 250, 0.6)';
+    ctx.beginPath();
+    ctx.roundRect(-w*0.1, -h/2 - 14*scale, w*0.2, 14*scale, [3*scale, 6*scale, 0, 0]);
+    ctx.fill();
+
+    // Racing stripe
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fillRect(-w*0.05, -h/2, w*0.1, h);
+
+    // Wheels
+    const wheelR = 10 * scale;
+    [[-w*0.3, h/2 - 2*scale], [w*0.3, h/2 - 2*scale]].forEach(([wx, wy]) => {
+      ctx.fillStyle = '#222';
+      ctx.beginPath();
+      ctx.arc(wx, wy, wheelR, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#666';
+      ctx.beginPath();
+      ctx.arc(wx, wy, wheelR * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    // Headlight
+    ctx.fillStyle = '#ffffaa';
+    ctx.beginPath();
+    ctx.ellipse(w/2 - 2*scale, -h*0.15, 4*scale, 6*scale, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  function shadeColor(hex, pct) {
+    let r = parseInt(hex.slice(1,3), 16);
+    let g = parseInt(hex.slice(3,5), 16);
+    let b = parseInt(hex.slice(5,7), 16);
+    r = Math.max(0, Math.min(255, r + pct));
+    g = Math.max(0, Math.min(255, g + pct));
+    b = Math.max(0, Math.min(255, b + pct));
+    return '#' + [r,g,b].map(v => v.toString(16).padStart(2,'0')).join('');
+  }
+
+  function drawDust() {
+    for (let i = dustParticles.length - 1; i >= 0; i--) {
+      const p = dustParticles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 0.02;
+      p.vy -= 0.3;
+      if (p.life <= 0) { dustParticles.splice(i, 1); continue; }
+      ctx.globalAlpha = p.life * 0.5;
+      ctx.fillStyle = '#c9a96e';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * devicePixelRatio, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function spawnDust(x, y, count) {
+    for (let i = 0; i < count; i++) {
+      dustParticles.push({
+        x, y,
+        vx: (Math.random() - 0.7) * 4 * devicePixelRatio,
+        vy: -Math.random() * 3 * devicePixelRatio,
+        size: 3 + Math.random() * 5,
+        life: 0.5 + Math.random() * 0.5,
+      });
+    }
+  }
+
+  // === GAME LOGIC ===
+  let animFrame;
+  let jumpTime = 0;
+  let jumpDuration = 0;
+  let jumpStartX, jumpStartY, jumpEndX, jumpEndY, jumpApexY;
+
+  function newRound() {
+    phase = 'gate';
+    locked = true;
+    gateOpen = false;
+    chosenRamp = -1;
+    dustParticles = [];
+    resultEl.classList.remove('show');
+
+    nums = generateNumbers();
+    document.getElementById('ramp-display-1').textContent = nums[0];
+    document.getElementById('ramp-display-2').textContent = nums[1];
+
+    carColor = CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)];
+    carX = W * 0.08;
+    carY = groundY - 20 * devicePixelRatio;
+    carAngle = 0;
+    carVX = 0;
+    carVY = 0;
+
+    // Ramp positions
+    rampLeftX = W * 0.3;
+    rampRightX = W * 0.58;
+
+    const ceiling = getCeiling(Math.max(nums[0], nums[1]));
+    rampLeftH = 40 + (nums[0] / ceiling) * 140;
+    rampRightH = 40 + (nums[1] / ceiling) * 140;
+
+    // Show gate, hide tap prompt
+    numGate.classList.remove('hidden');
+    tapPrompt.classList.add('hidden');
+    document.getElementById('gate-sub').classList.add('hidden');
+    input1.value = '';
+    input2.value = '';
+    input1.classList.remove('correct', 'wrong');
+    input2.classList.remove('correct', 'wrong');
+
+    levelBadge.textContent = LEVELS[level].name;
+    roundsAtLevel++;
+
+    setTimeout(() => input1.focus(), 100);
+  }
+
+  function checkGate() {
+    const v1 = parseInt(input1.value);
+    const v2 = parseInt(input2.value);
+    const ok1 = v1 === nums[0];
+    const ok2 = v2 === nums[1];
+
+    input1.classList.remove('correct', 'wrong');
+    input2.classList.remove('correct', 'wrong');
+    if (input1.value !== '') input1.classList.add(ok1 ? 'correct' : 'wrong');
+    if (input2.value !== '') input2.classList.add(ok2 ? 'correct' : 'wrong');
+
+    // Auto-focus second input when first is correct
+    if (ok1 && document.activeElement === input1 && !ok2) {
+      input2.focus();
+    }
+
+    if (ok1 && ok2) {
+      // Show "Which ramp is BIGGER?" and linger for 1 second
+      document.getElementById('gate-sub').classList.remove('hidden');
+      setTimeout(() => {
+        gateOpen = true;
+        phase = 'choose';
+        locked = false;
+        numGate.classList.add('hidden');
+        tapPrompt.classList.remove('hidden');
+      }, 1000);
+    }
+  }
+
+  input1.addEventListener('input', checkGate);
+  input2.addEventListener('input', checkGate);
+
+  // Click/tap on canvas to choose ramp
+  canvas.addEventListener('click', function(e) {
+    if (phase !== 'choose' || locked) return;
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    const clickX = e.clientX * devicePixelRatio;
+    const rampMid = (rampLeftX + rampRightX + 120 * devicePixelRatio) / 2;
+
+    chosenRamp = clickX < rampMid ? 0 : 1;
+    locked = true;
+    tapPrompt.classList.add('hidden');
+    phase = 'driving';
+
+    // Drive toward chosen ramp
+    const targetRampX = chosenRamp === 0 ? rampLeftX : rampRightX;
+    driveTarget = targetRampX + 120 * devicePixelRatio;
+    carVX = 8 * devicePixelRatio;
+
+    playEngine();
+  });
+
+  function startJump() {
+    phase = 'jumping';
+    playLaunch();
+
+    const rampH = chosenRamp === 0 ? rampLeftH : rampRightH;
+    const rampX = chosenRamp === 0 ? rampLeftX : rampRightX;
+
+    jumpStartX = rampX + 120 * devicePixelRatio;
+    jumpStartY = groundY - rampH * devicePixelRatio - 20 * devicePixelRatio;
+    jumpEndX = jumpStartX + (150 + rampH * 0.8) * devicePixelRatio;
+    jumpEndY = groundY - 20 * devicePixelRatio;
+
+    // Apex height proportional to ramp
+    jumpApexY = jumpStartY - (rampH * 1.2) * devicePixelRatio;
+    jumpTime = 0;
+    jumpDuration = 60 + rampH * 0.3; // frames
+
+    carX = jumpStartX;
+    carY = jumpStartY;
+
+    spawnDust(jumpStartX - 30 * devicePixelRatio, groundY, 15);
+  }
+
+  function updateJump() {
+    jumpTime++;
+    const t = jumpTime / jumpDuration;
+
+    if (t >= 1) {
+      // Landing
+      phase = 'landing';
+      carX = jumpEndX;
+      carY = jumpEndY;
+      carAngle = 0;
+
+      spawnDust(carX, groundY, 20);
+
+      const biggerIdx = nums[0] > nums[1] ? 0 : 1;
+      const correct = chosenRamp === biggerIdx;
+
+      if (correct) {
+        score++; streak++;
+        scoreEl.textContent = score;
+        roundHistory.push(true);
+        if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) { level++; roundsAtLevel = 0; }
+      } else {
+        streak = 0;
+        roundHistory.push(false);
+        if (roundHistory.length >= 3) {
+          const wrongs = roundHistory.slice(-3).filter(x => !x).length;
+          if (wrongs >= 2 && level > 0) { level--; roundsAtLevel = 0; }
+        }
+      }
+
+      if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+      updateStreakBar();
+
+      setTimeout(() => {
+        const winNum = Math.max(nums[0], nums[1]);
+        const loseNum = Math.min(nums[0], nums[1]);
+        const emoji = document.getElementById('result-emoji');
+        const text = document.getElementById('result-text');
+        const explain = document.getElementById('result-explain');
+
+        if (correct) {
+          emoji.textContent = '🏆';
+          text.textContent = 'HUGE JUMP!';
+          text.style.color = '#4ade80';
+          confetti();
+          playSuccess();
+        } else {
+          emoji.textContent = '😔';
+          text.textContent = 'Small jump...';
+          text.style.color = '#f87171';
+          playCrash();
+        }
+        explain.textContent = winNum + ' > ' + loseNum;
+        resultEl.classList.add('show');
+      }, 400);
+
+      setTimeout(newRound, 3500);
+      return;
+    }
+
+    // Parabolic arc
+    carX = jumpStartX + (jumpEndX - jumpStartX) * t;
+    // Quadratic bezier: start -> apex -> end
+    const invT = 1 - t;
+    carY = invT * invT * jumpStartY + 2 * invT * t * jumpApexY + t * t * jumpEndY;
+
+    // Rotation during jump
+    carAngle = -0.3 + t * 0.6; // tilt up then nose down
+
+    // Dust trail
+    if (jumpTime % 3 === 0 && t < 0.3) {
+      spawnDust(carX - 40 * devicePixelRatio, carY + 15 * devicePixelRatio, 2);
+    }
+  }
+
+  // === RENDER LOOP ===
+  function frame() {
+    ctx.clearRect(0, 0, W, H);
+
+    drawSky();
+    drawGround();
+
+    // Ramps (highlight the bigger one only after choosing, or neither during gate)
+    const biggerIdx = nums[0] > nums[1] ? 0 : 1;
+    const showHighlight = phase === 'landing' || phase === 'result';
+    drawRamp(rampLeftX, rampLeftH, nums[0], showHighlight && biggerIdx === 0);
+    drawRamp(rampRightX, rampRightH, nums[1], showHighlight && biggerIdx === 1);
+
+    // Drive phase
+    if (phase === 'driving') {
+      carX += carVX;
+      // Spawn dust while driving
+      if (Math.random() < 0.4) spawnDust(carX - 40 * devicePixelRatio, groundY, 1);
+
+      // Check if reached ramp
+      const rampX = chosenRamp === 0 ? rampLeftX : rampRightX;
+      const rampW = 120 * devicePixelRatio;
+      const rampH = chosenRamp === 0 ? rampLeftH : rampRightH;
+
+      // Drive up ramp
+      if (carX > rampX && carX < rampX + rampW) {
+        const frac = (carX - rampX) / rampW;
+        carY = groundY - frac * rampH * devicePixelRatio - 20 * devicePixelRatio;
+        carAngle = -Math.atan2(rampH * devicePixelRatio, rampW);
+      }
+
+      if (carX >= rampX + rampW) {
+        startJump();
+      }
+    }
+
+    if (phase === 'jumping') {
+      updateJump();
+    }
+
+    drawDust();
+    drawCar(carX, carY, carAngle, carColor);
+
+    animFrame = requestAnimationFrame(frame);
+  }
+
+  // Level picker
+  window.toggleLevelPicker = function() {
+    const pickerEl = document.getElementById('level-picker');
+    if (pickerEl.classList.contains('open')) {
+      pickerEl.classList.remove('open');
+      return;
+    }
+    pickerEl.innerHTML = '';
+    LEVELS.forEach((lv, i) => {
+      const opt = document.createElement('div');
+      opt.className = 'level-option' + (i === level ? ' active' : '');
+      opt.innerHTML = '<span>' + lv.name + '</span><span class="level-range">' + lv.min + '–' + lv.max + '</span>';
+      opt.onclick = function(e) {
+        e.stopPropagation();
+        level = i; streak = 0; roundHistory = []; roundsAtLevel = 0;
+        updateStreakBar();
+        pickerEl.classList.remove('open');
+        newRound();
+      };
+      pickerEl.appendChild(opt);
+    });
+    pickerEl.classList.toggle('open');
+  };
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) {
+      document.getElementById('level-picker').classList.remove('open');
+    }
+  });
+
+  // Start
+  newRound();
+  frame();
+
+})();
+</script>
+</body>
+</html>

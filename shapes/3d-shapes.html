@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fun with Shapes | 3D Shapes</title>
+        <style>
+            :root {
+                /* Light mode colors */
+                --primary: #FF6B6B;
+                --secondary: #4ECDC4;
+                --accent: #FFE66D;
+                --dark: #292F36;
+                --light: #F7FFF7;
+                --purple: #7209B7;
+                --orange: #FF9F1C;
+                --teal: #2EC4B6;
+                --card-bg: white;
+                --footer-text: #555;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    /* Dark mode vaporwave neon colors */
+                    --primary: #FF00FF;
+                    /* neon magenta */
+                    --secondary: #00FFFF;
+                    /* neon cyan */
+                    --accent: #FFFF00;
+                    /* neon yellow */
+                    --dark: #FFFFFF;
+                    /* white text */
+                    --light: #121212;
+                    /* dark background */
+                    --purple: #B14AED;
+                    /* bright purple */
+                    --orange: #FF9E00;
+                    /* neon orange */
+                    --teal: #01FFC3;
+                    /* bright mint */
+                    --card-bg: #1E1E1E;
+                    /* dark card background */
+                    --footer-text: #FFFFFF;
+                    /* white footer text */
+                }
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+            }
+
+            body {
+                background-color: var(--light);
+                color: var(--dark);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            header {
+                background-color: var(--primary);
+                color: white;
+                padding: 1.5rem;
+                text-align: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s;
+            }
+
+            nav {
+                background-color: var(--secondary);
+                display: flex;
+                justify-content: center;
+                transition: background-color 0.3s;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 1rem 2rem;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            nav a.active {
+                background-color: var(--accent);
+                color: var(--dark);
+            }
+
+            nav a:hover {
+                background-color: var(--accent);
+                color: var(--dark);
+                transform: translateY(-3px);
+            }
+
+            main {
+                flex: 1;
+                padding: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            h1,
+            h2 {
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .shapes-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 2rem;
+            }
+
+            .shape-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.3s;
+                padding: 1.5rem;
+                background-color: var(--card-bg);
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                height: 280px;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .shape-container {
+                    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.07);
+                }
+            }
+
+            .shape-container:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .shape-container:hover {
+                    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+                }
+            }
+
+            .shape-canvas {
+                width: 100%;
+                height: 180px;
+                margin-bottom: 1.5rem;
+            }
+
+            .shape-name {
+                font-weight: bold;
+                font-size: 1.2rem;
+                min-height: 1.5rem;
+                text-align: center;
+                color: var(--dark);
+            }
+
+            footer a {
+                color: var(--footer-text);
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+            footer {
+                background-color: var(--light);
+                color: var(--footer-text);
+                text-align: center;
+                padding: 1rem;
+                margin-top: 2rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            @media (max-width: 768px) {
+                .shapes-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                    gap: 1.5rem;
+                }
+
+                .shape-container {
+                    padding: 1rem;
+                    height: 250px;
+                }
+
+                .shape-canvas {
+                    height: 150px;
+                }
+            }
+        </style>
+        <script>
+            // Create a global object to communicate between scripts
+            window.shapePartyMode = {
+                active: false,
+                speedMultiplier: 3
+            };
+        </script>
+    </head>
+    <body>
+        <header>
+            <h1>Fun with Shapes</h1>
+        </header>
+
+        <nav>
+            <a href="index.html">2D Shapes</a>
+            <a href="3d-shapes.html" class="active">3D Shapes</a>
+        </nav>
+
+        <main>
+            <h2>3D Shapes Gallery</h2>
+            <p>Click on any shape to see its name and watch it rotate! Explore these three-dimensional wonders.</p>
+
+            <div class="shapes-grid">
+                <div class="shape-container" data-shape="Cube">
+                    <canvas class="shape-canvas" id="cube-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Pyramid">
+                    <canvas class="shape-canvas" id="pyramid-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Sphere">
+                    <canvas class="shape-canvas" id="sphere-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Cylinder">
+                    <canvas class="shape-canvas" id="cylinder-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Cone">
+                    <canvas class="shape-canvas" id="cone-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Torus">
+                    <canvas class="shape-canvas" id="torus-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Octahedron">
+                    <canvas class="shape-canvas" id="octahedron-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" data-shape="Hemisphere">
+                    <canvas class="shape-canvas" id="hemisphere-canvas"></canvas>
+                    <div class="shape-name"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025-2026 <a href="https://meimakes.com">meimakes</a>.</p>
+        </footer>
+
+        <script type="module">
+            // Import Three.js from CDN
+            import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.module.js';
+
+            // Check if user prefers dark mode
+            const prefersDarkMode = window.matchMedia && window
+                .matchMedia('(prefers-color-scheme: dark)')
+                .matches;
+
+            // Colors - adapting for light/dark mode
+            const colors = prefersDarkMode
+                ? {
+                    // Neon colors for dark mode
+                    primary: 0xFF00FF, // magenta
+                    secondary: 0x00FFFF, // cyan
+                    accent: 0xFFFF00, // yellow
+                    purple: 0xB14AED, // bright purple
+                    orange: 0xFF9E00, // neon orange
+                    teal: 0x01FFC3, // bright mint
+                    green: 0x0FFF50, // neon green
+                    pink: 0xFF71CE, // hot pink
+                    blue: 0x01CDFE // bright blue
+                }
+                : {
+                    // Original colors for light mode
+                    primary: 0xFF6B6B,
+                    secondary: 0x4ECDC4,
+                    accent: 0xFFE66D,
+                    purple: 0x7209B7,
+                    orange: 0xFF9F1C,
+                    teal: 0x2EC4B6
+                };
+
+            // Store all scenes, cameras, renderers
+            const scenes = {};
+            const renderers = {};
+            const animations = {};
+            const rotationAxes = {}; // Track rotation axes and speeds
+
+            // Function to create a basic scene
+            function createScene(canvasId) {
+                const canvas = document.getElementById(canvasId);
+                const renderer = new THREE.WebGLRenderer({canvas: canvas, antialias: true, alpha: true});
+
+                renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+                // Set clear color based on color scheme
+                if (prefersDarkMode) {
+                    renderer.setClearColor(0x121212, 1); // Dark background for dark mode
+                } else {
+                    renderer.setClearColor(0xffffff, 0); // Transparent for light mode
+                }
+
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+                camera.position.z = 5;
+
+                // Lighting based on color scheme
+                if (prefersDarkMode) {
+                    // Dark mode: stronger light and ambient
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+                    scene.add(ambientLight);
+
+                    // Add colored point lights for neon effect
+                    const pointLight1 = new THREE.PointLight(0xFF00FF, 0.8); // Magenta
+                    pointLight1
+                        .position
+                        .set(5, 3, 5);
+                    scene.add(pointLight1);
+
+                    const pointLight2 = new THREE.PointLight(0x00FFFF, 0.8); // Cyan
+                    pointLight2
+                        .position
+                        .set(-5, -3, 2);
+                    scene.add(pointLight2);
+
+                    const pointLight3 = new THREE.PointLight(0xFFFF00, 0.5); // Yellow
+                    pointLight3
+                        .position
+                        .set(0, 5, 0);
+                    scene.add(pointLight3);
+                } else {
+                    // Light mode: standard lighting
+                    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+                    scene.add(ambientLight);
+
+                    const pointLight = new THREE.PointLight(0xffffff, 0.8);
+                    pointLight
+                        .position
+                        .set(5, 3, 5);
+                    scene.add(pointLight);
+
+                    const pointLight2 = new THREE.PointLight(0xffffff, 0.4);
+                    pointLight2
+                        .position
+                        .set(-5, -3, 2);
+                    scene.add(pointLight2);
+                }
+
+                return {scene, camera, renderer};
+            }
+
+            // Create cube
+            function createCube() {
+                const {scene, camera, renderer} = createScene("cube-canvas");
+
+                const geometry = new THREE.BoxGeometry(2, 2, 2);
+
+                // Create appropriate material based on color scheme
+                const material = createMaterial(colors.primary);
+
+                const cube = new THREE.Mesh(geometry, material);
+                scene.add(cube);
+
+                // Slight rotation to show dimensionality
+                cube.rotation.x = 0.5;
+                cube.rotation.y = 0.7;
+
+                // Store for animation
+                scenes.cube = {
+                    scene,
+                    camera,
+                    object: cube
+                };
+                renderers.cube = renderer;
+                rotationAxes.cube = {
+                    x: 0.01,
+                    y: 0.01,
+                    z: 0
+                };
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create a square-based pyramid (not tetrahedron)
+            function createPyramid() {
+                const {scene, camera, renderer} = createScene("pyramid-canvas");
+
+                // Create a custom square-based pyramid geometry
+                const geometry = new THREE.BufferGeometry();
+
+                // Define the vertices (a base of 2x2 and height of 2)
+                const vertices = new Float32Array([
+                    // Base (square)
+                    -1,
+                    -1,
+                    -1,
+                    1,
+                    -1,
+                    -1,
+                    1,
+                    -1,
+                    1,
+                    -1,
+                    -1,
+                    1,
+
+                    // Apex
+                    0,
+                    1,
+                    0
+                ]);
+
+                // Define the faces
+                const indices = [
+                    // Base (made of two triangles)
+                    0,
+                    1,
+                    2,
+                    0,
+                    2,
+                    3,
+
+                    // Side faces
+                    0,
+                    4,
+                    1,
+                    1,
+                    4,
+                    2,
+                    2,
+                    4,
+                    3,
+                    3,
+                    4,
+                    0
+                ];
+
+                // Set the vertices and faces
+                geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+                geometry.setIndex(indices);
+                geometry.computeVertexNormals();
+
+                // Create the material and mesh
+                const material = createMaterial(colors.secondary, true);
+
+                const pyramid = new THREE.Mesh(geometry, material);
+                pyramid
+                    .scale
+                    .set(1.2, 1.2, 1.2); // Make it a bit larger
+                scene.add(pyramid);
+
+                // Slight rotation to show dimensionality
+                pyramid.rotation.x = 0.3;
+                pyramid.rotation.y = 0.7;
+
+                // Store for animation
+                scenes.pyramid = {
+                    scene,
+                    camera,
+                    object: pyramid
+                };
+                renderers.pyramid = renderer;
+                rotationAxes.pyramid = {
+                    x: 0.01,
+                    y: 0.01,
+                    z: 0
+                };
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create sphere
+            function createSphere() {
+                const {scene, camera, renderer} = createScene("sphere-canvas");
+
+                const geometry = new THREE.SphereGeometry(1.5, 32, 32);
+                const material = createMaterial(colors.purple);
+                const sphere = new THREE.Mesh(geometry, material);
+                scene.add(sphere);
+
+                // Store for animation
+                scenes.sphere = {
+                    scene,
+                    camera,
+                    object: sphere
+                };
+                renderers.sphere = renderer;
+                rotationAxes.sphere = {
+                    x: 0.005,
+                    y: 0.01,
+                    z: 0
+                };
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create cylinder
+            function createCylinder() {
+                const {scene, camera, renderer} = createScene("cylinder-canvas");
+
+                const geometry = new THREE.CylinderGeometry(1.2, 1.2, 2.5, 32);
+                const material = createMaterial(colors.accent);
+                const cylinder = new THREE.Mesh(geometry, material);
+
+                // Tilt cylinder initially to better show rotation
+                cylinder.rotation.x = 0.5;
+                cylinder.rotation.z = 0.3;
+
+                scene.add(cylinder);
+
+                // Store for animation with emphasized x rotation for visibility
+                scenes.cylinder = {
+                    scene,
+                    camera,
+                    object: cylinder
+                };
+                renderers.cylinder = renderer;
+                rotationAxes.cylinder = {
+                    x: 0.015,
+                    y: 0.005,
+                    z: 0.01
+                }; // Emphasize x rotation
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create cone
+            function createCone() {
+                const {scene, camera, renderer} = createScene("cone-canvas");
+
+                const geometry = new THREE.ConeGeometry(1.5, 3, 32);
+                const material = createMaterial(colors.orange);
+                const cone = new THREE.Mesh(geometry, material);
+
+                // Tilt cone initially to better show rotation
+                cone.rotation.x = 0.5;
+                cone.rotation.z = 0.3;
+
+                scene.add(cone);
+
+                // Store for animation with emphasized x rotation for visibility
+                scenes.cone = {
+                    scene,
+                    camera,
+                    object: cone
+                };
+                renderers.cone = renderer;
+                rotationAxes.cone = {
+                    x: 0.015,
+                    y: 0.005,
+                    z: 0.01
+                }; // Emphasize x rotation
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create torus
+            function createTorus() {
+                const {scene, camera, renderer} = createScene("torus-canvas");
+
+                const geometry = new THREE.TorusGeometry(1.2, 0.5, 16, 32);
+                const material = createMaterial(colors.teal);
+                const torus = new THREE.Mesh(geometry, material);
+
+                // Slight rotation to show dimensionality
+                torus.rotation.x = 0.5;
+
+                scene.add(torus);
+
+                // Store for animation
+                scenes.torus = {
+                    scene,
+                    camera,
+                    object: torus
+                };
+                renderers.torus = renderer;
+                rotationAxes.torus = {
+                    x: 0.01,
+                    y: 0.01,
+                    z: 0
+                };
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create octahedron
+            function createOctahedron() {
+                const {scene, camera, renderer} = createScene("octahedron-canvas");
+
+                const geometry = new THREE.OctahedronGeometry(1.5, 0);
+
+                // Use different color for dark mode
+                const color = prefersDarkMode
+                    ? colors.pink
+                    : colors.primary;
+                const material = createMaterial(color);
+
+                const octahedron = new THREE.Mesh(geometry, material);
+
+                // Slight rotation to show dimensionality
+                octahedron.rotation.x = 0.4;
+                octahedron.rotation.y = 0.4;
+
+                scene.add(octahedron);
+
+                // Store for animation
+                scenes.octahedron = {
+                    scene,
+                    camera,
+                    object: octahedron
+                };
+                renderers.octahedron = renderer;
+                rotationAxes.octahedron = {
+                    x: 0.01,
+                    y: 0.01,
+                    z: 0
+                };
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Create hemisphere with proper flat base
+            function createHemisphere() {
+                const {scene, camera, renderer} = createScene("hemisphere-canvas");
+
+                // Create a group to hold both the hemisphere and its base
+                const group = new THREE.Group();
+
+                // Create the curved part
+                const sphereGeometry = new THREE.SphereGeometry(1.5, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+
+                // Use different color for dark mode
+                const color = prefersDarkMode
+                    ? colors.blue
+                    : colors.secondary;
+                const sphereMaterial = createMaterial(color);
+
+                const hemisphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+
+                // Create the flat base with a slightly larger radius to ensure no gaps
+                const baseGeometry = new THREE.CircleGeometry(1.51, 32);
+                const baseMaterial = new THREE.MeshPhongMaterial({
+                    color: color,
+                    shininess: prefersDarkMode
+                        ? 150
+                        : 100,
+                    specular: prefersDarkMode
+                        ? 0xffffff
+                        : 0x333333,
+                    side: THREE.DoubleSide // Visible from both sides
+                });
+
+                // Add emissive for dark mode
+                if (prefersDarkMode) {
+                    baseMaterial
+                        .emissive
+                        .set(color);
+                    baseMaterial.emissiveIntensity = 0.2;
+                }
+
+                const base = new THREE.Mesh(baseGeometry, baseMaterial);
+
+                // Position and orient the flat base correctly
+                base.rotation.x = Math.PI / 2;
+
+                // Add both parts to the group
+                group.add(hemisphere);
+                group.add(base);
+
+                // Tilt hemisphere to better show rotation
+                group.rotation.x = 0.7;
+                group.rotation.y = 0.3;
+                group.rotation.z = 0.2;
+
+                scene.add(group);
+
+                // Store for animation with variety of rotations for visibility
+                scenes.hemisphere = {
+                    scene,
+                    camera,
+                    object: group
+                };
+                renderers.hemisphere = renderer;
+                rotationAxes.hemisphere = {
+                    x: 0.012,
+                    y: 0.008,
+                    z: 0.005
+                }; // Varied rotation
+
+                // Initial render
+                renderer.render(scene, camera);
+            }
+
+            // Helper function to create appropriate material based on color scheme
+            function createMaterial(color, flatShading = false) {
+                if (prefersDarkMode) {
+                    // Enhanced neon material for dark mode
+                    const material = new THREE.MeshPhongMaterial({color: color, shininess: 150, specular: 0xffffff, flatShading: flatShading});
+
+                    // Add emissive properties for glow effect
+                    material
+                        .emissive
+                        .set(color);
+                    material.emissiveIntensity = 0.2;
+
+                    return material;
+                } else {
+                    // Standard material for light mode
+                    return new THREE.MeshPhongMaterial({color: color, shininess: 100, specular: 0x333333, flatShading: flatShading});
+                }
+            }
+
+            // Initialize all shapes
+            function initShapes() {
+                createCube();
+                createPyramid();
+                createSphere();
+                createCylinder();
+                createCone();
+                createTorus();
+                createOctahedron();
+                createHemisphere();
+
+                // Add event listeners to shape containers
+                document
+                    .querySelectorAll('.shape-container')
+                    .forEach(container => {
+                        const shapeName = container
+                            .dataset
+                            .shape
+                            .toLowerCase();
+                        const nameElement = container.querySelector('.shape-name');
+
+                        container.addEventListener('click', () => {
+                            // Display the name
+                            nameElement.textContent = container.dataset.shape;
+
+                            // Toggle animation
+                            toggleAnimation(shapeName);
+                        });
+                    });
+            }
+
+            // Animation function - MODIFIED FOR PARTY MODE
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // Check if party mode is active
+                const isPartyMode = window.shapePartyMode && window.shapePartyMode.active;
+                const speedMultiplier = isPartyMode ? window.shapePartyMode.speedMultiplier : 1;
+
+                // Update each animation
+                Object.keys(animations).forEach(shapeName => {
+                    if (animations[shapeName] || isPartyMode) {
+                        const {scene, camera, object} = scenes[shapeName];
+                        const axes = rotationAxes[shapeName];
+
+                        // Apply faster rotation during party mode
+                        object.rotation.x += axes.x * speedMultiplier;
+                        object.rotation.y += axes.y * speedMultiplier;
+                        if (axes.z) {
+                            object.rotation.z += axes.z * speedMultiplier;
+                        }
+
+                        // Add bobbing motion during party mode
+                        if (isPartyMode) {
+                            object.position.y = Math.sin(Date.now() / 500) * 0.1;
+                        } else {
+                            object.position.y = 0;
+                        }
+
+                        renderers[shapeName].render(scene, camera);
+                    }
+                });
+            }
+
+            // Toggle animation for a shape
+            function toggleAnimation(shapeName) {
+                animations[shapeName] = !animations[shapeName];
+            }
+
+            // Window resize handler
+            function handleResize() {
+                Object
+                    .keys(renderers)
+                    .forEach(shapeName => {
+                        const canvas = renderers[shapeName].domElement;
+                        const {scene, camera} = scenes[shapeName];
+
+                        // Update camera aspect ratio
+                        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                        camera.updateProjectionMatrix();
+
+                        // Update renderer size
+                        renderers[shapeName].setSize(canvas.clientWidth, canvas.clientHeight, false);
+                        renderers[shapeName].render(scene, camera);
+                    });
+            }
+
+            // Handle system dark mode changes
+            function handleColorSchemeChange(e) {
+                // Reload page to apply new color scheme
+                window
+                    .location
+                    .reload();
+            }
+
+            // Initialize everything when the page is loaded
+            window.addEventListener('load', () => {
+                initShapes();
+                animate();
+                window.addEventListener('resize', handleResize);
+
+                // Listen for changes to color scheme preference
+                if (window.matchMedia) {
+                    window
+                        .matchMedia('(prefers-color-scheme: dark)')
+                        .addEventListener('change', handleColorSchemeChange);
+                }
+            });
+        </script>
+        <script>
+            // Konami Code Easter Egg - Shape Party Mode (Simplified)
+            (function () {
+                // Konami Code sequence
+                const konamiCode = [
+                    'ArrowUp',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'ArrowDown',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'b',
+                    'a'
+                ];
+                let konamiIndex = 0;
+
+                // Track if party mode is active
+                let partyModeActive = false;
+
+                // Store original body background
+                let originalBodyBackground;
+
+                // Listen for keydown events to detect Konami code
+                document.addEventListener('keydown', function (e) {
+                    // Get the key that was pressed
+                    const key = e.key.toLowerCase();
+
+                    // Check if the key matches the expected key in the sequence
+                    const expectedKey = konamiCode[konamiIndex].toLowerCase();
+
+                    if (key === expectedKey) {
+                        // Move to the next key in the sequence
+                        konamiIndex++;
+
+                        // If the entire sequence has been entered correctly
+                        if (konamiIndex === konamiCode.length) {
+                            // Reset the index
+                            konamiIndex = 0;
+
+                            // Toggle party mode
+                            if (!partyModeActive) {
+                                startShapeParty();
+                            } else {
+                                endShapeParty();
+                            }
+                        }
+                    } else {
+                        // Reset if the wrong key is pressed
+                        konamiIndex = 0;
+                    }
+                });
+
+                // Function to start the shape party
+                function startShapeParty() {
+                    if (partyModeActive) return;
+                    partyModeActive = true;
+
+                    // Set the global flag for THREE.js to recognize
+                    window.shapePartyMode.active = true;
+                    window.shapePartyMode.speedMultiplier = 3;
+
+                    console.log("🎉 PARTY MODE ACTIVATED! 🎉");
+
+                    // Store original background color
+                    originalBodyBackground = document.body.style.backgroundColor || getComputedStyle(document.body).backgroundColor;
+
+                    // Change background color gently
+                    document.body.style.transition = 'background-color 2s ease';
+                    document.body.style.backgroundColor = '#e6f7ff'; // Soft light blue
+
+                    // Create and show the party banner
+                    const banner = document.createElement('div');
+                    banner.id = "party-banner";
+                    banner.innerHTML = `
+                      <div style="position: fixed; top: 10px; left: 0; right: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center;">
+                        <div style="background-color: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                          <h3 style="margin: 0; color: #4b4b4b; font-size: 1.5rem;">Shape Dance Party!</h3>
+                        </div>
+                        <button id="end-party-button" style="margin-top: 10px; padding: 8px 16px; background-color: #ff6b6b; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 1rem; font-weight: bold;">End Party</button>
+                        <div id="party-countdown" style="width: 50px; height: 50px; margin-top: 10px; position: relative;">
+                          <svg width="50" height="50" viewBox="0 0 50 50">
+                            <circle cx="25" cy="25" r="20" fill="none" stroke="#dddddd" stroke-width="5"></circle>
+                            <circle id="countdown-circle" cx="25" cy="25" r="20" fill="none" stroke="#ff6b6b" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90, 25, 25)"></circle>
+                          </svg>
+                          <span id="countdown-number" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; color: #4b4b4b;">15</span>
+                        </div>
+                      </div>
+                    `;
+                    document.body.appendChild(banner);
+
+                    // Set up end party button
+                    const endButton = document.getElementById('end-party-button');
+                    endButton.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent this click from ending the party twice
+                        endShapeParty();
+                    });
+
+                    // Set up countdown
+                    const countdownNumber = document.getElementById('countdown-number');
+                    const countdownCircle = document.getElementById('countdown-circle');
+                    const circlePath = 2 * Math.PI * 20; // 2πr where r=20
+                    countdownCircle.style.strokeDasharray = circlePath;
+
+                    let secondsLeft = 15;
+                    const countdownInterval = setInterval(() => {
+                        secondsLeft--;
+                        countdownNumber.textContent = secondsLeft;
+
+                        // Update the circle progress
+                        const remainingFraction = secondsLeft / 15;
+                        countdownCircle.style.strokeDashoffset = circlePath * (1 - remainingFraction);
+
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownInterval);
+                            endShapeParty();
+                        }
+                    }, 1000);
+
+                    // Store the interval ID to clear it later
+                    window.partyCountdownInterval = countdownInterval;
+
+                    // Allow clicking anywhere to end
+                    document.addEventListener('click', documentClickHandler);
+                }
+
+                // Handler for clicking document to end party
+                function documentClickHandler(e) {
+                    // Ignore clicks on buttons or special elements
+                    if (e.target.id === 'end-party-button' || 
+                        e.target.closest('#party-countdown') || 
+                        e.target.closest('#party-banner')) {
+                        return;
+                    }
+                    endShapeParty();
+                }
+
+                // Function to end the party
+                function endShapeParty() {
+                    if (!partyModeActive) return;
+                    partyModeActive = false;
+
+                    // Turn off the global flag
+                    window.shapePartyMode.active = false;
+                    window.shapePartyMode.speedMultiplier = 1;
+
+                    console.log("✨ PARTY MODE ENDED! ✨");
+
+                    // Remove event listener
+                    document.removeEventListener('click', documentClickHandler);
+
+                    // Clear countdown interval if it exists
+                    if (window.partyCountdownInterval) {
+                        clearInterval(window.partyCountdownInterval);
+                        window.partyCountdownInterval = null;
+                    }
+
+                    // Remove banner
+                    const banner = document.getElementById('party-banner');
+                    if (banner) {
+                        document.body.removeChild(banner);
+                    }
+
+                    // Reset background color
+                    document.body.style.backgroundColor = originalBodyBackground;
+
+                    // Show completion message
+                    const completionMsg = document.createElement('div');
+                    completionMsg.id = 'completion-message';
+                    completionMsg.innerHTML = `
+                      <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; text-align: center;">
+                        <h3 style="margin-top: 0; color: #4b4b4b;">Thank you for dancing with the shapes!</h3>
+                        <p style="margin-bottom: 0; color: #4b4b4b;">They had fun!</p>
+                      </div>
+                    `;
+                    document.body.appendChild(completionMsg);
+
+                    // Remove completion message after 3 seconds
+                    setTimeout(() => {
+                        const msg = document.getElementById('completion-message');
+                        if (msg) {
+                            document.body.removeChild(msg);
+                        }
+                    }, 3000);
+                }
+            })();
+        </script>
+    </body>
+</html>

@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fun with Shapes | 2D Shapes</title>
+        <style>
+            :root {
+                /* Light mode colors */
+                --primary: #FF6B6B;
+                --secondary: #4ECDC4;
+                --accent: #FFE66D;
+                --dark: #292F36;
+                --light: #F7FFF7;
+                --purple: #7209B7;
+                --orange: #FF9F1C;
+                --teal: #2EC4B6;
+                --green: #06D6A0;
+                --pink: #EF476F;
+                --blue: #118AB2;
+                --card-bg: white;
+                --footer-text: #555;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                :root {
+                    /* Dark mode vaporwave neon colors */
+                    --primary: #FF00FF;
+                    /* neon magenta */
+                    --secondary: #00FFFF;
+                    /* neon cyan */
+                    --accent: #FFFF00;
+                    /* neon yellow */
+                    --dark: #FFFFFF;
+                    /* white text */
+                    --light: #121212;
+                    /* dark background */
+                    --purple: #B14AED;
+                    /* bright purple */
+                    --orange: #FF9E00;
+                    /* neon orange */
+                    --teal: #01FFC3;
+                    /* bright mint */
+                    --green: #0FFF50;
+                    /* neon green */
+                    --pink: #FF71CE;
+                    /* hot pink */
+                    --blue: #01CDFE;
+                    /* bright blue */
+                    --card-bg: #1E1E1E;
+                    /* dark card background */
+                    --footer-text: #FFFFFF;
+                    /* white footer text */
+                }
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
+            }
+
+            body {
+                background-color: var(--light);
+                color: var(--dark);
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            header {
+                background-color: var(--primary);
+                color: white;
+                padding: 1.5rem;
+                text-align: center;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s;
+            }
+
+            nav {
+                background-color: var(--secondary);
+                display: flex;
+                justify-content: center;
+                transition: background-color 0.3s;
+            }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                padding: 1rem 2rem;
+                font-weight: bold;
+                transition: all 0.3s;
+            }
+
+            nav a.active {
+                background-color: var(--accent);
+                color: var(--dark);
+            }
+
+            nav a:hover {
+                background-color: var(--accent);
+                color: var(--dark);
+                transform: translateY(-3px);
+            }
+
+            main {
+                flex: 1;
+                padding: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            h1,
+            h2 {
+                margin-bottom: 1rem;
+                text-align: center;
+            }
+
+            p {
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+
+            .shapes-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 2rem;
+            }
+
+            .shape-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.3s;
+                padding: 1.5rem;
+                background-color: var(--card-bg);
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                height: 250px;
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .shape-container {
+                    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.07);
+                }
+            }
+
+            .shape-container:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            }
+
+            @media (prefers-color-scheme: dark) {
+                .shape-container:hover {
+                    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+                }
+            }
+
+            .shape {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 1.5rem;
+                transition: all 0.3s;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .shape-name {
+                font-weight: bold;
+                font-size: 1.2rem;
+                min-height: 1.5rem;
+                text-align: center;
+                color: var(--dark);
+            }
+
+            /* 2D Shapes with improved colors and gradients */
+            .circle {
+                background: radial-gradient(circle at 30% 30%, #ff8c8c, var(--primary));
+                border-radius: 50%;
+            }
+
+            .square {
+                background: linear-gradient(135deg, var(--purple), #9d4edd);
+            }
+
+            .rectangle {
+                background: linear-gradient(135deg, var(--blue), #64dfdf);
+                width: 140px;
+                height: 80px;
+            }
+
+            .triangle {
+                width: 120px;
+                height: 120px;
+                background: linear-gradient(to top, var(--teal), #5afff3);
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            }
+
+            .pentagon {
+                width: 120px;
+                height: 120px;
+                background: linear-gradient(135deg, var(--orange), #ffd166);
+                clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+            }
+
+            .hexagon {
+                width: 120px;
+                height: 104px;
+                background: linear-gradient(135deg, var(--green), #8eeddf);
+                clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            }
+
+            .star {
+                width: 120px;
+                height: 120px;
+                background: linear-gradient(135deg, var(--pink), #ff8fab);
+                clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            }
+
+            .oval {
+                width: 140px;
+                height: 80px;
+                background: linear-gradient(135deg, var(--accent), #fff7ab);
+                border-radius: 50%;
+            }
+
+            .trapezoid {
+                width: 120px;
+                height: 80px;
+                background: linear-gradient(135deg, var(--blue), #72efdd);
+                clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+            }
+
+            .parallelogram {
+                width: 120px;
+                height: 80px;
+                background: linear-gradient(135deg, var(--purple), #c77dff);
+                transform: skew(-20deg);
+            }
+
+            .diamond {
+                width: 80px;
+                height: 120px;
+                background: linear-gradient(135deg, var(--primary), #ffadad);
+                transform: rotate(45deg);
+            }
+
+            .heart {
+                width: 120px;
+                height: 110px;
+                background: transparent;
+                position: relative;
+                margin-top: 10px;
+            }
+
+            .heart::after,
+            .heart::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                width: 60px;
+                height: 90px;
+                background: linear-gradient(135deg, var(--pink), #ff8fab);
+                border-radius: 60px 60px 0 0;
+            }
+
+            .heart::before {
+                left: 60px;
+                transform: rotate(-45deg);
+                transform-origin: 0 100%;
+            }
+
+            .heart::after {
+                left: 0;
+                transform: rotate(45deg);
+                transform-origin: 100% 100%;
+            }
+
+            footer {
+                background-color: var(--light);
+                color: var(--footer-text);
+                text-align: center;
+                padding: 1rem;
+            }
+
+            footer a {
+                color: var(--footer-text);
+                text-decoration: none;
+                font-weight: 600;
+                margin-top: 2rem;
+                transition: background-color 0.3s, color 0.3s;
+            }
+
+            @keyframes pop {
+                0% {
+                    transform: scale(1);
+                }
+                50% {
+                    transform: scale(1.2);
+                }
+                100% {
+                    transform: scale(1);
+                }
+            }
+
+            @keyframes glow {
+                0% {
+                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+                }
+                50% {
+                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px var(--accent);
+                }
+                100% {
+                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+                }
+            }
+
+            @media (prefers-color-scheme: dark) {
+                @keyframes glow {
+                    0% {
+                        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+                    }
+                    50% {
+                        box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary);
+                    }
+                    100% {
+                        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+                    }
+                }
+            }
+
+            .pop {
+                animation: pop 0.3s ease;
+            }
+
+            .glow {
+                animation: glow 1.5s ease infinite;
+            }
+
+            @media (max-width: 768px) {
+                .shapes-grid {
+                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                    gap: 1.5rem;
+                }
+
+                .shape-container {
+                    padding: 1rem;
+                    height: 200px;
+                }
+
+                .shape {
+                    width: 80px;
+                    height: 80px;
+                }
+
+                .rectangle {
+                    width: 100px;
+                    height: 60px;
+                }
+
+                .oval {
+                    width: 100px;
+                    height: 60px;
+                }
+
+                .heart::after,
+                .heart::before {
+                    width: 40px;
+                    height: 60px;
+                }
+
+                .heart::before {
+                    left: 40px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Fun with Shapes</h1>
+        </header>
+
+        <nav>
+            <a href="index.html" class="active">2D Shapes</a>
+            <a href="3d-shapes.html">3D Shapes</a>
+        </nav>
+
+        <main>
+            <h2>2D Shapes Gallery</h2>
+            <p>Click on any shape to see its name! Have fun exploring these two-dimensional wonders.</p>
+
+            <div class="shapes-grid">
+                <div class="shape-container" onclick="showShapeName(this, 'Circle')">
+                    <div class="shape circle"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Square')">
+                    <div class="shape square"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Rectangle')">
+                    <div class="shape rectangle"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Triangle')">
+                    <div class="shape triangle"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Pentagon')">
+                    <div class="shape pentagon"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Hexagon')">
+                    <div class="shape hexagon"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Star')">
+                    <div class="shape star"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Oval')">
+                    <div class="shape oval"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Trapezoid')">
+                    <div class="shape trapezoid"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Parallelogram')">
+                    <div class="shape parallelogram"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Diamond')">
+                    <div class="shape diamond"></div>
+                    <div class="shape-name"></div>
+                </div>
+
+                <div class="shape-container" onclick="showShapeName(this, 'Heart')">
+                    <div class="shape heart"></div>
+                    <div class="shape-name"></div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© 2025-2026 <a href="https://meimakes.com">meimakes</a>.</p>
+        </footer>
+
+        <script>
+            function showShapeName(container, name) {
+                const shapeElement = container.querySelector('.shape');
+                const nameElement = container.querySelector('.shape-name');
+
+                // Add pop animation
+                shapeElement
+                    .classList
+                    .remove('pop');
+                void shapeElement.offsetWidth; // Trigger reflow
+                shapeElement
+                    .classList
+                    .add('pop');
+
+                // Toggle glow effect
+                shapeElement
+                    .classList
+                    .toggle('glow');
+
+                // Display the name
+                nameElement.textContent = name;
+            }
+        </script>
+        <!-- Add this script at the end of both HTML files, just before the closing </body> tag -->
+        <script>
+            // Konami Code Easter Egg - Shape Party Mode
+            (function () {
+                // Konami Code sequence
+                const konamiCode = [
+                    'ArrowUp',
+                    'ArrowUp',
+                    'ArrowDown',
+                    'ArrowDown',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'ArrowLeft',
+                    'ArrowRight',
+                    'b',
+                    'a'
+                ];
+                let konamiIndex = 0;
+
+                // Audio element for optional gentle music
+                const partyMusic = new Audio();
+                partyMusic.src = 'https://soundbible.com/mp3/toy-music-box-happy-birthday-to-you-165723.mp3'; // Placeholder URL
+                partyMusic.volume = 0.3; // Quieter volume by default
+
+                // Track if party mode is active
+                let partyModeActive = false;
+
+                // Store original shape properties
+                const originalShapeProperties = new Map();
+
+                // Listen for keydown events to detect Konami code
+                document.addEventListener('keydown', function (e) {
+                    // Get the key that was pressed
+                    const key = e
+                        .key
+                        .toLowerCase();
+
+                    // Check if the key matches the expected key in the sequence
+                    const expectedKey = konamiCode[konamiIndex].toLowerCase();
+
+                    if (key === expectedKey) {
+                        // Move to the next key in the sequence
+                        konamiIndex++;
+
+                        // If the entire sequence has been entered correctly
+                        if (konamiIndex === konamiCode.length) {
+                            // Reset the index
+                            konamiIndex = 0;
+
+                            // Start the party if not already active
+                            if (!partyModeActive) {
+                                startShapeParty();
+                            }
+                        }
+                    } else {
+                        // Reset if the wrong key is pressed
+                        konamiIndex = 0;
+                    }
+                });
+
+                // Function to start the shape party
+                function startShapeParty() {
+                    if (partyModeActive) 
+                        return;
+                    partyModeActive = true;
+
+                    // Store original body background color
+                    const originalBodyBackground = document.body.style.backgroundColor || getComputedStyle(document.body).backgroundColor;
+                    originalShapeProperties.set('body', {backgroundColor: originalBodyBackground});
+
+                    // Create and show the party banner
+                    const banner = document.createElement('div');
+                    banner.innerHTML = `
+        <div style="position: fixed; top: 10px; left: 0; right: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center;">
+          <div style="background-color: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0; color: #4b4b4b; font-size: 1.5rem;">Shape Dance Party!</h3>
+          </div>
+          <button id="end-party-button" style="margin-top: 10px; padding: 8px 16px; background-color: #ff6b6b; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 1rem; font-weight: bold;">End Party</button>
+          <div id="party-countdown" style="width: 50px; height: 50px; margin-top: 10px; position: relative;">
+            <svg width="50" height="50" viewBox="0 0 50 50">
+              <circle cx="25" cy="25" r="20" fill="none" stroke="#dddddd" stroke-width="5"></circle>
+              <circle id="countdown-circle" cx="25" cy="25" r="20" fill="none" stroke="#ff6b6b" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90, 25, 25)"></circle>
+            </svg>
+            <span id="countdown-number" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; color: #4b4b4b;">15</span>
+          </div>
+          <button id="mute-button" style="margin-top: 10px; padding: 5px 10px; background-color: #4ECDC4; color: white; border: none; border-radius: 10px; cursor: pointer; font-size: 0.8rem;">Mute Music</button>
+        </div>
+      `;
+                    document
+                        .body
+                        .appendChild(banner);
+
+                    // Change background color gently
+                    document.body.style.transition = 'background-color 2s ease';
+                    document.body.style.backgroundColor = '#e6f7ff'; // Soft light blue
+
+                    // Play gentle music
+                    partyMusic.play();
+
+                    // Set up mute button
+                    const muteButton = document.getElementById('mute-button');
+                    muteButton.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent this click from ending the party
+
+                        if (partyMusic.muted) {
+                            partyMusic.muted = false;
+                            muteButton.textContent = 'Mute Music';
+                        } else {
+                            partyMusic.muted = true;
+                            muteButton.textContent = 'Unmute Music';
+                        }
+                    });
+
+                    // Set up end party button
+                    const endButton = document.getElementById('end-party-button');
+                    endButton.addEventListener('click', function (e) {
+                        e.stopPropagation(); // Prevent this click from ending the party twice
+                        endShapeParty();
+                    });
+
+                    // Animate 2D shapes if they exist
+                    document
+                        .querySelectorAll('.shape')
+                        .forEach((shape, index) => {
+                            // Store original styles to restore later
+                            const computedStyle = getComputedStyle(shape);
+                            originalShapeProperties.set(index, {
+                                transition: shape.style.transition || computedStyle.transition,
+                                transform: shape.style.transform || computedStyle.transform,
+                                background: shape.style.background || computedStyle.background,
+                                backgroundColor: shape.style.backgroundColor || computedStyle.backgroundColor,
+                                backgroundImage: shape.style.backgroundImage || computedStyle.backgroundImage
+                            });
+
+                            // Apply gentle animation based on shape class
+                            shape.style.transition = 'all 1.5s ease-in-out';
+
+                            if (shape.classList.contains('circle')) {
+                                // Breathing animation for circles
+                                shape.animate([
+                                    {
+                                        transform: 'scale(1)'
+                                    }, {
+                                        transform: 'scale(1.15)'
+                                    }, {
+                                        transform: 'scale(1)'
+                                    }
+                                ], {
+                                    duration: 3000,
+                                    iterations: 5
+                                });
+                                // Soft color transition
+                                animateGradientColor(shape, 'radial-gradient', index);
+                            } else if (shape.classList.contains('square')) {
+                                // Gentle rotation for squares
+                                shape.animate([
+                                    {
+                                        transform: 'rotate(0deg)'
+                                    }, {
+                                        transform: 'rotate(45deg)'
+                                    }, {
+                                        transform: 'rotate(0deg)'
+                                    }, {
+                                        transform: 'rotate(-45deg)'
+                                    }, {
+                                        transform: 'rotate(0deg)'
+                                    }
+                                ], {
+                                    duration: 4000,
+                                    iterations: 4
+                                });
+                                animateGradientColor(shape, 'linear-gradient', index);
+                            } else if (shape.classList.contains('rectangle')) {
+                                // Gentle swaying for rectangles
+                                shape.animate([
+                                    {
+                                        transform: 'rotate(0deg)'
+                                    }, {
+                                        transform: 'rotate(15deg)'
+                                    }, {
+                                        transform: 'rotate(0deg)'
+                                    }, {
+                                        transform: 'rotate(-15deg)'
+                                    }, {
+                                        transform: 'rotate(0deg)'
+                                    }
+                                ], {
+                                    duration: 4000,
+                                    iterations: 4
+                                });
+                                animateGradientColor(shape, 'linear-gradient', index);
+                            } else if (shape.classList.contains('triangle')) {
+                                // Bobbing animation for triangles
+                                shape.animate([
+                                    {
+                                        transform: 'translateY(0)'
+                                    }, {
+                                        transform: 'translateY(-10px)'
+                                    }, {
+                                        transform: 'translateY(0)'
+                                    }
+                                ], {
+                                    duration: 2000,
+                                    iterations: 7
+                                });
+                                animateGradientColor(shape, 'linear-gradient', index);
+                            } else {
+                                // Generic animation for other shapes
+                                shape.animate([
+                                    {
+                                        transform: 'scale(1)'
+                                    }, {
+                                        transform: 'scale(1.1) rotate(5deg)'
+                                    }, {
+                                        transform: 'scale(1) rotate(0deg)'
+                                    }
+                                ], {
+                                    duration: 3000,
+                                    iterations: 5
+                                });
+                                animateGradientColor(shape, 'linear-gradient', index);
+                            }
+                        });
+
+                    // Animate 3D shapes if they exist - for the 3D shapes page
+                    if (typeof THREE !== 'undefined' && Object.keys(scenes).length > 0) {
+                        Object
+                            .keys(scenes)
+                            .forEach(shapeName => {
+                                // Start the animation for this shape
+                                animations[shapeName] = true;
+
+                                // Enhance the rotation to be more noticeable but still gentle
+                                const axes = rotationAxes[shapeName];
+
+                                // Store the original values to restore later
+                                originalShapeProperties.set(shapeName + '_3d', {
+                                    x: axes.x,
+                                    y: axes.y,
+                                    z: axes.z || 0
+                                });
+
+                                // Temporarily increase rotation speed
+                                axes.x *= 1.5;
+                                axes.y *= 1.5;
+                                axes.z = axes.z || 0.01; // Ensure there's some z rotation for interest
+                            });
+                    }
+
+                    // Set up countdown
+                    const countdownNumber = document.getElementById('countdown-number');
+                    const countdownCircle = document.getElementById('countdown-circle');
+                    const circlePath = 2 * Math.PI * 20; // 2πr where r=20
+                    countdownCircle.style.strokeDasharray = circlePath;
+
+                    let secondsLeft = 15;
+                    const countdownInterval = setInterval(() => {
+                        secondsLeft--;
+                        countdownNumber.textContent = secondsLeft;
+
+                        // Update the circle progress
+                        const remainingFraction = secondsLeft / 15;
+                        countdownCircle.style.strokeDashoffset = circlePath * (1 - remainingFraction);
+
+                        if (secondsLeft <= 0) {
+                            clearInterval(countdownInterval);
+                            endShapeParty();
+                        }
+                    }, 1000);
+
+                    // Allow clicking anywhere to end
+                    document.addEventListener('click', documentClickHandler);
+
+                    // Helper function to animate gradient colors
+                    function animateGradientColor(element, gradientType, index) {
+                        // Pastel color sets for animation
+                        const pastelColors = [
+                            {
+                                start: '#FFD3E8',
+                                end: '#FFA8C5'
+                            }, { // Soft pink
+                                start: '#D3F8FF',
+                                end: '#A8E6FF'
+                            }, { // Soft blue
+                                start: '#DDFFD3',
+                                end: '#C2FFA8'
+                            }, { // Soft green
+                                start: '#FFE8D3',
+                                end: '#FFCCA8'
+                            }, { // Soft orange
+                                start: '#F0D3FF',
+                                end: '#E2A8FF'
+                            } // Soft purple
+                        ];
+
+                        let colorIndex = 0;
+
+                        // Animate through colors
+                        const colorInterval = setInterval(() => {
+                            const color = pastelColors[colorIndex];
+
+                            if (gradientType === 'radial-gradient') {
+                                element.style.background = `radial-gradient(circle at 30% 30%, ${color.start}, ${color.end})`;
+                            } else {
+                                element.style.background = `linear-gradient(135deg, ${color.start}, ${color.end})`;
+                            }
+
+                            colorIndex = (colorIndex + 1) % pastelColors.length;
+                        }, 3000);
+
+                        // Store the interval ID with the element to clear it later
+                        element.setAttribute('data-color-interval', colorInterval);
+                    }
+                }
+
+                // Handler for clicking document to end party
+                function documentClickHandler(e) {
+                    // Ignore clicks on the mute button or end party button (they have their own handlers)
+                    if (e.target.id === 'mute-button' || e.target.id === 'end-party-button') {
+                        return;
+                    }
+
+                    endShapeParty();
+                }
+
+                // Function to end the party
+                function endShapeParty() {
+                    // Remove event listener
+                    document.removeEventListener('click', documentClickHandler);
+
+                    // Stop music
+                    partyMusic.pause();
+                    partyMusic.currentTime = 0;
+
+                    // Remove banner
+                    const banner = document.querySelector('body > div:last-child');
+                    if (banner) {
+                        document
+                            .body
+                            .removeChild(banner);
+                    }
+
+                    // Reset background color of body
+                    const bodyProps = originalShapeProperties.get('body');
+                    if (bodyProps) {
+                        document.body.style.backgroundColor = bodyProps.backgroundColor;
+                    }
+
+                    // Reset 2D shape animations and restore original styles
+                    document
+                        .querySelectorAll('.shape')
+                        .forEach((shape, index) => {
+                            // Stop any running animations
+                            const animations = shape.getAnimations();
+                            animations.forEach(animation => animation.cancel());
+
+                            // Clear color interval
+                            const colorInterval = shape.getAttribute('data-color-interval');
+                            if (colorInterval) {
+                                clearInterval(parseInt(colorInterval));
+                                shape.removeAttribute('data-color-interval');
+                            }
+
+                            // Restore original styles
+                            const originalProps = originalShapeProperties.get(index);
+                            if (originalProps) {
+                                shape.style.transition = originalProps.transition;
+                                shape.style.transform = originalProps.transform;
+
+                                // Check which background property was originally set and restore it
+                                if (originalProps.background && originalProps.background !== 'none') {
+                                    shape.style.background = originalProps.background;
+                                } else if (originalProps.backgroundColor && originalProps.backgroundColor !== 'rgba(0, 0, 0, 0)') {
+                                    shape.style.backgroundColor = originalProps.backgroundColor;
+                                } else if (originalProps.backgroundImage && originalProps.backgroundImage !== 'none') {
+                                    shape.style.backgroundImage = originalProps.backgroundImage;
+                                } else {
+                                    // As a fallback, clear the background
+                                    shape.style.background = '';
+                                    shape.style.backgroundColor = '';
+                                    shape.style.backgroundImage = '';
+                                }
+                            }
+                        });
+
+                    // Reset 3D shape animations if they exist
+                    if (typeof THREE !== 'undefined' && Object.keys(scenes).length > 0) {
+                        Object
+                            .keys(scenes)
+                            .forEach(shapeName => {
+                                // Restore original rotation speeds
+                                const originalProps = originalShapeProperties.get(shapeName + '_3d');
+                                if (originalProps) {
+                                    rotationAxes[shapeName].x = originalProps.x;
+                                    rotationAxes[shapeName].y = originalProps.y;
+                                    rotationAxes[shapeName].z = originalProps.z;
+                                }
+                            });
+                    }
+
+                    // Clear the originalShapeProperties map
+                    originalShapeProperties.clear();
+
+                    // Show completion message
+                    const completionMsg = document.createElement('div');
+                    completionMsg.innerHTML = `
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; text-align: center;">
+          <h3 style="margin-top: 0; color: #4b4b4b;">Thank you for dancing with the shapes!</h3>
+          <p style="margin-bottom: 0; color: #4b4b4b;">They had fun!</p>
+        </div>
+      `;
+                    document
+                        .body
+                        .appendChild(completionMsg);
+
+                    // Remove completion message after 3 seconds
+                    setTimeout(() => {
+                        document
+                            .body
+                            .removeChild(completionMsg);
+                        partyModeActive = false;
+                    }, 3000);
+                }
+            })();
+        </script>
+    </body>
+</html>

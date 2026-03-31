@@ -1,592 +1,537 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+<html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#F5F1E8">
-
-    <!-- Basic Meta Tags -->
-    <meta name="description" content="A word building game for early readers. Build 3-letter words and watch the train chug away.">
-    <meta name="author" content="Mei (@meimakes)">
-
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://meimakes.com/word-train">
-    <meta property="og:title" content="Word Train | meimakes">
-    <meta property="og:description" content="A word building game for early readers. Build 3-letter words and watch the train chug away.">
-    <meta property="og:image" content="https://meimakes.com/word-train.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://meimakes.com/word-train">
-    <meta property="twitter:title" content="Word Train | meimakes">
-    <meta property="twitter:description" content="A word building game for early readers. Build 3-letter words and watch the train chug away.">
-    <meta property="twitter:image" content="https://meimakes.com/word-train.jpg">
-    <meta property="twitter:creator" content="@meimakes">
-
-    <!-- Additional -->
-    <link rel="canonical" href="https://meimakes.com/word-train">
-
-    <title>Word Train | meimakes</title>
+    <title>mama.dev | Workshop</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&amp;family=Special+Elite&amp;family=Walter+Turncoat&amp;family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet">
+    
     <style>
+        :root {
+            --paper-bg: #f3f0ea;
+            --paper-dark: #e8e3d8;
+            --ink-black: #2c2a27;
+            --ink-blue: #1c457a;
+            --ink-red: #a83a32;
+            --pencil: #5a5954;
+            --tape-yellow: rgba(232, 222, 172, 0.7);
+            --tape-blue: rgba(162, 192, 212, 0.65);
+            --tape-pink: rgba(212, 162, 172, 0.65);
+            
+            --font-typewriter: 'Special Elite', monospace;
+            --font-hand: 'Just Another Hand', cursive;
+            --font-marker: 'Walter Turncoat', cursive;
+            --font-scribble: 'Nanum Pen Script', cursive;
+
+            --shadow-flat: 1px 1px 2px rgba(44, 42, 39, 0.15);
+            --shadow-lift: 2px 4px 8px rgba(44, 42, 39, 0.2);
+            --shadow-high: 5px 10px 15px rgba(44, 42, 39, 0.15);
+        }
+
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Arial', 'Helvetica', sans-serif;
-            background: linear-gradient(135deg, #F5F1E8 0%, #E8DCC8 100%);
-            color: #4A4238;
+            background-color: var(--paper-bg);
+            
+            background-image: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+                radial-gradient(circle at 50% 50%, transparent 20%, rgba(200, 190, 170, 0.1) 100%),
+                linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.03) 100%);
+            color: var(--ink-black);
+            font-family: var(--font-hand);
+            font-size: 24px;
+            line-height: 1.2;
             min-height: 100vh;
-            padding: 20px;
             overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding-top: 40px;
-        }
-
-        .train-area {
+            padding: 40px 20px;
             position: relative;
-            margin-bottom: 60px;
-            height: 200px;
         }
 
-        .signal {
+        
+        .coffee-ring {
             position: absolute;
-            left: 20px;
-            top: 20px;
-            width: 30px;
-            height: 90px;
-            background: #4A4238;
-            border-radius: 4px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-
-        .signal::before,
-        .signal::after {
-            content: '';
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: #D4A895;
-            transition: all 0.3s ease;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        /* Top lamp - red */
-        .signal::before {
-            background: #D4A895;
-        }
-
-        /* Bottom lamp - red by default */
-        .signal::after {
-            background: #D4A895;
-        }
-
-        /* Bottom lamp turns green and glows */
-        .signal.green::after {
-            background: #B8C5B0;
-            box-shadow: 
-                inset 0 2px 4px rgba(0,0,0,0.2),
-                0 0 15px rgba(184, 197, 176, 0.8),
-                0 0 25px rgba(184, 197, 176, 0.5);
-        }
-
-        .train-container {
-            position: absolute;
-            left: 0;
-            right: 0;
-            top: 50px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 10px;
-            transition: transform 1.5s ease-in-out;
-        }
-
-        .train-container.drive-in {
-            animation: driveIn 1.5s ease-out;
-        }
-
-        .train-container.drive-off {
-            transform: translateX(-150%);
-        }
-
-        @keyframes driveIn {
-            from {
-                transform: translateX(150%);
-            }
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .engine {
-            font-size: 3em;
-        }
-
-        .car {
-            width: 100px;
-            height: 100px;
-            background: rgba(255, 255, 255, 0.9);
-            border: 4px solid #8FA39A;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3em;
-            font-weight: bold;
-            color: #4A4238;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .car.celebrate {
-            animation: celebrate 0.6s ease;
-        }
-
-        @keyframes celebrate {
-            0%, 100% { transform: translateY(0) scale(1); }
-            25% { transform: translateY(-15px) scale(1.05); }
-            50% { transform: translateY(0) scale(1); }
-            75% { transform: translateY(-8px) scale(1.02); }
-        }
-
-        .sparkle {
-            position: absolute;
-            font-size: 1.2em;
-            animation: sparkleFloat 1.2s ease-out forwards;
+            width: 300px;
+            height: 280px;
+            border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
+            border: 4px solid rgba(139, 90, 43, 0.15);
+            top: -50px;
+            right: -80px;
+            transform: rotate(20deg);
             pointer-events: none;
-            z-index: 10;
-            opacity: 0.8;
+            z-index: 0;
         }
-
-        @keyframes sparkleFloat {
-            0% {
-                opacity: 0.8;
-                transform: translate(-50%, 0) scale(0.5);
-            }
-            50% {
-                opacity: 0.6;
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -60px) scale(0.8) rotate(90deg);
-            }
-        }
-
-        .car.empty {
-            background: rgba(255, 255, 255, 0.5);
-            border-style: dashed;
-        }
-
-        .remove-btn {
+        .coffee-ring::after {
+            content: '';
             position: absolute;
-            bottom: -30px;
+            width: 280px;
+            height: 290px;
+            border-radius: 50% 50% 45% 55% / 40% 60% 50% 50%;
+            border: 2px solid rgba(139, 90, 43, 0.08);
+            top: 10px;
+            left: -5px;
+            transform: rotate(-15deg);
+        }
+
+        
+        .desk-surface {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            margin-bottom: 80px;
+            position: relative;
+            display: inline-block;
+            transform: rotate(-2deg);
+            padding-left: 20px;
+        }
+
+        h1 {
+            font-family: var(--font-typewriter);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: var(--ink-black);
+            letter-spacing: -2px;
+            display: inline-block;
+            position: relative;
+            background: rgba(255,255,255,0.5);
+            padding: 10px 20px;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-flat);
+        }
+
+        
+        .stamp-dev {
+            color: var(--ink-red);
+            border: 3px solid var(--ink-red);
+            padding: 2px 8px;
+            border-radius: 4px;
+            transform: rotate(4deg) translateY(-5px);
+            display: inline-block;
+            opacity: 0.85;
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.3'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' fill='white'/%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.5' mix-blend-mode='multiply'/%3E%3C/svg%3E");
+            mask-mode: luminance;
+        }
+
+        .tagline {
+            font-family: var(--font-marker);
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            color: var(--pencil);
+            margin-top: 15px;
+            margin-left: 30px;
+            transform: rotate(1deg);
+        }
+
+        .tagline .arrow {
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 20"><path d="M0 10 Q 25 20, 45 5 L 40 0 M 45 5 L 50 15" fill="none" stroke="%232c2a27" stroke-width="2" stroke-linecap="round"/></svg>') no-repeat center;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        
+        .projects-board {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 60px;
+            padding: 20px;
+            position: relative;
+        }
+
+        
+        .item {
+            position: relative;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .item:hover {
+            transform: scale(1.02) translateY(-5px) !important;
+            z-index: 10;
+        }
+
+        
+        .tape {
+            position: absolute;
+            height: 30px;
+            width: 100px;
+            background-color: var(--tape-yellow);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            z-index: 5;
+            
+            clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%, 3% 50%);
+            
+            background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.2) 50%);
+            background-size: 4px 100%;
+        }
+
+        
+        .proj-story {
+            transform: rotate(-3deg);
+            justify-self: center;
+        }
+        
+        .proj-story .paper {
+            background: #fff;
+            padding: 15px 15px 40px 15px;
+            box-shadow: var(--shadow-lift);
+            width: 300px;
+            position: relative;
+        }
+
+        .proj-story .tape-top {
+            top: -15px;
             left: 50%;
-            transform: translateX(-50%);
-            background: rgba(212, 168, 149, 0.6);
-            border: 1px solid #D4A895;
-            width: 24px;
-            height: 24px;
+            transform: translateX(-50%) rotate(2deg);
+            width: 120px;
+        }
+
+        .proj-story .photo-container {
+            width: 100%;
+            height: 220px;
+            background: #ddd;
+            overflow: hidden;
+            position: relative;
+            filter: sepia(0.2) contrast(1.1);
+        }
+
+        .proj-story img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .proj-story .meta-scribble {
+            position: absolute;
+            bottom: 10px;
+            right: 15px;
+            font-family: var(--font-scribble);
+            font-size: 1.2rem;
+            color: var(--ink-blue);
+            transform: rotate(-5deg);
+        }
+
+        
+        .proj-train {
+            transform: rotate(2deg) translateY(30px);
+            justify-self: center;
+        }
+
+        .proj-train .paper {
+            background: #fbf9f4;
+            padding: 30px 20px;
+            box-shadow: var(--shadow-flat);
+            width: 320px;
+            border-left: 2px solid rgba(200, 50, 50, 0.4); 
+            position: relative;
+            background-image: repeating-linear-gradient(transparent, transparent 29px, rgba(0,100,200,0.1) 30px);
+            background-position: 0 40px;
+        }
+
+        .proj-train .paperclip {
+            position: absolute;
+            top: -20px;
+            right: 30px;
+            width: 40px;
+            height: 80px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 50"><path d="M10,45 C4,45 1,40 1,35 L1,15 C1,8 6,3 12,3 C18,3 19,8 19,15 L19,30 C19,34 16,37 12,37 C8,37 6,35 6,31 L6,15" fill="none" stroke="%23777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat;
+            z-index: 6;
+            transform: rotate(15deg);
+        }
+
+        .stamp-circle {
+            position: absolute;
+            top: 20px;
+            right: 10px;
+            width: 60px;
+            height: 60px;
+            border: 2px dashed var(--ink-red);
             border-radius: 50%;
-            font-size: 0.9em;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #4A4238;
-            font-weight: normal;
-            z-index: 100;
-            opacity: 0.7;
-            transition: opacity 0.2s ease;
-        }
-
-        .remove-btn:hover {
-            opacity: 1;
-        }
-
-        .remove-btn:active {
-            transform: translateX(-50%) scale(0.9);
-        }
-
-        .track {
-            width: 100%;
-            height: 4px;
-            background: #8FA39A;
-            border-radius: 2px;
-            position: absolute;
-            bottom: 40px;
-        }
-
-        .letter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
-            gap: 12px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .letter-btn {
-            width: 100%;
-            aspect-ratio: 1;
-            min-height: 70px;
-            font-size: 2em;
-            font-weight: bold;
-            border: 3px solid;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: #4A4238;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .letter-btn.consonant {
-            background: rgba(143, 163, 154, 0.3);
-            border-color: #8FA39A;
-        }
-
-        .letter-btn.vowel {
-            background: rgba(212, 168, 149, 0.3);
-            border-color: #D4A895;
-        }
-
-        .letter-btn:active {
-            transform: scale(0.95);
-        }
-
-        .letter-btn:hover {
-            filter: brightness(1.1);
-        }
-
-        footer {
+            font-family: var(--font-typewriter);
+            font-size: 0.6rem;
+            color: var(--ink-red);
+            transform: rotate(-20deg);
+            opacity: 0.6;
             text-align: center;
-            margin-top: 40px;
-            font-size: 0.85em;
-            color: #8FA39A;
+            line-height: 1;
         }
 
-        footer a {
-            color: #8FA39A;
-            text-decoration: none;
-            border-bottom: 1px solid #B8C5B0;
+        
+        .proj-ramp {
+            transform: rotate(-1deg) translateY(-20px);
+            justify-self: center;
         }
 
-        @media (max-width: 480px) {
-            .car {
-                width: 80px;
-                height: 80px;
-                font-size: 2.2em;
-            }
-
-            .engine {
-                font-size: 2.5em;
-            }
-
-            .letter-grid {
-                grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
-                gap: 10px;
-            }
-
-            .letter-btn {
-                min-height: 60px;
-                font-size: 1.8em;
-            }
-
-            .signal {
-                width: 25px;
-                height: 70px;
-            }
-
-            .signal::before,
-            .signal::after {
-                width: 16px;
-                height: 16px;
-            }
+        .proj-ramp .paper {
+            background: #faf8f5;
+            padding: 30px;
+            width: 340px;
+            box-shadow: var(--shadow-lift);
+            
+            background-image: 
+                linear-gradient(rgba(100,150,200,0.15) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100,150,200,0.15) 1px, transparent 1px);
+            background-size: 20px 20px;
+            position: relative;
+            border-radius: 2px;
         }
+
+        .proj-ramp .tape-corner-1 {
+            background-color: var(--tape-blue);
+            width: 60px;
+            top: -10px;
+            left: -20px;
+            transform: rotate(-45deg);
+        }
+        
+        .proj-ramp .tape-corner-2 {
+            background-color: var(--tape-blue);
+            width: 60px;
+            bottom: -10px;
+            right: -20px;
+            transform: rotate(-45deg);
+        }
+
+        .sketch-drawing {
+            width: 100%;
+            height: 120px;
+            border: 2px solid var(--pencil);
+            margin-bottom: 15px;
+            position: relative;
+            background: rgba(255,255,255,0.5);
+            
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+        }
+
+        .sketch-drawing::before {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 80%;
+            height: 2px;
+            background: var(--pencil);
+            transform: rotate(-5deg);
+        }
+        
+        .sketch-drawing::after {
+            content: '';
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-bottom: 20px solid var(--pencil);
+            transform: rotate(20deg) translate(30px, -20px);
+        }
+
+        
+        .proj-title {
+            font-family: var(--font-marker);
+            font-size: 1.8rem;
+            color: var(--ink-black);
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .proj-desc {
+            font-family: var(--font-hand);
+            font-size: 1.4rem;
+            color: var(--pencil);
+            line-height: 1.1;
+        }
+
+        .typewriter-title {
+            font-family: var(--font-typewriter);
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .link-indicator {
+            display: inline-block;
+            margin-top: 15px;
+            font-family: var(--font-scribble);
+            font-size: 1.5rem;
+            color: var(--ink-red);
+            border-bottom: 2px solid var(--ink-red);
+            padding-bottom: 2px;
+            transition: color 0.2s;
+        }
+
+        
+        .marginalia {
+            position: absolute;
+            font-family: var(--font-scribble);
+            color: var(--pencil);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .note-1 { top: -40px; left: 100px; transform: rotate(-10deg); }
+        .note-2 { bottom: -30px; right: 20px; transform: rotate(5deg); color: var(--ink-blue); }
+
+        
+        .built-with {
+            font-family: var(--font-typewriter);
+            font-size: 0.7rem;
+            background: var(--ink-black);
+            color: var(--paper-bg);
+            padding: 2px 6px;
+            position: absolute;
+            bottom: 10px;
+            left: -10px;
+            transform: rotate(-90deg);
+            transform-origin: left bottom;
+        }
+
+        @media (max-width: 768px) {
+            .projects-board {
+                grid-template-columns: 1fr;
+                gap: 80px;
+            }
+            .proj-story, .proj-train, .proj-ramp {
+                transform: rotate(0) translateY(0);
+                margin-bottom: 20px;
+            }
+            .coffee-ring { display: none; }
+        }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="train-area">
-            <div class="signal" id="signal"></div>
-            <div class="train-container drive-in" id="train">
-                <div class="engine">🚂</div>
-                <div class="car empty" id="car0">
-                    <span class="letter"></span>
-                </div>
-                <div class="car empty" id="car1">
-                    <span class="letter"></span>
-                </div>
-                <div class="car empty" id="car2">
-                    <span class="letter"></span>
-                </div>
-            </div>
-            <div class="track"></div>
-        </div>
 
-        <div class="letter-grid" id="letters"></div>
+    <div class="coffee-ring"></div>
+
+    <div class="desk-surface">
+        <header>
+            <h1>mama.<span class="stamp-dev">dev</span></h1>
+            <div class="tagline">small things built for a small person <span class="arrow"></span></div>
+            <div class="marginalia note-1">drawer of treasures ↓</div>
+        </header>
+
+        <main class="projects-board">
+            
+            
+            <a href="/one-true-story/" class="item proj-story" aria-label="One True Story">
+                <div class="tape tape-top"></div>
+                <div class="paper">
+                    <div class="photo-container">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/First_flight2.jpg" alt="Wright Brothers first flight, 1903">
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <h2 class="proj-title">one-true-story</h2>
+                        <p class="proj-desc">Printable nonfiction stories for early readers. Real photos, big facts.</p>
+                        <span class="link-indicator">read it</span>
+                    </div>
+                    <div class="meta-scribble">4 stories</div>
+                </div>
+            </a>
+
+            <a href="/word-train/" class="item proj-train" aria-label="Word Train">
+                <div class="paperclip"></div>
+                <div class="paper">
+                    <div class="stamp-circle">TESTED<br>&amp;<br>APPROVED</div>
+                    <h2 class="typewriter-title">&gt;&gt; word-train.exe</h2>
+                    <p class="proj-desc" style="margin-top: 15px; font-size: 1.6rem; color: var(--ink-black);">
+                        A phonics game. Build words by snapping train cars together.
+                        Choo choo! 🚂
+                    </p>
+                    <div style="margin-top: 20px; border-top: 1px dashed var(--pencil); padding-top: 10px;">
+                        <span style="font-family: var(--font-typewriter); font-size: 0.8rem; color: var(--pencil);">STATUS: ACTIVE / DAILY USE</span>
+                    </div>
+                    <span class="link-indicator" style="color: var(--ink-blue); border-color: var(--ink-blue);">play game</span>
+                </div>
+            </a>
+
+            <a href="/bigger-ramp-jump/" class="item proj-ramp" aria-label="Bigger Ramp Jump">
+                <div class="tape tape-corner-1"></div>
+                <div class="tape tape-corner-2"></div>
+                <div class="paper">
+                    <div class="sketch-drawing">
+                        <div style="position: absolute; top: 10px; right: 10px; font-family: var(--font-scribble); font-size: 1rem;">fig. 1 - physics test</div>
+                    </div>
+                    <h2 class="proj-title" style="font-size: 2.2rem; margin-top: -10px; transform: rotate(-2deg);">Bigger Ramp Jump!</h2>
+                    <p class="proj-desc">Adjust height. Adjust angle. Launch the truck into the stratosphere.</p>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px;">
+                        <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">launch →</span>
+                    </div>
+                </div>
+                <div class="marginalia note-2">mostly tuning gravity...</div>
+            </a>
+
+            <a href="/bigger-than-race/" class="item proj-story" style="transform: rotate(2deg);" aria-label="Bigger Than Race">
+                <div class="tape tape-top" style="background-color: var(--tape-pink);"></div>
+                <div class="paper">
+                    <div style="padding: 20px 15px 15px;">
+                        <h2 class="proj-title">Bigger Than Race</h2>
+                        <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">Two cars, two numbers. Tap the bigger one to win the race! 🏎️</p>
+                        <p class="proj-desc" style="margin-top: 8px;">Number comparison from 1–9 up to 100–999. Adaptive difficulty.</p>
+                        <span class="link-indicator">race!</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/shapes/" class="item proj-train" style="transform: rotate(-2deg) translateY(20px);" aria-label="Shapes">
+                <div class="paperclip" style="right: 20px;"></div>
+                <div class="paper">
+                    <h2 class="proj-title" style="font-size: 2.4rem; text-align: center; margin-top: 15px;">shapes!</h2>
+                    <p class="proj-desc" style="text-align: center; margin-top: 10px; font-size: 1.6rem; color: var(--ink-black);">
+                        2D and 3D shapes that reveal their names and spin when you tap them
+                    </p>
+                    <div style="text-align: center; margin-top: 15px;">
+                        <span class="link-indicator" style="color: var(--ink-blue); border-color: var(--ink-blue);">tap →</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/what-to-eat/" class="item proj-ramp" style="transform: rotate(1.5deg) translateY(-10px);" aria-label="What To Eat">
+                <div class="tape tape-corner-1" style="background-color: var(--tape-pink);"></div>
+                <div class="tape tape-corner-2" style="background-color: var(--tape-yellow);"></div>
+                <div class="paper">
+                    <h2 class="typewriter-title">&gt;&gt; what-to-eat.exe</h2>
+                    <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
+                        A menu of simple foods. Tap to choose what sounds good. 🍳
+                    </p>
+                    <p class="proj-desc" style="margin-top: 8px;">For when "what do you want to eat" gets a blank stare.</p>
+                    <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">pick food</span>
+                </div>
+            </a>
+
+            <a href="/2026-calendar/" class="item proj-story" style="transform: rotate(-1deg);" aria-label="2026 Calendar">
+                <div class="tape tape-top"></div>
+                <div class="paper">
+                    <div style="padding: 20px 15px 15px;">
+                        <h2 class="proj-title" style="font-size: 2rem;">2026 Calendar</h2>
+                        <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
+                            Interactive holiday calendar. Tap a holiday for confetti and animations! 🎉
+                        </p>
+                        <p class="proj-desc" style="margin-top: 8px;">27 holidays with cute clipart.</p>
+                        <span class="link-indicator">explore</span>
+                    </div>
+                </div>
+            </a>
+
+        </main>
     </div>
 
-    <footer>
-        Made with care by <a href="https://x.com/meimakes" target="_blank" rel="noopener">@meimakes</a>
-    </footer>
 
-    <script>
-        // All valid 3-letter words (includes CVC, CVCe, digraphs, blends, sight words, etc)
-        const validWords = [
-            // CVC a words
-            'van', 'cab', 'can', 'man', 'ran', 'fan', 'pan', 'tan', 'bad', 'dad',
-            'had', 'mad', 'sad', 'lad', 'pad', 'bag', 'tag', 'wag', 'bat', 'cat',
-            'hat', 'mat', 'pat', 'rat', 'sat', 'vat', 'fat', 'dab', 'gab', 'jab',
-            'lab', 'nab', 'tab', 'dam', 'ham', 'jam', 'ram', 'yam', 'cap', 'gap',
-            'lap', 'map', 'nap', 'rap', 'sap', 'tap', 'zap', 'gas', 'pal', 'wax',
-            'max', 'tax', 'fax', 'was', 'has',
-            // CVCe and other a patterns
-            'ace', 'age', 'ape', 'are', 'ate', 'ave', 'awe', 'axe', 'aye', 'all',
-            'and', 'ant', 'any', 'apt', 'arc', 'ark', 'arm', 'art', 'ash', 'ask',
-            'add', 'aid', 'aim', 'air', 'ale', 'amp', 'act',
-            // CVC e words
-            'bed', 'red', 'led', 'fed', 'wed', 'beg', 'leg', 'peg', 'ben', 'den',
-            'hen', 'men', 'pen', 'ten', 'bet', 'get', 'jet', 'let', 'met', 'net',
-            'pet', 'set', 'vet', 'wet', 'yet', 'pep', 'web', 'pew',
-            // Other e patterns
-            'ear', 'eat', 'egg', 'elf', 'elk', 'elm', 'emu', 'end', 'era', 'err',
-            'eve', 'ewe', 'eye', 'ebb',
-            // CVC i words
-            'bid', 'did', 'hid', 'kid', 'lid', 'rid', 'big', 'dig', 'fig', 'gig',
-            'jig', 'pig', 'wig', 'bin', 'din', 'fin', 'kin', 'pin', 'sin', 'tin',
-            'win', 'bit', 'fit', 'hit', 'kit', 'lit', 'pit', 'sit', 'wit', 'dip',
-            'hip', 'lip', 'nip', 'rip', 'sip', 'tip', 'zip', 'dim', 'him', 'rim',
-            'fix', 'mix', 'six', 'rib', 'bib',
-            // Other i patterns
-            'ice', 'ill', 'imp', 'ink', 'inn', 'ion', 'its', 'ivy',
-            // CVC o words
-            'bog', 'cog', 'dog', 'fog', 'hog', 'jog', 'log', 'box', 'fox', 'not',
-            'cot', 'dot', 'got', 'hot', 'lot', 'pot', 'rot', 'tot', 'cop', 'hop',
-            'mop', 'pop', 'top', 'bop', 'bob', 'cob', 'job', 'mob', 'rob', 'sob', 'god',
-            'nod', 'pod', 'rod', 'sod', 'mom', 'tom', 'bot',
-            // Other o patterns
-            'oak', 'oar', 'oat', 'odd', 'ode', 'off', 'oft', 'oil', 'old', 'one',
-            'opt', 'orb', 'ore', 'our', 'out', 'owe', 'owl', 'own', 'ox',
-            // CVC u words
-            'bud', 'cud', 'mud', 'bug', 'dug', 'hug', 'jug', 'mug', 'pug', 'rug',
-            'tug', 'bun', 'fun', 'gun', 'nun', 'pun', 'run', 'sun', 'but', 'cut',
-            'gut', 'hut', 'jut', 'nut', 'rut', 'bus', 'cub', 'hub', 'pub', 'rub',
-            'sub', 'tub', 'bum', 'gum', 'hum', 'sum', 'yum', 'cup', 'pup', 'sup',
-            'put',
-            // Other u patterns
-            'urn', 'use', 'ugh',
-            // Digraphs and other patterns
-            'the', 'she', 'who', 'why', 'how', 'now', 'new', 'few', 'sew', 'dew',
-            'cow', 'bow', 'row', 'low', 'sow', 'tow', 'vow', 'wow', 'two', 'see',
-            'bee', 'fee', 'pee', 'tea', 'sea', 'pea', 'too', 'zoo', 'boo', 'coo',
-            'goo', 'moo', 'woo', 'shh', 'shy', 'sky', 'spy', 'try', 'dry', 'fry',
-            'cry', 'pry', 'way', 'bay', 'day', 'hay', 'jay', 'lay', 'may', 'pay',
-            'ray', 'say', 'toy', 'boy', 'coy', 'joy', 'soy', 'car', 'bar', 'far',
-            'jar', 'tar', 'war', 'for', 'nor', 'fur', 'our', 'her', 'per', 'sir',
-            'pal', 'gal', 'gnu', 'psi', 'chi', 'phi', 'you', 'yes', 'yep', 'yak',
-            'yen', 'yew'
-        ];
-
-        const vowels = ['a', 'e', 'i', 'o', 'u'];
-        const consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'x', 'z'];
-        
-        let currentWord = ['', '', ''];
-        let isAnimating = false;
-
-        // Create letter buttons
-        function createLetterGrid() {
-            const grid = document.getElementById('letters');
-            
-            // All letters sorted alphabetically
-            const allLetters = [...consonants, ...vowels].sort();
-            
-            allLetters.forEach(function(letter) {
-                const btn = document.createElement('button');
-                btn.className = vowels.includes(letter) ? 'letter-btn vowel' : 'letter-btn consonant';
-                btn.textContent = letter;
-                btn.onclick = function() { addLetter(letter); };
-                grid.appendChild(btn);
-            });
-        }
-
-        function addLetter(letter) {
-            if (isAnimating) return;
-            
-            // Find next empty spot
-            for (let i = 0; i < 3; i++) {
-                if (currentWord[i] === '') {
-                    currentWord[i] = letter;
-                    updateDisplay();
-                    checkWord();
-                    return;
-                }
-            }
-        }
-
-        function removeLetter(index) {
-            if (isAnimating) return;
-            currentWord[index] = '';
-            updateDisplay();
-        }
-
-        function updateDisplay() {
-            for (let i = 0; i < 3; i++) {
-                const car = document.getElementById('car' + i);
-                const letter = currentWord[i];
-                
-                if (letter) {
-                    car.classList.remove('empty');
-                    car.querySelector('.letter').textContent = letter;
-                    
-                    // Add remove button if not present
-                    if (!car.querySelector('.remove-btn')) {
-                        const removeBtn = document.createElement('button');
-                        removeBtn.className = 'remove-btn';
-                        removeBtn.textContent = 'x';
-                        removeBtn.onclick = function() { removeLetter(i); };
-                        car.appendChild(removeBtn);
-                    }
-                } else {
-                    car.classList.add('empty');
-                    car.querySelector('.letter').textContent = '';
-                    const removeBtn = car.querySelector('.remove-btn');
-                    if (removeBtn) removeBtn.remove();
-                }
-            }
-        }
-
-        function checkWord() {
-            const word = currentWord.join('');
-            
-            if (word.length === 3 && validWords.includes(word)) {
-                celebrateWord();
-            }
-        }
-
-        function celebrateWord() {
-            isAnimating = true;
-            const signal = document.getElementById('signal');
-            const train = document.getElementById('train');
-            
-            // Add celebrate animation to all cars
-            for (let i = 0; i < 3; i++) {
-                const car = document.getElementById('car' + i);
-                car.classList.add('celebrate');
-                
-                // Add sparkles
-                const sparkles = ['✨', '⭐', '💫'];
-                for (let j = 0; j < 2; j++) {
-                    setTimeout(function() {
-                        const sparkle = document.createElement('div');
-                        sparkle.className = 'sparkle';
-                        sparkle.textContent = sparkles[Math.floor(Math.random() * sparkles.length)];
-                        sparkle.style.left = '50%';
-                        sparkle.style.top = '20px';
-                        sparkle.style.animationDelay = (j * 0.2) + 's';
-                        car.appendChild(sparkle);
-                        
-                        setTimeout(function() {
-                            sparkle.remove();
-                        }, 1200);
-                    }, j * 150);
-                }
-            }
-            
-            // Turn signal green
-            signal.classList.add('green');
-            
-            // Play choo sound (simple beep using Web Audio API)
-            playChoo();
-            
-            // Wait a moment, then drive off
-            setTimeout(function() {
-                train.classList.add('drive-off');
-                
-                // After train leaves, bring in new train
-                setTimeout(function() {
-                    resetTrain();
-                }, 1500);
-            }, 800);
-        }
-
-        function playChoo() {
-            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = 400;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.5);
-        }
-
-        function resetTrain() {
-            const train = document.getElementById('train');
-            const signal = document.getElementById('signal');
-            
-            // Reset position without animation
-            train.classList.remove('drive-off');
-            train.style.transition = 'none';
-            train.style.transform = 'translateX(150%)';
-            
-            // Reset word
-            currentWord = ['', '', ''];
-            updateDisplay();
-            
-            // Turn signal red
-            signal.classList.remove('green');
-            
-            // Force reflow
-            train.offsetHeight;
-            
-            // Re-enable transition and drive in
-            train.style.transition = '';
-            train.style.transform = '';
-            train.classList.add('drive-in');
-            
-            setTimeout(function() {
-                train.classList.remove('drive-in');
-                isAnimating = false;
-            }, 1500);
-        }
-
-        // Keyboard support
-        document.addEventListener('keydown', function(event) {
-            const key = event.key.toLowerCase();
-            if (vowels.includes(key) || consonants.includes(key)) {
-                addLetter(key);
-            } else if (key === 'backspace') {
-                // Remove last filled letter
-                for (let i = 2; i >= 0; i--) {
-                    if (currentWord[i] !== '') {
-                        removeLetter(i);
-                        break;
-                    }
-                }
-            }
-        });
-
-        // Initialize
-        createLetterGrid();
-    </script>
-</body>
-</html>
+</body></html>

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#F5F1E8">
+
+    <!-- Basic Meta Tags -->
+    <meta name="description" content="A visual food menu for toddlers. Helps kids choose what they want to eat with emoji pictures.">
+    <meta name="author" content="Mei (@meimakes)">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://meimakes.com/what-to-eat">
+    <meta property="og:title" content="What to Eat | meimakes">
+    <meta property="og:description" content="A visual food menu for toddlers. Helps kids choose what they want to eat with emoji pictures.">
+    <meta property="og:image" content="https://meimakes.com/what-to-eat.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://meimakes.com/what-to-eat">
+    <meta property="twitter:title" content="What to Eat | meimakes">
+    <meta property="twitter:description" content="A visual food menu for toddlers. Helps kids choose what they want to eat with emoji pictures.">
+    <meta property="twitter:image" content="https://meimakes.com/what-to-eat.jpg">
+    <meta property="twitter:creator" content="@meimakes">
+
+    <!-- Additional -->
+    <link rel="canonical" href="https://meimakes.com/what-to-eat">
+
+    <title>What to Eat | meimakes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    body {
+        font-family: 'Arial', 'Helvetica', sans-serif;
+        background: linear-gradient(135deg, #F5F1E8 0%, #E8DCC8 100%);
+        color: #4A4238;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        font-size: 2.5em;
+        margin-bottom: 10px;
+        color: #4A4238;
+        font-weight: normal;
+    }
+
+    .subtitle {
+        text-align: center;
+        font-size: 1.1em;
+        color: #8FA39A;
+        margin-bottom: 30px;
+        font-style: italic;
+    }
+
+    .filters {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 40px;
+    }
+
+    .filter-btn {
+        padding: 12px 24px;
+        font-size: 1em;
+        background: rgba(255, 255, 255, 0.7);
+        border: 2px solid #B8C5B0;
+        border-radius: 25px;
+        cursor: pointer;
+        font-family: 'Arial', sans-serif;
+        color: #4A4238;
+        transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover {
+        background: rgba(184, 197, 176, 0.3);
+    }
+
+    .filter-btn.active {
+        background: #B8C5B0;
+        color: white;
+        font-weight: bold;
+    }
+
+    .food-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 20px;
+        margin-bottom: 60px;
+    }
+
+    .food-item {
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 16px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 3px solid transparent;
+    }
+
+    .food-item:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(74, 66, 56, 0.15);
+        border-color: #B8C5B0;
+    }
+
+    .food-item:active {
+        transform: translateY(-2px);
+    }
+
+    .food-emoji {
+        font-size: 4em;
+        margin-bottom: 10px;
+        display: block;
+    }
+
+    .food-name {
+        font-size: 1.1em;
+        color: #4A4238;
+        font-weight: 500;
+    }
+
+    .food-item.hidden {
+        display: none;
+    }
+
+    footer {
+        text-align: center;
+        padding-top: 40px;
+        font-size: 0.85em;
+        color: #8FA39A;
+    }
+
+    footer a {
+        color: #8FA39A;
+        text-decoration: none;
+        border-bottom: 1px solid #B8C5B0;
+    }
+
+    .nutrition-note {
+        font-size: 0.9em;
+        line-height: 1.5;
+        max-width: 400px;
+        margin: 0 auto 8px;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2em;
+        }
+
+        .food-grid {
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .food-emoji {
+            font-size: 3em;
+        }
+
+        .food-name {
+            font-size: 0.95em;
+        }
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(74, 66, 56, 0.9);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal.active {
+        display: flex;
+    }
+
+    .modal-content {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 60px;
+        text-align: center;
+        max-width: 400px;
+        border: 4px solid #B8C5B0;
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-emoji {
+        font-size: 10em;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .modal-name {
+        font-size: 2.5em;
+        color: #4A4238;
+        font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+        .modal-content {
+            padding: 40px;
+        }
+
+        .modal-emoji {
+            font-size: 8em;
+        }
+
+        .modal-name {
+            font-size: 2em;
+        }
+    }
+
+    .nutrition-info {
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 2px dashed #B8C5B0;
+    }
+
+    .nutrition-portion {
+        font-size: 1em;
+        color: #8FA39A;
+        margin-bottom: 16px;
+        font-style: italic;
+    }
+
+    .nutrition-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .nutrition-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nutrition-value {
+        font-size: 1.3em;
+        font-weight: bold;
+        color: #4A4238;
+    }
+
+    .nutrition-label {
+        font-size: 0.75em;
+        color: #8FA39A;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    @media (max-width: 768px) {
+        .nutrition-info {
+            margin-top: 20px;
+            padding-top: 16px;
+        }
+
+        .nutrition-portion {
+            font-size: 0.9em;
+        }
+
+        .nutrition-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .nutrition-value {
+            font-size: 1.1em;
+        }
+
+        .nutrition-label {
+            font-size: 0.7em;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <div class="container">
+        <h1>What to Eat?</h1>
+        <div class="subtitle">tap a food to see it bigger</div>
+
+    <div class="filters">
+        <button class="filter-btn active" data-filter="all">all foods</button>
+        <button class="filter-btn" data-filter="protein">protein</button>
+        <button class="filter-btn" data-filter="fruit">fruit</button>
+        <button class="filter-btn" data-filter="vegetable">vegetables</button>
+        <button class="filter-btn" data-filter="grain">grains</button>
+        <button class="filter-btn" data-filter="dairy">dairy</button>
+    </div>
+
+    <div class="food-grid" id="foodGrid"></div>
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <span class="modal-emoji" id="modalEmoji"></span>
+        <div class="modal-name" id="modalName"></div>
+        <div class="nutrition-info" id="nutritionInfo">
+            <div class="nutrition-portion" id="nutritionPortion"></div>
+            <div class="nutrition-grid">
+                <div class="nutrition-item">
+                    <span class="nutrition-value" id="nutritionCalories"></span>
+                    <span class="nutrition-label">calories</span>
+                </div>
+                <div class="nutrition-item">
+                    <span class="nutrition-value" id="nutritionProtein"></span>
+                    <span class="nutrition-label">protein</span>
+                </div>
+                <div class="nutrition-item">
+                    <span class="nutrition-value" id="nutritionCarbs"></span>
+                    <span class="nutrition-label">carbs</span>
+                </div>
+                <div class="nutrition-item">
+                    <span class="nutrition-value" id="nutritionFat"></span>
+                    <span class="nutrition-label">fat</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="nutrition-note">
+        Toddler portions based on the guideline of ~1 tablespoon per year of age.
+        Nutrition data from <a href="https://fdc.nal.usda.gov/" target="_blank" rel="noopener">USDA FoodData Central</a>.
+    </div>
+    <div style="margin-top: 12px;">
+        Made with care by <a href="https://x.com/meimakes" target="_blank" rel="noopener">@meimakes</a>
+    </div>
+</footer>
+
+<script>
+    const foods = [
+        // Proteins
+        { name: 'eggs', emoji: '🥚', categories: ['protein'], nutrition: { portion: '1 small egg', calories: 54, protein: 4, carbs: 0, fat: 4 } },
+        { name: 'chicken', emoji: '🍗', categories: ['protein'], nutrition: { portion: '2 tbsp shredded', calories: 45, protein: 8, carbs: 0, fat: 1 } },
+        { name: 'bacon', emoji: '🥓', categories: ['protein'], nutrition: { portion: '1 slice', calories: 43, protein: 3, carbs: 0, fat: 3 } },
+        { name: 'beef', emoji: '🥩', categories: ['protein'], nutrition: { portion: '2 tbsp ground', calories: 50, protein: 5, carbs: 0, fat: 3 } },
+        { name: 'fish', emoji: '🐟', categories: ['protein'], nutrition: { portion: '1 oz fillet', calories: 36, protein: 7, carbs: 0, fat: 1 } },
+        { name: 'shrimp', emoji: '🦐', categories: ['protein'], nutrition: { portion: '3-4 small', calories: 30, protein: 6, carbs: 0, fat: 0 } },
+        { name: 'hot dog', emoji: '🌭', categories: ['protein'], nutrition: { portion: '1/2 hot dog', calories: 75, protein: 3, carbs: 1, fat: 7 } },
+        { name: 'ham', emoji: '🍖', categories: ['protein'], nutrition: { portion: '1 slice diced', calories: 30, protein: 5, carbs: 0, fat: 1 } },
+
+        // Fruits
+        { name: 'apple', emoji: '🍎', categories: ['fruit'], nutrition: { portion: '1/4 apple sliced', calories: 24, protein: 0, carbs: 6, fat: 0 } },
+        { name: 'banana', emoji: '🍌', categories: ['fruit'], nutrition: { portion: '1/2 small banana', calories: 45, protein: 1, carbs: 11, fat: 0 } },
+        { name: 'grapes', emoji: '🍇', categories: ['fruit'], nutrition: { portion: '8-10 halved', calories: 35, protein: 0, carbs: 9, fat: 0 } },
+        { name: 'strawberry', emoji: '🍓', categories: ['fruit'], nutrition: { portion: '3-4 small', calories: 15, protein: 0, carbs: 4, fat: 0 } },
+        { name: 'watermelon', emoji: '🍉', categories: ['fruit'], nutrition: { portion: '1/4 cup cubed', calories: 12, protein: 0, carbs: 3, fat: 0 } },
+        { name: 'orange', emoji: '🍊', categories: ['fruit'], nutrition: { portion: '2-3 segments', calories: 20, protein: 0, carbs: 5, fat: 0 } },
+        { name: 'peach', emoji: '🍑', categories: ['fruit'], nutrition: { portion: '1/4 peach sliced', calories: 15, protein: 0, carbs: 4, fat: 0 } },
+        { name: 'cherries', emoji: '🍒', categories: ['fruit'], nutrition: { portion: '4-5 pitted', calories: 25, protein: 0, carbs: 6, fat: 0 } },
+        { name: 'blueberries', emoji: '🫐', categories: ['fruit'], nutrition: { portion: '2 tbsp', calories: 20, protein: 0, carbs: 5, fat: 0 } },
+        { name: 'pineapple', emoji: '🍍', categories: ['fruit'], nutrition: { portion: '2 tbsp chunks', calories: 20, protein: 0, carbs: 5, fat: 0 } },
+        { name: 'mango', emoji: '🥭', categories: ['fruit'], nutrition: { portion: '2 tbsp cubed', calories: 25, protein: 0, carbs: 6, fat: 0 } },
+        { name: 'pear', emoji: '🍐', categories: ['fruit'], nutrition: { portion: '1/4 pear sliced', calories: 25, protein: 0, carbs: 6, fat: 0 } },
+
+        // Vegetables
+        { name: 'broccoli', emoji: '🥦', categories: ['vegetable'], nutrition: { portion: '2-3 florets', calories: 10, protein: 1, carbs: 2, fat: 0 } },
+        { name: 'carrot', emoji: '🥕', categories: ['vegetable'], nutrition: { portion: '2 tbsp cooked', calories: 12, protein: 0, carbs: 3, fat: 0 } },
+        { name: 'tomato', emoji: '🍅', categories: ['vegetable'], nutrition: { portion: '2 tbsp diced', calories: 6, protein: 0, carbs: 1, fat: 0 } },
+        { name: 'corn', emoji: '🌽', categories: ['vegetable'], nutrition: { portion: '2 tbsp kernels', calories: 30, protein: 1, carbs: 7, fat: 0 } },
+        { name: 'cucumber', emoji: '🥒', categories: ['vegetable'], nutrition: { portion: '3-4 slices', calories: 5, protein: 0, carbs: 1, fat: 0 } },
+        { name: 'lettuce', emoji: '🥬', categories: ['vegetable'], nutrition: { portion: '1-2 leaves', calories: 3, protein: 0, carbs: 1, fat: 0 } },
+        { name: 'pepper', emoji: '🫑', categories: ['vegetable'], nutrition: { portion: '2 tbsp diced', calories: 8, protein: 0, carbs: 2, fat: 0 } },
+        { name: 'potato', emoji: '🥔', categories: ['vegetable'], nutrition: { portion: '2 tbsp mashed', calories: 35, protein: 1, carbs: 8, fat: 0 } },
+        { name: 'sweet potato', emoji: '🍠', categories: ['vegetable'], nutrition: { portion: '2 tbsp mashed', calories: 35, protein: 1, carbs: 8, fat: 0 } },
+        { name: 'avocado', emoji: '🥑', categories: ['vegetable', 'protein'], nutrition: { portion: '2 tbsp mashed', calories: 50, protein: 1, carbs: 3, fat: 5 } },
+        { name: 'mushroom', emoji: '🍄', categories: ['vegetable'], nutrition: { portion: '2 tbsp sliced', calories: 5, protein: 1, carbs: 1, fat: 0 } },
+        { name: 'peas', emoji: '🫛', categories: ['vegetable', 'protein'], nutrition: { portion: '2 tbsp', calories: 25, protein: 2, carbs: 4, fat: 0 } },
+
+        // Grains
+        { name: 'bread', emoji: '🍞', categories: ['grain'], nutrition: { portion: '1/2 slice', calories: 40, protein: 2, carbs: 7, fat: 1 } },
+        { name: 'rice', emoji: '🍚', categories: ['grain'], nutrition: { portion: '2 tbsp cooked', calories: 35, protein: 1, carbs: 8, fat: 0 } },
+        { name: 'pasta', emoji: '🍝', categories: ['grain'], nutrition: { portion: '2 tbsp cooked', calories: 35, protein: 1, carbs: 7, fat: 0 } },
+        { name: 'tortilla', emoji: '🫓', categories: ['grain'], nutrition: { portion: '1/2 small tortilla', calories: 45, protein: 1, carbs: 8, fat: 1 } },
+        { name: 'bagel', emoji: '🥯', categories: ['grain'], nutrition: { portion: '1/4 mini bagel', calories: 45, protein: 2, carbs: 9, fat: 0 } },
+        { name: 'croissant', emoji: '🥐', categories: ['grain'], nutrition: { portion: '1/4 croissant', calories: 60, protein: 1, carbs: 6, fat: 3 } },
+        { name: 'pancakes', emoji: '🥞', categories: ['grain'], nutrition: { portion: '1 silver dollar', calories: 50, protein: 1, carbs: 8, fat: 2 } },
+        { name: 'waffle', emoji: '🧇', categories: ['grain'], nutrition: { portion: '1/4 waffle', calories: 45, protein: 1, carbs: 7, fat: 2 } },
+        { name: 'cereal', emoji: '🥣', categories: ['grain', 'dairy'], nutrition: { portion: '1/4 cup dry', calories: 35, protein: 1, carbs: 8, fat: 0 } },
+        { name: 'oatmeal', emoji: '🥣', categories: ['grain'], nutrition: { portion: '2 tbsp cooked', calories: 25, protein: 1, carbs: 5, fat: 0 } },
+        { name: 'pizza', emoji: '🍕', categories: ['grain', 'dairy'], nutrition: { portion: '1/4 slice', calories: 70, protein: 3, carbs: 8, fat: 3 } },
+        { name: 'sandwich', emoji: '🥪', categories: ['grain', 'protein'], nutrition: { portion: '1/4 sandwich', calories: 70, protein: 4, carbs: 8, fat: 3 } },
+
+        // Dairy
+        { name: 'milk', emoji: '🥛', categories: ['dairy', 'protein'], nutrition: { portion: '1/2 cup', calories: 75, protein: 4, carbs: 6, fat: 4 } },
+        { name: 'cheese', emoji: '🧀', categories: ['dairy', 'protein'], nutrition: { portion: '1/2 oz cubed', calories: 57, protein: 4, carbs: 0, fat: 5 } },
+        { name: 'yogurt', emoji: '🍨', categories: ['dairy', 'protein'], nutrition: { portion: '1/4 cup', calories: 37, protein: 2, carbs: 3, fat: 2 } },
+        { name: 'butter', emoji: '🧈', categories: ['dairy'], nutrition: { portion: '1/2 tsp', calories: 18, protein: 0, carbs: 0, fat: 2 } },
+        { name: 'ice cream', emoji: '🍦', categories: ['dairy'], nutrition: { portion: '2 tbsp', calories: 45, protein: 1, carbs: 5, fat: 2 } },
+
+        // Other common foods
+        { name: 'peanut butter', emoji: '🥜', categories: ['protein'], nutrition: { portion: '1 tbsp', calories: 95, protein: 4, carbs: 3, fat: 8 } },
+        { name: 'nuts', emoji: '🌰', categories: ['protein'], nutrition: { portion: '4-5 pieces', calories: 35, protein: 1, carbs: 1, fat: 3 } },
+        { name: 'beans', emoji: '🫘', categories: ['protein', 'vegetable'], nutrition: { portion: '2 tbsp', calories: 40, protein: 3, carbs: 7, fat: 0 } },
+        { name: 'soup', emoji: '🍲', categories: ['protein', 'vegetable'], nutrition: { portion: '1/4 cup', calories: 40, protein: 2, carbs: 5, fat: 1 } },
+        { name: 'french fries', emoji: '🍟', categories: ['vegetable'], nutrition: { portion: '5-6 fries', calories: 50, protein: 1, carbs: 6, fat: 3 } },
+        { name: 'popcorn', emoji: '🍿', categories: ['grain'], nutrition: { portion: '1/2 cup popped', calories: 15, protein: 0, carbs: 3, fat: 0 } }
+    ];
+
+    let currentFilter = 'all';
+
+    function createFoodGrid() {
+        const grid = document.getElementById('foodGrid');
+        grid.innerHTML = '';
+        
+        foods.forEach(function(food) {
+            const item = document.createElement('div');
+            item.className = 'food-item';
+            item.dataset.categories = food.categories.join(',');
+            
+            const emoji = document.createElement('span');
+            emoji.className = 'food-emoji';
+            emoji.textContent = food.emoji;
+            
+            const name = document.createElement('div');
+            name.className = 'food-name';
+            name.textContent = food.name;
+            
+            item.appendChild(emoji);
+            item.appendChild(name);
+            
+            item.onclick = function() {
+                showFoodModal(food.emoji, food.name, food.nutrition);
+            };
+            
+            grid.appendChild(item);
+        });
+    }
+
+    function showFoodModal(emoji, name, nutrition) {
+        document.getElementById('modalEmoji').textContent = emoji;
+        document.getElementById('modalName').textContent = name;
+        document.getElementById('nutritionPortion').textContent = 'Toddler portion: ' + nutrition.portion;
+        document.getElementById('nutritionCalories').textContent = nutrition.calories;
+        document.getElementById('nutritionProtein').textContent = nutrition.protein + 'g';
+        document.getElementById('nutritionCarbs').textContent = nutrition.carbs + 'g';
+        document.getElementById('nutritionFat').textContent = nutrition.fat + 'g';
+        document.getElementById('modal').classList.add('active');
+    }
+
+    function hideFoodModal() {
+        document.getElementById('modal').classList.remove('active');
+    }
+
+    // Close modal when clicking anywhere on it
+    document.getElementById('modal').onclick = function() {
+        hideFoodModal();
+    };
+
+    function filterFoods(category) {
+        currentFilter = category;
+        const items = document.querySelectorAll('.food-item');
+        
+        items.forEach(function(item) {
+            const categories = item.dataset.categories.split(',');
+            
+            if (category === 'all' || categories.includes(category)) {
+                item.classList.remove('hidden');
+            } else {
+                item.classList.add('hidden');
+            }
+        });
+    }
+
+    // Set up filter buttons
+    document.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.onclick = function() {
+            document.querySelectorAll('.filter-btn').forEach(function(b) {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+            filterFoods(this.dataset.filter);
+        };
+    });
+
+    // Initialize
+    createFoodGrid();
+</script>
+
+</body>
+</html>

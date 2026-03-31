@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interesting Stories</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@500;700;800&family=Patrick+Hand&display=swap');
+
+  :root {
+    --desk: #d4c5a9;
+    --paper: #faf6ee;
+    --ink: #3a2e22;
+    --ink-light: #7a6b58;
+    --brown: #8B5E3C;
+    --yellow: #FFD966;
+    --sage: #B2C2A2;
+    --blue: #8DA9FF;
+    --lavender: #B5B8E8;
+    --tape-yellow: rgba(255, 217, 102, 0.55);
+    --tape-sage: rgba(178, 194, 162, 0.5);
+    --font-hand: 'Patrick Hand', cursive;
+    --font-note: 'Caveat', cursive;
+    --font-read: 'Nunito', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--desk);
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 49px,
+        rgba(0,0,0,0.03) 49px,
+        rgba(0,0,0,0.03) 50px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 49px,
+        rgba(0,0,0,0.03) 49px,
+        rgba(0,0,0,0.03) 50px
+      );
+    color: var(--ink);
+    font-family: var(--font-read);
+    min-height: 100vh;
+  }
+
+  .desk {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+  }
+
+  /* Header — looks like a label sticker */
+  header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .title-sticker {
+    display: inline-block;
+    background: var(--paper);
+    border: 2px solid #e0d6c4;
+    border-radius: 6px;
+    padding: 0.8rem 2rem 0.5rem;
+    box-shadow: 2px 3px 0 rgba(0,0,0,0.06);
+    transform: rotate(-1.5deg);
+  }
+
+  h1 {
+    font-family: var(--font-hand);
+    font-size: 3.2rem;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .subtitle {
+    font-family: var(--font-note);
+    font-size: 1.5rem;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  /* Card grid */
+  .story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 2rem;
+    padding: 0.5rem;
+  }
+
+  /* Each card = a polaroid-style photo taped to the desk */
+  .story-card {
+    background: var(--paper);
+    padding: 10px 10px 0;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
+  }
+
+  .story-card:nth-child(1) { transform: rotate(-3deg); }
+  .story-card:nth-child(2) { transform: rotate(2deg); }
+  .story-card:nth-child(3) { transform: rotate(-1.5deg); }
+  .story-card:nth-child(4) { transform: rotate(2.5deg); }
+
+  .story-card:hover {
+    transform: translateY(-6px) rotate(0deg) scale(1.04);
+    box-shadow: 4px 8px 20px rgba(0,0,0,0.15);
+    z-index: 10;
+  }
+
+  /* Tape strips */
+  .tape {
+    position: absolute;
+    height: 20px;
+    z-index: 5;
+    border-radius: 1px;
+  }
+
+  .tape-top {
+    top: -8px;
+    left: 50%;
+    width: 55px;
+    transform: translateX(-50%) rotate(-2deg);
+    background: var(--tape-yellow);
+  }
+
+  .story-card:nth-child(2) .tape-top { transform: translateX(-50%) rotate(4deg); background: var(--tape-sage); }
+  .story-card:nth-child(3) .tape-top { transform: translateX(-40%) rotate(-5deg); }
+  .story-card:nth-child(4) .tape-top { transform: translateX(-55%) rotate(3deg); background: var(--tape-sage); }
+
+  /* Photo area */
+  .card-photo {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    display: block;
+    filter: sepia(0.15) contrast(1.05);
+  }
+
+  /* Info area below photo — like writing on a polaroid */
+  .card-info {
+    padding: 8px 4px 10px;
+  }
+
+  .card-title {
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    line-height: 1.15;
+    color: var(--ink);
+    margin-bottom: 2px;
+  }
+
+  .card-when {
+    font-family: var(--font-note);
+    font-size: 1rem;
+    color: var(--ink-light);
+  }
+
+  /* Handwritten notes next to some cards */
+  .desk-note {
+    position: absolute;
+    font-family: var(--font-note);
+    font-size: 1rem;
+    color: var(--brown);
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* Doodle stickers */
+  .sticker {
+    position: absolute;
+    font-size: 1.8rem;
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+  }
+
+  .footer-note {
+    display: inline-block;
+    background: var(--paper);
+    border: 1.5px solid #e0d6c4;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    font-family: var(--font-note);
+    font-size: 1.2rem;
+    color: var(--ink-light);
+    transform: rotate(1deg);
+    box-shadow: 1px 2px 0 rgba(0,0,0,0.04);
+  }
+
+  @media (max-width: 500px) {
+    .story-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    h1 { font-size: 2.5rem; }
+    .card-title { font-size: 1.15rem; }
+    .desk-note { display: none; }
+    .sticker { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="desk">
+  <header>
+    <div class="title-sticker">
+      <h1>Interesting Stories</h1>
+      <div class="subtitle">Real stories about amazing things</div>
+    </div>
+  </header>
+
+  <div class="story-grid">
+    <a href="stories/wright-brothers.html" class="story-card">
+      <div class="tape tape-top"></div>
+      <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/86/First_flight2.jpg" alt="Wright Brothers first flight">
+      <div class="card-info">
+        <div class="card-title">The First Airplane Flight</div>
+        <div class="card-when">1903</div>
+      </div>
+      <span class="sticker" style="bottom: -10px; right: -8px; transform: rotate(12deg);">✈️</span>
+    </a>
+
+    <a href="stories/titanic.html" class="story-card">
+      <div class="tape tape-top"></div>
+      <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/f/fd/RMS_Titanic_3.jpg" alt="RMS Titanic">
+      <div class="card-info">
+        <div class="card-title">The Story of the Titanic</div>
+        <div class="card-when">1912</div>
+      </div>
+      <span class="desk-note" style="bottom: -18px; right: 5px; transform: rotate(4deg);">so big!</span>
+    </a>
+
+    <a href="stories/golden-spike.html" class="story-card">
+      <div class="tape tape-top"></div>
+      <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/5/5d/East_and_West_Shaking_hands_at_the_laying_of_last_rail_Union_Pacific_Railroad_-_Restoration.jpg" alt="Golden Spike ceremony">
+      <div class="card-info">
+        <div class="card-title">The Golden Spike</div>
+        <div class="card-when">1869</div>
+      </div>
+      <span class="sticker" style="top: -12px; right: -6px; transform: rotate(-8deg);">🚂</span>
+    </a>
+
+    <a href="stories/dinosaurs.html" class="story-card">
+      <div class="tape tape-top"></div>
+      <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/9/94/Tyrannosaurus_Rex_Holotype.jpg" alt="T-Rex skeleton">
+      <div class="card-info">
+        <div class="card-title">What Happened to the Dinosaurs?</div>
+        <div class="card-when">66 million years ago</div>
+      </div>
+      <span class="desk-note" style="bottom: -18px; left: 8px; transform: rotate(-3deg);">wow!</span>
+    </a>
+  </div>
+
+  <footer>
+    <div class="footer-note">every story is 100% true — click one to start reading</div>
+  </footer>
+</div>
+
+</body>
+</html>

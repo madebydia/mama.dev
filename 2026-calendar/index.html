@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>🎉 2026 Fun Calendar!</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bubblegum+Sans&family=Fredoka+One&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --month-hue: 200;
+}
+
+body {
+  font-family: 'Bubblegum Sans', 'Fredoka One', cursive, sans-serif;
+  min-height: 100dvh;
+  background: linear-gradient(135deg, hsl(var(--month-hue), 80%, 85%), hsl(calc(var(--month-hue) + 40), 80%, 90%));
+  transition: background 0.6s;
+  overflow-x: hidden;
+  padding: 12px;
+}
+
+.calendar-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ---- HEADER ---- */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0 12px;
+  user-select: none;
+}
+
+.nav-btn {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  border: 4px solid rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.5);
+  font-size: 32px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, background 0.2s;
+  -webkit-user-select: none;
+}
+.nav-btn:active { transform: scale(0.88); background: rgba(255,255,255,0.8); }
+
+.month-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(28px, 7vw, 48px);
+  color: #fff;
+  text-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  text-align: center;
+  min-width: 0;
+  flex: 1;
+  line-height: 1.1;
+}
+.month-title .year { font-size: 0.55em; opacity: 0.7; display: block; }
+
+/* ---- GRID ---- */
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 4px;
+}
+.weekdays span {
+  text-align: center;
+  font-size: clamp(13px, 3.5vw, 18px);
+  font-weight: 700;
+  color: rgba(255,255,255,0.85);
+  padding: 4px 0;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  animation: fadeUp 0.35s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.day-cell {
+  aspect-ratio: 1;
+  border-radius: 18%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(16px, 4.5vw, 26px);
+  font-weight: 700;
+  color: #444;
+  background: rgba(255,255,255,0.45);
+  position: relative;
+  transition: transform 0.15s;
+}
+.day-cell.empty { background: transparent; }
+
+.day-cell.holiday {
+  background: rgba(255,255,255,0.85);
+  cursor: pointer;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+  animation: wiggle 2.5s ease-in-out infinite;
+}
+.day-cell.holiday:active { transform: scale(0.92); }
+
+.holiday-label {
+  font-size: clamp(6px, 1.8vw, 10px);
+  font-weight: 600;
+  color: #888;
+  line-height: 1.1;
+  margin-top: 2px;
+  text-align: center;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.day-cell.today {
+  outline: 4px solid #ff6b6b;
+  outline-offset: -2px;
+}
+
+.sticker {
+  font-size: clamp(18px, 5vw, 32px);
+  line-height: 1;
+  position: absolute;
+  top: 2px; right: 2px;
+  animation: bounce 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.sticker-img {
+  position: absolute;
+  top: 2px; right: 2px;
+  width: clamp(24px, 6vw, 40px);
+  height: clamp(24px, 6vw, 40px);
+  object-fit: contain;
+  animation: bounce 2s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes wiggle {
+  0%,100% { transform: rotate(0); }
+  25% { transform: rotate(-2deg); }
+  75% { transform: rotate(2deg); }
+}
+@keyframes bounce {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+@keyframes pop {
+  0% { transform: scale(0.3); opacity: 0; }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-10px) rotate(0); opacity: 1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+}
+
+/* ---- MODAL ---- */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+
+.modal {
+  background: #fff;
+  border-radius: 28px;
+  padding: 28px 24px 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+  animation: pop 0.35s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-emoji { font-size: 64px; margin-bottom: 8px; }
+.modal-title {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(22px, 5vw, 30px);
+  color: #333;
+  margin-bottom: 6px;
+}
+.modal-date { font-size: 16px; color: #999; margin-bottom: 12px; }
+.modal-desc {
+  font-size: clamp(16px, 4vw, 20px);
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+.modal-close {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: #ff6b6b;
+  color: #fff;
+  font-size: 28px;
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.modal-close:active { transform: scale(0.88); }
+
+/* confetti bits inside modal */
+.confetti {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-radius: 2px;
+  animation: confettiFall 1.2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ---- FLOATING DECORATIONS ---- */
+.floater {
+  position: fixed;
+  font-size: 28px;
+  opacity: 0.25;
+  pointer-events: none;
+  animation: floatDrift 8s ease-in-out infinite;
+}
+@keyframes floatDrift {
+  0%,100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-20px) rotate(10deg); }
+}
+</style>
+</head>
+<body>
+
+<div class="calendar-wrap">
+  <div class="header">
+    <button class="nav-btn" id="prev" aria-label="Previous month">⬅️</button>
+    <div class="month-title" id="monthTitle"></div>
+    <button class="nav-btn" id="next" aria-label="Next month">➡️</button>
+  </div>
+  <div class="weekdays" id="weekdays"></div>
+  <div class="days-grid" id="grid"></div>
+</div>
+
+<div class="modal-overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="modal-emoji" id="modalEmoji"></div>
+    <div class="modal-title" id="modalTitle"></div>
+    <div class="modal-date" id="modalDate"></div>
+    <div class="modal-desc" id="modalDesc"></div>
+    <button class="modal-close" id="modalClose">✕</button>
+  </div>
+</div>
+
+<script>
+// ========== HOLIDAY DATA ==========
+const holidays = {
+  "2026-01-01": { name: "New Year's Day! 🎉", emoji: "🎉", sticker: "🎊", img: "images/new-years-day.png", desc: "Happy New Year! Today we start a brand new year — 2026! Time for fun, hugs, and new adventures!" },
+  "2026-01-19": { name: "Martin Luther King Jr. Day ✊", emoji: "🕊️", sticker: "🕊️", img: "images/mlk-day.png", desc: "Today we remember Dr. Martin Luther King Jr. He taught everyone to be kind and treat all people fairly. He had a big dream that everyone could be friends!" },
+  "2026-02-02": { name: "Groundhog Day! 🐿️", emoji: "🐿️", sticker: "🐿️", img: "images/groundhog-day.png", desc: "A cute little groundhog peeks out of his hole today! If he sees his shadow, there might be more winter. If not — spring is coming soon!" },
+  "2026-02-14": { name: "Valentine's Day 💕", emoji: "💖", sticker: "💕", img: "images/valentines-day.png", desc: "A day full of LOVE! We give cards and hugs to the people we love most. You are SO loved! 💕" },
+  "2026-02-16": { name: "Presidents' Day 🇺🇸", emoji: "🎩", sticker: "🎩", img: "images/presidents-day.png", desc: "Today we remember some very important leaders of our country, like George Washington and Abraham Lincoln!" },
+  "2026-03-17": { name: "St. Patrick's Day ☘️", emoji: "☘️", sticker: "🍀", img: "images/st-patricks-day.png", desc: "Wear something GREEN today! 💚 People celebrate with shamrocks, leprechauns, and lots of green silliness!" },
+  "2026-03-20": { name: "First Day of Spring! 🌸", emoji: "🌷", sticker: "🌸", img: "images/spring.png", desc: "Spring is here! Flowers start to bloom, birds sing, and it gets warmer outside. Time to play in the sunshine! 🌞" },
+  "2026-04-05": { name: "Easter 🐣", emoji: "🐣", sticker: "🥚", img: "images/easter.png", desc: "Happy Easter! Time for egg hunts, chocolate bunnies, and springtime fun! Can you find all the hidden eggs? 🥚🐰" },
+  "2026-05-10": { name: "Mother's Day 💐", emoji: "👩‍👧‍👦", sticker: "💐", img: "images/mothers-day.png", desc: "Today we celebrate MOMS! Give your mommy extra hugs and tell her she's the BEST! 🥰 Thank you, Mom!" },
+  "2026-05-25": { name: "Memorial Day 🇺🇸", emoji: "🎗️", sticker: "🇺🇸", img: "images/memorial-day.png", desc: "A day to remember brave people who helped keep our country safe. We say 'thank you' to our heroes." },
+  "2026-06-19": { name: "Juneteenth ✊🏿", emoji: "✊", sticker: "🎆", img: "images/juneteenth.png", desc: "A very special day celebrating freedom and equality for all people! We celebrate with joy, music, and togetherness!" },
+  "2026-06-20": { name: "First Day of Summer! ☀️", emoji: "☀️", sticker: "🌞", img: "images/summer.png", desc: "SUMMER IS HERE! The longest day of the year! Time for swimming, ice pops, and staying up a little later! 🏖️" },
+  "2026-06-21": { name: "Father's Day 👔", emoji: "👨‍👧‍👦", sticker: "👔", img: "images/fathers-day.png", desc: "Today we celebrate DADS! Give your daddy the biggest hug ever! Thank you, Dad, for everything! 💙" },
+  "2026-07-04": { name: "4th of July! 🎆", emoji: "🎆", sticker: "🎇", img: "images/fourth-of-july.png", desc: "Happy Birthday, America! 🇺🇸 Today we watch FIREWORKS, eat hot dogs, and wave flags! BOOM! SPARKLE! POP! 🎆🎇✨" },
+  "2026-09-07": { name: "Labor Day 👷", emoji: "👷", sticker: "🛠️", img: "images/labor-day.png", desc: "A day off to relax! We thank all the workers who help build, teach, heal, and make our world go round! 💪" },
+  "2026-09-22": { name: "First Day of Fall! 🍂", emoji: "🍁", sticker: "🍂", img: "images/fall.png", desc: "Autumn is here! Leaves turn red, orange, and yellow. Time for apple picking, pumpkin patches, and cozy sweaters! 🧣" },
+  "2026-10-31": { name: "HALLOWEEN! 🎃", emoji: "🎃", sticker: "👻", img: "images/halloween.png", desc: "BOO! 👻 Time to dress up in costumes and go trick-or-treating! What do you want to be? A dinosaur? A princess? A superhero? 🍬🍭" },
+  "2026-11-11": { name: "Veterans Day 🎖️", emoji: "🎖️", sticker: "🇺🇸", img: "images/veterans-day.png", desc: "We say THANK YOU to all the brave men and women who served in the military to keep us safe! 🫡" },
+  "2026-11-26": { name: "Thanksgiving! 🦃", emoji: "🦃", sticker: "🍗", img: "images/thanksgiving.png", desc: "Gobble gobble! 🦃 Today we eat turkey, pie, and give THANKS for all the wonderful things in our lives — especially family! 🥧" },
+  "2026-12-21": { name: "First Day of Winter! ❄️", emoji: "⛄", sticker: "❄️", img: "images/winter.png", desc: "Winter is here! Bundle up! Time for snowflakes, hot cocoa, and maybe even a snowman! ⛄☕" },
+  "2026-12-24": { name: "Christmas Eve 🌟", emoji: "🌟", sticker: "🌟", img: "images/christmas-eve.png", desc: "Tomorrow is Christmas! Tonight we might leave cookies for Santa 🎅 and listen for jingle bells! Shhh… is that a reindeer? 🦌" },
+  "2026-12-25": { name: "Christmas Day! 🎄", emoji: "🎄", sticker: "🎁", img: "images/christmas-day.png", desc: "MERRY CHRISTMAS! 🎄 Open presents, sing songs, eat yummy food, and be with the people you love! Ho ho ho! 🎅🎁" },
+  "2026-12-31": { name: "New Year's Eve 🥳", emoji: "🥳", sticker: "🎊", img: "images/new-years-eve.png", desc: "Tonight we count down… 10, 9, 8, 7, 6, 5, 4, 3, 2, 1… HAPPY NEW YEAR! 🎉 (But little ones might be asleep by then! 😴)" },
+  "2026-01-28": { name: "National Lego Day! 🧱", emoji: "🧱", sticker: "🧱", img: "images/lego-day.png", desc: "Click, click, BUILD! Today we celebrate LEGOS! What will you build? A castle? A spaceship? A dinosaur? 🏰🚀🦕" },
+  "2026-04-02": { name: "National PB&J Day! 🥜", emoji: "🥪", sticker: "🥜", img: "images/pbj-day.png", desc: "Peanut butter and jelly — the BEST sandwich ever! Sticky, sweet, and yummy in your tummy! 😋" },
+  "2026-06-01": { name: "National Dinosaur Day! 🦖", emoji: "🦕", sticker: "🦖", img: "images/dinosaur-day.png", desc: "ROARRR! 🦖 Today we celebrate dinosaurs! T-Rex, Triceratops, Brachiosaurus — which one is YOUR favorite? 🦕" },
+  "2026-08-01": { name: "National Coloring Book Day! 🖍️", emoji: "🖍️", sticker: "🎨", img: "images/coloring-book-day.png", desc: "Grab your crayons and color ALL the things! Stay in the lines… or don't! Art is about having FUN! 🌈" },
+};
+
+const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+const dayNames = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const monthHues = [210, 330, 140, 280, 50, 170, 10, 30, 25, 270, 35, 350];
+const monthEmoji = ["⛄","💕","☘️","🐣","🌸","☀️","🎆","🏖️","🍎","🎃","🦃","🎄"];
+
+let currentMonth = new Date().getMonth();
+let currentYear = 2026;
+
+const $grid = document.getElementById('grid');
+const $title = document.getElementById('monthTitle');
+const $weekdays = document.getElementById('weekdays');
+const $overlay = document.getElementById('overlay');
+
+// Build weekday headers
+dayNames.forEach(d => {
+  const s = document.createElement('span');
+  s.textContent = d;
+  $weekdays.appendChild(s);
+});
+
+function render() {
+  document.documentElement.style.setProperty('--month-hue', monthHues[currentMonth]);
+  $title.innerHTML = `${monthEmoji[currentMonth]} ${monthNames[currentMonth]}<span class="year">2026</span>`;
+
+  $grid.innerHTML = '';
+  const firstDay = new Date(2026, currentMonth, 1).getDay();
+  const daysInMonth = new Date(2026, currentMonth + 1, 0).getDate();
+
+  for (let i = 0; i < firstDay; i++) {
+    const empty = document.createElement('div');
+    empty.className = 'day-cell empty';
+    $grid.appendChild(empty);
+  }
+
+  const today = new Date();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `2026-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+
+    if (today.getFullYear() === 2026 && today.getMonth() === currentMonth && today.getDate() === d) {
+      cell.classList.add('today');
+    }
+
+    const h = holidays[key];
+    if (h) {
+      cell.classList.add('holiday');
+      // Strip emoji from name for the label
+      const shortName = h.name.replace(/[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{FE00}-\u{FEFF}\u{1F900}-\u{1F9FF}\u{200D}\u{20E3}\u{E0020}-\u{E007F}✊]/gu, '').trim();
+      const stickerHtml = h.img
+        ? `<img class="sticker-img" src="${h.img}" alt="${shortName}">`
+        : `<span class="sticker">${h.sticker}</span>`;
+      cell.innerHTML = `${d}${stickerHtml}<span class="holiday-label">${shortName}</span>`;
+      cell.addEventListener('click', () => openModal(h, key));
+    } else {
+      cell.textContent = d;
+    }
+    $grid.appendChild(cell);
+  }
+
+  // Floating decorations
+  document.querySelectorAll('.floater').forEach(e => e.remove());
+  const deco = monthEmoji[currentMonth];
+  for (let i = 0; i < 4; i++) {
+    const f = document.createElement('div');
+    f.className = 'floater';
+    f.textContent = deco;
+    f.style.left = Math.random() * 90 + 5 + '%';
+    f.style.top = Math.random() * 80 + 10 + '%';
+    f.style.animationDelay = (Math.random() * 4) + 's';
+    f.style.fontSize = (22 + Math.random() * 20) + 'px';
+    document.body.appendChild(f);
+  }
+}
+
+function openModal(h, key) {
+  const [,m,d] = key.split('-').map(Number);
+  const emojiEl = document.getElementById('modalEmoji');
+  if (h.img) {
+    emojiEl.innerHTML = `<img src="${h.img}" style="width:80px;height:80px;object-fit:contain;">`;
+  } else {
+    emojiEl.textContent = h.emoji;
+  }
+  document.getElementById('modalTitle').textContent = h.name;
+  document.getElementById('modalDate').textContent = `${monthNames[m-1]} ${d}, 2026`;
+  document.getElementById('modalDesc').textContent = h.desc;
+  $overlay.classList.add('open');
+
+  // confetti
+  const modal = document.getElementById('modal');
+  modal.querySelectorAll('.confetti').forEach(c => c.remove());
+  const colors = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff6bcb','#ffa94d'];
+  for (let i = 0; i < 20; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.top = '-10px';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.animationDelay = (Math.random() * 0.6) + 's';
+    c.style.animationDuration = (0.8 + Math.random() * 0.8) + 's';
+    modal.appendChild(c);
+  }
+}
+
+function closeModal() { $overlay.classList.remove('open'); }
+document.getElementById('modalClose').addEventListener('click', closeModal);
+$overlay.addEventListener('click', e => { if (e.target === $overlay) closeModal(); });
+
+document.getElementById('prev').addEventListener('click', () => {
+  currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  render();
+});
+document.getElementById('next').addEventListener('click', () => {
+  currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+  render();
+});
+
+// Swipe support
+let touchStartX = 0;
+document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend', e => {
+  const diff = e.changedTouches[0].clientX - touchStartX;
+  if (Math.abs(diff) > 60) {
+    if (diff < 0) { currentMonth = currentMonth === 11 ? 0 : currentMonth + 1; }
+    else { currentMonth = currentMonth === 0 ? 11 : currentMonth - 1; }
+    render();
+  }
+}, { passive: true });
+
+render();
+</script>
+</body>
+</html>

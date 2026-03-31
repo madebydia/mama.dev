@@ -1,0 +1,306 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@500;700;800&family=Patrick+Hand&display=swap');
+
+:root {
+  --desk: #d4c5a9;
+  --paper: #faf6ee;
+  --ink: #3a2e22;
+  --ink-light: #7a6b58;
+  --brown: #8B5E3C;
+  --yellow: #FFD966;
+  --sage: #B2C2A2;
+  --blue: #8DA9FF;
+  --tape-yellow: rgba(255, 217, 102, 0.55);
+  --tape-sage: rgba(178, 194, 162, 0.5);
+  --font-hand: 'Patrick Hand', cursive;
+  --font-note: 'Caveat', cursive;
+  --font-read: 'Nunito', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--desk);
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 49px, rgba(0,0,0,0.03) 49px, rgba(0,0,0,0.03) 50px),
+    repeating-linear-gradient(90deg, transparent, transparent 49px, rgba(0,0,0,0.03) 49px, rgba(0,0,0,0.03) 50px);
+  color: var(--ink);
+  font-family: var(--font-read);
+  min-height: 100vh;
+}
+
+.desk-surface {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-note);
+  font-size: 1.3rem;
+  color: var(--ink-light);
+  text-decoration: none;
+  margin-bottom: 1rem;
+}
+
+.back-link:hover { color: var(--brown); }
+
+/* The page — a sheet of paper on the desk */
+.page {
+  background: var(--paper);
+  padding: 2.5rem 2.5rem 2rem;
+  position: relative;
+  box-shadow: 3px 5px 15px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.03);
+  border-radius: 2px;
+}
+
+/* Tape holding the page down */
+.page-tape {
+  position: absolute;
+  height: 20px;
+  border-radius: 1px;
+  z-index: 5;
+}
+
+.page-tape-tl {
+  top: -6px;
+  left: 30px;
+  width: 60px;
+  background: var(--tape-yellow);
+  transform: rotate(-4deg);
+}
+
+.page-tape-tr {
+  top: -6px;
+  right: 40px;
+  width: 50px;
+  background: var(--tape-sage);
+  transform: rotate(3deg);
+}
+
+/* Title */
+h1 {
+  font-family: var(--font-hand);
+  font-size: 2.6rem;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 0.2rem;
+}
+
+.date-line {
+  font-family: var(--font-note);
+  font-size: 1.2rem;
+  color: var(--ink-light);
+  margin-bottom: 1.2rem;
+}
+
+/* Photo — taped into the scrapbook */
+.photo-frame {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin-bottom: 0.3rem;
+}
+
+.hero-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  display: block;
+  filter: sepia(0.1) contrast(1.05);
+  border: 6px solid white;
+  box-shadow: 1px 2px 6px rgba(0,0,0,0.1);
+}
+
+.photo-tape {
+  position: absolute;
+  height: 18px;
+  border-radius: 1px;
+  z-index: 5;
+}
+
+.photo-tape-l {
+  top: 10px;
+  left: -8px;
+  width: 50px;
+  background: var(--tape-sage);
+  transform: rotate(-8deg);
+}
+
+.photo-tape-r {
+  bottom: 15px;
+  right: -6px;
+  width: 45px;
+  background: var(--tape-yellow);
+  transform: rotate(6deg);
+}
+
+.caption {
+  font-family: var(--font-note);
+  font-size: 1.15rem;
+  color: var(--ink-light);
+  margin-bottom: 1.2rem;
+}
+
+/* Story body */
+.story-body {
+  font-size: 1.2rem;
+  line-height: 1.85;
+  font-weight: 500;
+}
+
+.story-body p {
+  margin-bottom: 1rem;
+}
+
+/* Highlighted vocabulary */
+.highlight {
+  background: var(--yellow);
+  padding: 1px 5px;
+  border-radius: 3px 8px 3px 8px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Emphasis */
+.big-text {
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  color: var(--brown);
+}
+
+/* Fun fact — like a sticky note */
+.fun-fact {
+  background: #fff9e0;
+  border: 1.5px solid #eed88a;
+  padding: 1rem 1.2rem;
+  margin: 1.2rem 0;
+  border-radius: 2px;
+  position: relative;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.06);
+  transform: rotate(0.5deg);
+}
+
+.fun-fact strong {
+  font-family: var(--font-hand);
+  font-size: 1.25rem;
+  color: var(--brown);
+}
+
+.fun-fact::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 20px;
+  width: 40px;
+  height: 16px;
+  background: var(--tape-yellow);
+  transform: rotate(2deg);
+  border-radius: 1px;
+}
+
+/* Margin scribbles */
+.margin-note {
+  position: absolute;
+  font-family: var(--font-note);
+  font-size: 1.15rem;
+  color: var(--brown);
+  pointer-events: none;
+}
+
+/* Actions */
+.story-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-block;
+  background: none;
+  border: 1.5px dashed var(--ink-light);
+  padding: 6px 16px;
+  font-family: var(--font-hand);
+  font-size: 1.2rem;
+  color: var(--ink-light);
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn:hover {
+  background: var(--yellow);
+  color: var(--ink);
+  border-color: var(--ink);
+  transform: rotate(-1deg) scale(1.03);
+}
+
+/* ─── PRINT ─── */
+@media print {
+  body { background: white; }
+  .desk-surface > .back-link, .story-actions, .page-tape, .photo-tape { display: none !important; }
+  .desk-surface { padding: 0; max-width: 100%; }
+
+  .page {
+    box-shadow: none;
+    padding: 0.3in 0.5in;
+    background: white;
+  }
+
+  h1 { font-size: 22pt; }
+  .date-line { font-size: 10pt; }
+  .caption { font-size: 9pt; }
+
+  .hero-image {
+    max-height: 3in;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    filter: none;
+  }
+
+  .story-body { font-size: 13pt; line-height: 1.7; }
+  .story-body p { margin-bottom: 0.15in; }
+
+  .highlight {
+    background: #fff3b0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .big-text {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .fun-fact {
+    border: 1px solid #ddd;
+    background: #fffde8;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    transform: none;
+    font-size: 11pt;
+  }
+
+  .fun-fact::before { display: none; }
+
+  .margin-note {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    font-size: 9pt;
+  }
+}
+
+/* ─── MOBILE ─── */
+@media (max-width: 600px) {
+  .page { padding: 1.5rem 1.2rem; }
+  h1 { font-size: 2rem; }
+  .hero-image { max-height: 200px; }
+  .story-body { font-size: 1.1rem; }
+  .margin-note { display: none; }
+  .photo-tape { display: none; }
+}
