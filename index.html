@@ -29,10 +29,14 @@
             --shadow-high: 5px 10px 15px rgba(44, 42, 39, 0.15);
         }
 
-        * {
+        *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        html {
+            overflow-x: clip;
         }
 
         body {
