@@ -47,7 +47,7 @@
             font-size: 24px;
             line-height: 1.2;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: clip;
             padding: 40px 20px;
             position: relative;
         }
@@ -187,6 +187,7 @@
             padding: 15px 15px 40px 15px;
             box-shadow: var(--shadow-lift);
             width: 300px;
+            max-width: 100%;
             position: relative;
         }
 
@@ -233,6 +234,7 @@
             padding: 30px 20px;
             box-shadow: var(--shadow-flat);
             width: 320px;
+            max-width: 100%;
             border-left: 2px solid rgba(200, 50, 50, 0.4); 
             position: relative;
             background-image: repeating-linear-gradient(transparent, transparent 29px, rgba(0,100,200,0.1) 30px);
@@ -280,6 +282,7 @@
             background: #faf8f5;
             padding: 30px;
             width: 340px;
+            max-width: 100%;
             box-shadow: var(--shadow-lift);
             
             background-image: 
@@ -351,10 +354,10 @@
         }
 
         .proj-desc {
-            font-family: var(--font-hand);
+            font-family: var(--font-scribble);
             font-size: 1.4rem;
             color: var(--pencil);
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .typewriter-title {
@@ -413,6 +416,19 @@
                 margin-bottom: 20px;
             }
             .coffee-ring { display: none; }
+            .tape-corner-1, .tape-corner-2 {
+                display: none;
+            }
+            .paperclip {
+                display: none;
+            }
+            .projects-board {
+                padding: 10px;
+                overflow: hidden;
+            }
+            .desk-surface {
+                overflow: hidden;
+            }
         }
 
     </style>
