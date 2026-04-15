@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Invention of LEGO — Interesting Stories</title>
+<link rel="stylesheet" href="../css/story.css">
+<style>
+  /* ─── LEGO BRICK THEME ─── */
+  :root {
+    --lego-red: #D01012;
+    --lego-blue: #0055BF;
+    --lego-yellow: #FFD500;
+    --lego-green: #237841;
+  }
+
+  /* Override tape colors with LEGO primary colors */
+  .page-tape-tl { background: rgba(208, 16, 18, 0.55); }
+  .page-tape-tr { background: rgba(0, 85, 191, 0.55); }
+
+  .photo-tape-l { background: rgba(255, 213, 0, 0.6); }
+  .photo-tape-r { background: rgba(35, 120, 65, 0.55); }
+
+  /* LEGO brick divider between sections */
+  .brick-divider {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin: 1.4rem 0;
+    padding: 0;
+  }
+
+  .brick {
+    width: 52px;
+    height: 28px;
+    border-radius: 3px;
+    position: relative;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.15);
+  }
+
+  /* Studs on top of each brick */
+  .brick::before,
+  .brick::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    width: 12px;
+    height: 7px;
+    border-radius: 50% 50% 0 0;
+    box-shadow: 0 -1px 0 rgba(0,0,0,0.08);
+  }
+
+  .brick::before { left: 10px; background: inherit; filter: brightness(1.08); }
+  .brick::after  { right: 10px; background: inherit; filter: brightness(1.08); }
+
+  .brick-red    { background: var(--lego-red); }
+  .brick-blue   { background: var(--lego-blue); }
+  .brick-yellow { background: var(--lego-yellow); }
+  .brick-green  { background: var(--lego-green); }
+
+  /* LEGO-colored highlights */
+  .hl-red    { background: rgba(208, 16, 18, 0.15); padding: 1px 5px; border-radius: 3px 8px 3px 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl-blue   { background: rgba(0, 85, 191, 0.15); padding: 1px 5px; border-radius: 3px 8px 3px 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl-yellow { background: rgba(255, 213, 0, 0.3); padding: 1px 5px; border-radius: 3px 8px 3px 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  .hl-green  { background: rgba(35, 120, 65, 0.15); padding: 1px 5px; border-radius: 3px 8px 3px 8px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+
+  /* Fun fact styled like a LEGO instruction booklet */
+  .fun-fact {
+    background: #fff8e0;
+    border: 2px solid var(--lego-yellow);
+    border-left: 5px solid var(--lego-red);
+  }
+
+  .fun-fact::before {
+    background: rgba(0, 85, 191, 0.45);
+  }
+
+  .fun-fact strong {
+    color: var(--lego-red);
+  }
+
+  /* Margin notes in LEGO colors */
+  .margin-note { color: var(--lego-blue); }
+
+  /* Big text in LEGO red */
+  .big-text { color: var(--lego-red); }
+
+  /* Stud decoration row at bottom of page */
+  .stud-row {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .stud {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.12), inset 0 1px 2px rgba(255,255,255,0.3);
+  }
+
+  .stud-red    { background: var(--lego-red); }
+  .stud-blue   { background: var(--lego-blue); }
+  .stud-yellow { background: var(--lego-yellow); }
+  .stud-green  { background: var(--lego-green); }
+
+  /* Print overrides */
+  @media print {
+    .brick-divider, .stud-row { display: none; }
+    .hl-red, .hl-blue, .hl-yellow, .hl-green {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="desk-surface">
+  <a href="../index.html" class="back-link">← all stories</a>
+
+  <div class="page">
+    <div class="page-tape page-tape-tl"></div>
+    <div class="page-tape page-tape-tr"></div>
+
+    <h1>The Invention of LEGO</h1>
+    <div class="date-line">1932 — Billund, Denmark</div>
+
+    <div class="photo-frame">
+      <div class="photo-tape photo-tape-l"></div>
+      <div class="photo-tape photo-tape-r"></div>
+      <img class="hero-image" src="https://upload.wikimedia.org/wikipedia/commons/3/32/Lego_Color_Bricks.jpg" alt="Colorful LEGO bricks piled together">
+    </div>
+    <p class="caption">Colorful LEGO bricks — the same simple shape that has been connecting since 1958.</p>
+
+    <span class="margin-note" style="position: absolute; right: 15px; top: 370px; transform: rotate(3deg);">leg godt!</span>
+
+    <div class="story-body">
+      <p>In a tiny town called <span class="hl-blue">Billund</span> in Denmark, there lived a carpenter named <span class="hl-red">Ole Kirk Christiansen</span>. He made tables, chairs, and doors for people in his village. But in the 1930s, times were very hard. Not many people needed new furniture.</p>
+
+      <p>Ole had an idea. He started making <span class="hl-yellow">wooden toys</span> — little cars, pull-along ducks, and tiny animals. They were beautiful, and children loved them!</p>
+
+      <div class="brick-divider">
+        <div class="brick brick-red"></div>
+        <div class="brick brick-yellow"></div>
+        <div class="brick brick-blue"></div>
+        <div class="brick brick-green"></div>
+      </div>
+
+      <p>In 1934, Ole gave his company a name. He put together two Danish words: <span class="hl-green">"leg godt"</span>, which means <span class="big-text">"play well."</span> That became LEGO.</p>
+
+      <span class="margin-note" style="position: absolute; right: 15px; top: 680px; transform: rotate(-3deg);">wooden duck!</span>
+
+      <p>After World War II ended, something exciting happened. A new material called <span class="hl-blue">plastic</span> arrived in Denmark. In 1949, LEGO began making small plastic bricks called "Automatic Binding Bricks." They could stack on top of each other — but they fell apart too easily.</p>
+
+      <p>Ole's son, <span class="hl-red">Godtfred</span>, kept experimenting. In 1958, he invented a brilliant new design. Each brick had little tubes inside the bottom that gripped the studs on top of another brick. They locked together perfectly — with a satisfying <span class="big-text">click!</span></p>
+
+      <div class="brick-divider">
+        <div class="brick brick-blue"></div>
+        <div class="brick brick-red"></div>
+        <div class="brick brick-green"></div>
+        <div class="brick brick-yellow"></div>
+      </div>
+
+      <p>This was the moment that changed everything. Now children could build towers, castles, spaceships — anything they could imagine — and the bricks would hold together.</p>
+
+      <p>The most amazing part? A LEGO brick made in <span class="hl-green">1958</span> still fits perfectly with a brick made today. Every single brick connects with every other brick, no matter how old or new it is.</p>
+
+      <p>Today, the LEGO factory in Billund makes about <span class="big-text">36 billion</span> bricks every year. That is about 100 million bricks every single day! LEGO is now one of the biggest toy companies in the whole world — all because a carpenter in a small Danish town decided to make children smile.</p>
+
+      <div class="fun-fact">
+        <strong>Fun Fact:</strong> The word LEGO also sounds like the Latin word <span class="hl-yellow">"lego"</span>, which means "I put together." Ole Kirk Christiansen didn't know this when he picked the name — it was a happy accident!
+      </div>
+
+      <div class="stud-row">
+        <div class="stud stud-red"></div>
+        <div class="stud stud-yellow"></div>
+        <div class="stud stud-blue"></div>
+        <div class="stud stud-green"></div>
+        <div class="stud stud-red"></div>
+        <div class="stud stud-yellow"></div>
+        <div class="stud stud-blue"></div>
+        <div class="stud stud-green"></div>
+      </div>
+    </div>
+
+    <div class="story-actions">
+      <button class="btn" onclick="window.print()">🖨️ print this story</button>
+      <a href="../index.html" class="btn">← more stories</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
