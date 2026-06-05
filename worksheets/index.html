@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Worksheets | mama.dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&family=Walter+Turncoat&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper-bg: #f3f0ea;
+    --paper-dark: #e8e3d8;
+    --ink-black: #2c2a27;
+    --ink-blue: #1c457a;
+    --ink-red: #a83a32;
+    --pencil: #5a5954;
+    --tape-yellow: rgba(232, 222, 172, 0.78);
+    --tape-blue: rgba(162, 192, 212, 0.72);
+    --font-typewriter: 'Special Elite', monospace;
+    --font-hand: 'Just Another Hand', cursive;
+    --font-marker: 'Walter Turncoat', cursive;
+    --font-scribble: 'Nanum Pen Script', cursive;
+    --shadow-flat: 1px 1px 2px rgba(44, 42, 39, 0.15);
+    --shadow-lift: 2px 4px 8px rgba(44, 42, 39, 0.2);
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
+      var(--paper-bg);
+    color: var(--ink-black);
+    font-family: var(--font-hand);
+    font-size: 24px;
+    line-height: 1.2;
+    padding: 34px 18px 54px;
+  }
+
+  .desk {
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+
+  .back-link {
+    display: inline-block;
+    color: var(--ink-blue);
+    font-family: var(--font-typewriter);
+    font-size: 0.82rem;
+    text-decoration: none;
+    border-bottom: 2px solid var(--ink-blue);
+    margin-bottom: 34px;
+  }
+
+  header {
+    max-width: 760px;
+    margin-bottom: 38px;
+    transform: rotate(-1deg);
+  }
+
+  h1 {
+    display: inline-block;
+    margin: 0;
+    padding: 12px 20px 8px;
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: var(--shadow-flat);
+    font-family: var(--font-typewriter);
+    font-size: clamp(2.2rem, 6vw, 4.3rem);
+    line-height: 1;
+  }
+
+  .subtitle {
+    margin: 18px 0 0 28px;
+    max-width: 620px;
+    color: var(--pencil);
+    font-family: var(--font-marker);
+    font-size: clamp(1.25rem, 3.4vw, 1.75rem);
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 34px;
+    align-items: start;
+  }
+
+  .worksheet-card {
+    position: relative;
+    display: flex;
+    min-height: 100%;
+    flex-direction: column;
+    padding: 14px 14px 22px;
+    background: #fffdf8;
+    color: inherit;
+    text-decoration: none;
+    box-shadow: var(--shadow-lift);
+    transform: rotate(var(--tilt));
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .worksheet-card:hover,
+  .worksheet-card:focus-visible {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: 4px 8px 16px rgba(44, 42, 39, 0.2);
+    outline: none;
+  }
+
+  .worksheet-card::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 112px;
+    height: 30px;
+    transform: translateX(-50%) rotate(var(--tape-tilt));
+    background: var(--tape-yellow);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%, 3% 50%);
+  }
+
+  .preview {
+    aspect-ratio: 8.5 / 11;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid rgba(44, 42, 39, 0.14);
+    background: var(--paper-dark);
+  }
+
+  .preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .card-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 18px 4px 0;
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-marker);
+    font-size: 1.8rem;
+    line-height: 1;
+  }
+
+  .meta {
+    margin: 8px 0 0;
+    color: var(--pencil);
+    font-family: var(--font-typewriter);
+    font-size: 0.72rem;
+    line-height: 1.45;
+  }
+
+  .desc {
+    margin: 12px 0 0;
+    color: var(--pencil);
+    font-family: var(--font-scribble);
+    font-size: 1.36rem;
+  }
+
+  .download {
+    align-self: flex-start;
+    margin-top: auto;
+    padding-top: 16px;
+    color: var(--ink-red);
+    border-bottom: 2px solid var(--ink-red);
+    font-family: var(--font-scribble);
+    font-size: 1.45rem;
+  }
+
+  .note {
+    max-width: 660px;
+    margin: 42px auto 0;
+    padding: 18px 22px;
+    background: rgba(255, 255, 255, 0.55);
+    border: 1px dashed rgba(44, 42, 39, 0.28);
+    color: var(--pencil);
+    font-family: var(--font-typewriter);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    text-align: center;
+  }
+
+  @media (max-width: 700px) {
+    body {
+      padding: 24px 14px 40px;
+    }
+
+    .gallery {
+      grid-template-columns: 1fr;
+      gap: 42px;
+    }
+
+    .worksheet-card {
+      transform: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="desk">
+    <a class="back-link" href="/">back to mama.dev</a>
+
+    <header>
+      <h1>worksheets</h1>
+      <p class="subtitle">Printable pages for quiet tables, marker bins, rainy mornings, and tiny hands that want a job.</p>
+    </header>
+
+    <main class="gallery" aria-label="Worksheet downloads">
+      <a class="worksheet-card" style="--tilt: -1.8deg; --tape-tilt: 2deg;" href="files/color-i-spy.pdf" download>
+        <div class="preview">
+          <img src="previews/color-i-spy.jpg" width="720" height="556" alt="Preview of Color I Spy worksheet" loading="eager" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Color I Spy</h2>
+          <p class="meta">PDF download · color hunt</p>
+          <p class="desc">A visual search page for spotting colors and naming what you find.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+
+      <a class="worksheet-card" style="--tilt: 1.2deg; --tape-tilt: -3deg;" href="files/shape-sort.pdf" download>
+        <div class="preview">
+          <img src="previews/shape-sort.jpg" width="695" height="900" alt="Preview of Shape Sort worksheet" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Shape Sort</h2>
+          <p class="meta">PDF download · sorting</p>
+          <p class="desc">Cut, match, and sort simple shapes into the right homes.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+
+      <a class="worksheet-card" style="--tilt: -0.8deg; --tape-tilt: 4deg;" href="files/pizza-addition.pdf" download>
+        <div class="preview">
+          <img src="previews/pizza-addition.jpg" width="695" height="900" alt="Preview of Pizza Addition worksheet" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Pizza Addition</h2>
+          <p class="meta">PDF download · early math</p>
+          <p class="desc">A playful addition page with pizza pieces and small sums.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+
+      <a class="worksheet-card" style="--tilt: 2deg; --tape-tilt: 1deg;" href="files/construction-packet.pdf" download>
+        <div class="preview">
+          <img src="previews/construction-packet.jpg" width="695" height="900" alt="Preview of Construction Packet worksheet" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Construction Packet</h2>
+          <p class="meta">PDF download · activity packet</p>
+          <p class="desc">Construction-themed pages for counting, matching, and coloring.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+
+      <a class="worksheet-card" style="--tilt: -1.4deg; --tape-tilt: -2deg;" href="files/months-of-the-year-poster.pdf" download>
+        <div class="preview">
+          <img src="previews/months-of-the-year-poster.jpg" width="720" height="540" alt="Preview of Months of the Year poster" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Months Poster</h2>
+          <p class="meta">PDF download · calendar words</p>
+          <p class="desc">A bright reference poster for learning the months of the year.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+
+      <a class="worksheet-card" style="--tilt: 0.9deg; --tape-tilt: 3deg;" href="files/indoor-scavenger-hunt.pdf" download>
+        <div class="preview">
+          <img src="previews/indoor-scavenger-hunt.jpg" width="695" height="900" alt="Preview of Indoor Scavenger Hunt printable" loading="lazy" decoding="async">
+        </div>
+        <div class="card-body">
+          <h2>Indoor Scavenger Hunt</h2>
+          <p class="meta">PDF download · around the house</p>
+          <p class="desc">A simple hunt for everyday things when everyone needs a reset.</p>
+          <span class="download">download PDF</span>
+        </div>
+      </a>
+    </main>
+
+    <p class="note">All files are plain PDFs. Print at actual size unless your printer needs fit-to-page.</p>
+  </div>
+</body>
+</html>

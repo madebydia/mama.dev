@@ -461,7 +461,15 @@
                 <div class="tape tape-top"></div>
                 <div class="paper">
                     <div class="photo-container">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/First_flight2.jpg" alt="Wright Brothers first flight, 1903">
+                        <img
+                            src="/assets/images/wright-first-flight-640.jpg"
+                            srcset="/assets/images/wright-first-flight-360.jpg 360w, /assets/images/wright-first-flight-640.jpg 640w"
+                            sizes="(max-width: 700px) 82vw, 360px"
+                            width="640"
+                            height="415"
+                            alt="Wright Brothers first flight, 1903"
+                            decoding="async"
+                            fetchpriority="high">
                     </div>
                     <div style="margin-top: 20px;">
                         <h2 class="proj-title">one-true-story</h2>
@@ -553,6 +561,19 @@
                         <p class="proj-desc" style="margin-top: 8px;">27 holidays with cute clipart.</p>
                         <span class="link-indicator">explore</span>
                     </div>
+                </div>
+            </a>
+
+            <a href="/worksheets/" class="item proj-ramp" style="transform: rotate(2deg) translateY(12px);" aria-label="Worksheets">
+                <div class="tape tape-corner-1" style="background-color: var(--tape-blue);"></div>
+                <div class="tape tape-corner-2" style="background-color: var(--tape-pink);"></div>
+                <div class="paper">
+                    <h2 class="typewriter-title">&gt;&gt; worksheets/</h2>
+                    <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
+                        Printable pages for coloring, sorting, counting, and table-time resets.
+                    </p>
+                    <p class="proj-desc" style="margin-top: 8px;">PDF gallery with direct downloads.</p>
+                    <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">download</span>
                 </div>
             </a>
 

@@ -242,7 +242,16 @@
 
     <a href="stories/wright-brothers.html" class="story-card">
       <div class="tape tape-top"></div>
-      <img class="card-photo" src="https://upload.wikimedia.org/wikipedia/commons/8/86/First_flight2.jpg" alt="Wright Brothers first flight">
+      <img
+        class="card-photo"
+        src="/assets/images/wright-first-flight-640.jpg"
+        srcset="/assets/images/wright-first-flight-360.jpg 360w, /assets/images/wright-first-flight-640.jpg 640w"
+        sizes="(max-width: 700px) 82vw, 280px"
+        width="640"
+        height="415"
+        alt="Wright Brothers first flight"
+        loading="lazy"
+        decoding="async">
       <div class="card-info">
         <div class="card-title">The First Airplane Flight</div>
         <div class="card-when">1903</div>
