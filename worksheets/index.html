@@ -129,14 +129,14 @@
     width: 100%;
     overflow: hidden;
     border: 1px solid rgba(44, 42, 39, 0.14);
-    background: var(--paper-dark);
+    background: #fffdf8;
   }
 
   .preview img {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
 
   .card-body {
@@ -169,13 +169,104 @@
   }
 
   .download {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     align-self: flex-start;
     margin-top: auto;
-    padding-top: 16px;
+    padding: 18px 2px 1px;
     color: var(--ink-red);
     border-bottom: 2px solid var(--ink-red);
     font-family: var(--font-scribble);
     font-size: 1.45rem;
+    line-height: 1;
+    transform: rotate(-1deg);
+    transform-origin: 18px 100%;
+    transition: color 0.18s ease, transform 0.18s ease;
+  }
+
+  .download::before {
+    content: "";
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+    background: currentColor;
+    clip-path: polygon(39% 0, 61% 0, 61% 48%, 78% 48%, 50% 76%, 22% 48%, 39% 48%, 39% 0, 0 86%, 100% 86%, 100% 100%, 0 100%);
+    transform: translateY(-2px);
+    transition: transform 0.18s ease;
+  }
+
+  .download::after {
+    content: "";
+    position: absolute;
+    right: -18px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border: 2px solid currentColor;
+    border-left: 0;
+    border-bottom: 0;
+    opacity: 0;
+    transform: rotate(14deg) scale(0.5);
+    transition: opacity 0.18s ease, transform 0.18s ease;
+  }
+
+  .worksheet-card:hover .download,
+  .worksheet-card:focus-visible .download {
+    color: var(--ink-blue);
+    transform: rotate(0deg) translateY(-2px);
+  }
+
+  .worksheet-card:hover .download::before,
+  .worksheet-card:focus-visible .download::before {
+    animation: download-bounce 0.72s ease both;
+  }
+
+  .worksheet-card:hover .download::after,
+  .worksheet-card:focus-visible .download::after {
+    opacity: 0.85;
+    transform: rotate(14deg) scale(1);
+  }
+
+  .download-pop {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 7px;
+    height: 7px;
+    pointer-events: none;
+    border-radius: 50%;
+    background: var(--dot-color);
+    box-shadow: 0 0 0 1px rgba(44, 42, 39, 0.08);
+    animation: paper-pop 620ms ease-out forwards;
+  }
+
+  @keyframes download-bounce {
+    0%,
+    100% {
+      transform: translateY(-2px);
+    }
+
+    38% {
+      transform: translateY(4px);
+    }
+
+    68% {
+      transform: translateY(-5px);
+    }
+  }
+
+  @keyframes paper-pop {
+    0% {
+      opacity: 1;
+      transform: translate(-50%, -50%) rotate(0deg) scale(0.7);
+    }
+
+    100% {
+      opacity: 0;
+      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--spin)) scale(0.15);
+    }
   }
 
   .note {
@@ -203,6 +294,16 @@
 
     .worksheet-card {
       transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .worksheet-card,
+    .download,
+    .download::before,
+    .download::after {
+      animation: none;
+      transition: none;
     }
   }
 </style>
@@ -257,5 +358,35 @@
 
     <p class="note">All files are plain PDFs. Print at actual size unless your printer needs fit-to-page.</p>
   </div>
+  <script>
+    const burstColors = ["#a83a32", "#1c457a", "#d6b84a", "#5a5954"];
+
+    document.querySelectorAll(".worksheet-card").forEach((card) => {
+      card.addEventListener("click", () => {
+        const button = card.querySelector(".download");
+
+        if (!button || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          return;
+        }
+
+        for (let i = 0; i < 9; i += 1) {
+          const dot = document.createElement("span");
+          const angle = (Math.PI * 2 * i) / 9;
+          const distance = 22 + Math.random() * 18;
+
+          dot.className = "download-pop";
+          dot.style.setProperty("--x", `${button.offsetWidth - 18}px`);
+          dot.style.setProperty("--y", "16px");
+          dot.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+          dot.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+          dot.style.setProperty("--spin", `${Math.round(Math.random() * 160 - 80)}deg`);
+          dot.style.setProperty("--dot-color", burstColors[i % burstColors.length]);
+
+          button.append(dot);
+          dot.addEventListener("animationend", () => dot.remove(), { once: true });
+        }
+      });
+    });
+  </script>
 </body>
 </html>
