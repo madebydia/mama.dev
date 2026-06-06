@@ -36,7 +36,7 @@ A browser-based ramp jump game where kids practice number recognition and compar
 
 ```bash
 # Clone and open
-git clone https://github.com/meimakes/bigger-ramp-jump.git
+git clone https://github.com/madebydia/bigger-ramp-jump.git
 open bigger-ramp-jump/index.html
 ```
 
@@ -46,12 +46,12 @@ Or just download `index.html` and double-click it. That's it. It's one file.
 
 > A car sits on a starry night road between two ramps of different heights, each labeled with a number. After typing both numbers, the player taps a side to send the car racing up that ramp and soaring through the air. Pick the bigger number and the car launches sky-high with confetti raining down. Pick the smaller one and you get a sad little hop.
 
-## 🏗️ More from meimakes
+## 🏗️ More from madebydia
 
 This game is part of a collection of browser games built with a 3-year-old — yes, really. Check out more at:
 
 - 🎮 [madladstudios.com](https://madladstudios.com) — games built by a toddler and his mom
-- 🐙 [github.com/meimakes](https://github.com/meimakes) — tools, games, and projects
+- 🐙 [github.com/madebydia](https://github.com/madebydia) — tools, games, and projects
 
 ## 📄 License
 

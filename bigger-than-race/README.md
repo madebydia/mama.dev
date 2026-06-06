@@ -36,7 +36,7 @@ Built for a 3-year-old who can count past 100 but is still building intuition fo
 
 Open `index.html` in any browser. No dependencies, no build step, no install.
 
-Or visit: [meimakes.github.io/bigger-than-race](https://meimakes.github.io/bigger-than-race)
+Or visit: [mama.dev/bigger-than-race](https://mama.dev/bigger-than-race)
 
 ## Made With
 

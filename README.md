@@ -25,4 +25,4 @@ My son is 3. These are the things I build for him — games, tools, stories. Eac
 
 ---
 
-Made by [@meimakes](https://x.com/meimakes)
+Made by [@madebydia](https://x.com/madebydia)
