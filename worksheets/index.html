@@ -125,7 +125,7 @@
   }
 
   .preview {
-    aspect-ratio: 8.5 / 11;
+    aspect-ratio: var(--preview-ratio);
     width: 100%;
     overflow: hidden;
     border: 1px solid rgba(44, 42, 39, 0.14);
@@ -318,7 +318,7 @@
     </header>
 
     <main class="gallery" aria-label="Worksheet downloads">
-      <a class="worksheet-card" style="--tilt: -1.1deg; --tape-tilt: 3deg;" href="files/airport-words-tracing.pdf" download>
+      <a class="worksheet-card" style="--tilt: -1.1deg; --tape-tilt: 3deg; --preview-ratio: 900 / 696;" href="files/airport-words-tracing.pdf" download>
         <div class="preview">
           <img src="previews/airport-words-tracing.jpg" width="900" height="696" alt="Preview of Airport Words Tracing worksheet" loading="eager" decoding="async">
         </div>
@@ -330,7 +330,7 @@
         </div>
       </a>
 
-      <a class="worksheet-card" style="--tilt: 1.6deg; --tape-tilt: -2deg;" href="files/airport-line-tracing.pdf" download>
+      <a class="worksheet-card" style="--tilt: 1.6deg; --tape-tilt: -2deg; --preview-ratio: 900 / 696;" href="files/airport-line-tracing.pdf" download>
         <div class="preview">
           <img src="previews/airport-line-tracing.jpg" width="900" height="696" alt="Preview of Trace the Airport worksheet" loading="eager" decoding="async">
         </div>
@@ -342,7 +342,7 @@
         </div>
       </a>
 
-      <a class="worksheet-card" style="--tilt: -0.6deg; --tape-tilt: 4deg;" href="files/airport-sign-words-tracing.pdf" download>
+      <a class="worksheet-card" style="--tilt: -0.6deg; --tape-tilt: 4deg; --preview-ratio: 637 / 900;" href="files/airport-sign-words-tracing.pdf" download>
         <div class="preview">
           <img src="previews/airport-sign-words-tracing.jpg" width="637" height="900" alt="Preview of Airport Sign Words Tracing worksheet" loading="lazy" decoding="async">
         </div>
