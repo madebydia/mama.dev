@@ -36,8 +36,8 @@ A browser-based ramp jump game where kids practice number recognition and compar
 
 ```bash
 # Clone and open
-git clone https://github.com/madebydia/bigger-ramp-jump.git
-open bigger-ramp-jump/index.html
+git clone https://github.com/madebydia/mama.dev.git
+open mama.dev/bigger-ramp-jump/index.html
 ```
 
 Or just download `index.html` and double-click it. That's it. It's one file.
