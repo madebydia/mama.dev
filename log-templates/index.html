@@ -114,6 +114,12 @@
     gap: 12px;
   }
 
+  .preview-stack.single {
+    max-width: 360px;
+    margin: 0 auto;
+    grid-template-columns: 1fr;
+  }
+
   .page-preview {
     overflow: hidden;
     border: 1px solid var(--line);
@@ -249,14 +255,13 @@
 
     <main class="templates" aria-label="Log template downloads">
       <article class="template-card">
-        <div class="preview-stack" aria-label="Water Tracker preview pages">
-          <div class="page-preview"><img src="previews/water-tracker-page-1.jpg" width="900" height="1165" alt="Water Tracker page 1 preview" loading="eager" decoding="async"></div>
-          <div class="page-preview"><img src="previews/water-tracker-page-2.jpg" width="900" height="1165" alt="Water Tracker page 2 preview" loading="eager" decoding="async"></div>
+        <div class="preview-stack single" aria-label="Water Tracker preview">
+          <div class="page-preview"><img src="previews/water-tracker-page-1.jpg" width="900" height="1165" alt="Water Tracker template preview" loading="eager" decoding="async"></div>
         </div>
         <div class="content">
-          <div class="tags"><span class="tag">Tracker</span><span class="tag">2 pages</span><span class="tag">Letter PDF</span></div>
+          <div class="tags"><span class="tag">Tracker</span><span class="tag">Duplex-ready</span><span class="tag">Letter PDF</span></div>
           <h2>Water Tracker</h2>
-          <p class="desc">A weekly fluid-ounce tracker with daily check boxes and a notes area. Print one set per week or keep extras in a binder.</p>
+          <p class="desc">A weekly fluid-ounce tracker with daily check boxes and a notes area. The PDF repeats the same template page for double-sided printing.</p>
           <a class="download" href="files/water-tracker.pdf" download>Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></a>
         </div>
       </article>
