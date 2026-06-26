@@ -279,6 +279,27 @@
             text-transform: none;
         }
 
+        .section-toggle {
+            width: 100%;
+            border: 0;
+            border-bottom: 2px solid var(--case-dark);
+            cursor: pointer;
+            font-family: var(--font);
+        }
+
+        .archive-section .section-title {
+            text-transform: lowercase;
+        }
+
+        .archive-marker {
+            display: inline-block;
+            min-width: 42px;
+        }
+
+        .archive-section.is-collapsed .row {
+            display: none;
+        }
+
         .list-header,
         .row {
             display: grid;
@@ -842,9 +863,9 @@
 <body>
     <div class="device">
         <nav class="controls" aria-label="directory sections">
-            <a class="plastic-btn active" href="#current-tools">Current</a>
-            <a class="plastic-btn" href="#kid-builds">Kid Builds</a>
+            <a class="plastic-btn active" href="#recents">Recents</a>
             <a class="plastic-btn" href="#printables">Printables</a>
+            <a class="plastic-btn" href="#kid-builds">Kid Builds</a>
         </nav>
 
         <main class="screen">
@@ -858,8 +879,8 @@
                     </div>
                 </section>
 
-                <section id="current-tools">
-                    <div class="section-title"><span>Current Tools</span><span class="section-count">4 items</span></div>
+                <section id="recents">
+                    <div class="section-title"><span>Recents</span><span class="section-count">4 items</span></div>
                     <div class="list-header" aria-hidden="true">
                         <div>Item Name</div><div>Type</div><div>Status</div><div>Updated</div><div>Annotation</div>
                     </div>
@@ -893,38 +914,6 @@
                     </a>
                 </section>
 
-                <section id="kid-builds">
-                    <div class="section-title"><span>Kid Builds</span><span class="section-count">4 items</span></div>
-                    <a class="row" href="/word-train/">
-                        <div class="cell name"><span class="dot maintained"></span>word-train</div>
-                        <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status">maintained</div>
-                        <div class="cell date">25-11</div>
-                        <div class="cell annotation">Phonics practice by snapping train cars into words</div>
-                    </a>
-                    <a class="row" href="/bigger-than-race/">
-                        <div class="cell name"><span class="dot maintained"></span>bigger-than-race</div>
-                        <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status">maintained</div>
-                        <div class="cell date">25-10</div>
-                        <div class="cell annotation">Number comparison as a race, from small to bigger numbers</div>
-                    </a>
-                    <a class="row" href="/bigger-ramp-jump/">
-                        <div class="cell name"><span class="dot experiment"></span>bigger-ramp-jump</div>
-                        <div class="cell"><span class="badge tool">lab</span></div>
-                        <div class="cell status">experiment</div>
-                        <div class="cell date">25-09</div>
-                        <div class="cell annotation">Ramp height, angle, and gravity tuning for truck launches</div>
-                    </a>
-                    <a class="row" href="/shapes/">
-                        <div class="cell name"><span class="dot"></span>shapes</div>
-                        <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status">archive</div>
-                        <div class="cell date">25-08</div>
-                        <div class="cell annotation">2D and 3D shape playground with tap-to-reveal practice</div>
-                    </a>
-                </section>
-
                 <section id="printables">
                     <div class="section-title"><span>Printables</span><span class="section-count">2 items</span></div>
                     <a class="row" href="/worksheets/">
@@ -941,6 +930,47 @@
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Short real-world stories for print and couch reading</div>
                     </a>
+                </section>
+
+                <section id="kid-builds">
+                    <div class="section-title"><span>Kid Builds</span><span class="section-count">2 items</span></div>
+                    <a class="row" href="/word-train/">
+                        <div class="cell name"><span class="dot maintained"></span>word-train</div>
+                        <div class="cell"><span class="badge game">game</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">25-11</div>
+                        <div class="cell annotation">Phonics practice by snapping train cars into words</div>
+                    </a>
+                    <a class="row" href="/bigger-than-race/">
+                        <div class="cell name"><span class="dot maintained"></span>bigger-than-race</div>
+                        <div class="cell"><span class="badge game">game</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">25-10</div>
+                        <div class="cell annotation">Number comparison as a race, from small to bigger numbers</div>
+                    </a>
+                </section>
+
+                <section id="archive" class="archive-section is-collapsed">
+                    <button class="section-title section-toggle" type="button" aria-expanded="false" aria-controls="archive-rows">
+                        <span><span class="archive-marker" aria-hidden="true">[+]</span>archive</span>
+                        <span class="section-count">2 items</span>
+                    </button>
+                    <div id="archive-rows">
+                        <a class="row" href="/bigger-ramp-jump/">
+                            <div class="cell name"><span class="dot experiment"></span>bigger-ramp-jump</div>
+                            <div class="cell"><span class="badge tool">lab</span></div>
+                            <div class="cell status">experiment</div>
+                            <div class="cell date">25-09</div>
+                            <div class="cell annotation">Ramp height, angle, and gravity tuning for truck launches</div>
+                        </a>
+                        <a class="row" href="/shapes/">
+                            <div class="cell name"><span class="dot"></span>shapes</div>
+                            <div class="cell"><span class="badge game">game</span></div>
+                            <div class="cell status">archive</div>
+                            <div class="cell date">25-08</div>
+                            <div class="cell annotation">2D and 3D shape playground with tap-to-reveal practice</div>
+                        </a>
+                    </div>
                 </section>
 
             </div>
@@ -1000,18 +1030,17 @@
                 });
             });
 
-            setActive("current-tools");
+            setActive("recents");
 
-            if ("IntersectionObserver" in window) {
-                const observer = new IntersectionObserver((entries) => {
-                    const visible = entries
-                        .filter((entry) => entry.isIntersecting)
-                        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-                    if (visible) setActive(visible.target.id);
-                }, { rootMargin: "-20% 0px -55% 0px", threshold: [0.12, 0.3, 0.55] });
+            const archive = document.querySelector("#archive");
+            const archiveToggle = archive?.querySelector(".section-toggle");
+            const archiveMarker = archive?.querySelector(".archive-marker");
 
-                sections.forEach((section) => observer.observe(section));
-            }
+            archiveToggle?.addEventListener("click", () => {
+                const isCollapsed = archive.classList.toggle("is-collapsed");
+                archiveToggle.setAttribute("aria-expanded", String(!isCollapsed));
+                archiveMarker.textContent = isCollapsed ? "[+]" : "[-]";
+            });
 
             const overlay = document.querySelector("#detailOverlay");
             const closeButtons = [
