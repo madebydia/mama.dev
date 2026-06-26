@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mama.dev - Index</title>
-    <meta name="description" content="A personal index of practical tools, kid builds, printables, and small experiments from a developer mom.">
+    <meta name="description" content="A personal index of practical tools, kid builds, printables, log templates, and small experiments from a developer mom.">
     <link rel="canonical" href="https://mama.dev/">
     <style>
         :root {
@@ -784,7 +784,7 @@
 
             .controls {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
+                grid-template-columns: repeat(4, minmax(0, 1fr));
                 border-right: 0;
                 border-bottom: 3px dotted var(--case-dark);
                 padding: 0 0 8px;
@@ -931,6 +931,7 @@
             }
 
             .controls {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 7px;
             }
 
@@ -980,6 +981,7 @@
         <nav class="controls" aria-label="directory sections">
             <a class="plastic-btn active" href="#recents">Recents</a>
             <a class="plastic-btn" href="#printables">Printables</a>
+            <a class="plastic-btn" href="#log-templates">Logs</a>
             <a class="plastic-btn" href="#kid-builds">Kid Builds</a>
         </nav>
 
@@ -987,18 +989,25 @@
             <div class="top-tab">mama.dev <span class="sparkle">✧✦</span></div>
             <div class="ruled">
                 <section class="screen-intro" aria-label="site introduction">
-                    <p>Small practical tools, kid builds, printable pages, and experiments from the family lab.</p>
+                    <p>Small practical tools, kid builds, printable pages, log templates, and experiments from the family lab.</p>
                     <div class="mini-stats" aria-label="directory stats">
                         <div><span>status</span><strong>online</strong></div>
-                        <div><span>entries</span><strong>10</strong></div>
+                        <div><span>entries</span><strong>11</strong></div>
                     </div>
                 </section>
 
                 <section id="recents">
-                    <div class="section-title"><span>Recents</span><span class="section-count">4 items</span></div>
+                    <div class="section-title"><span>Recents</span><span class="section-count">5 items</span></div>
                     <div class="list-header" aria-hidden="true">
                         <div>Item Name</div><div>Type</div><div>Status</div><div>Updated</div><div>Annotation</div>
                     </div>
+                    <a class="row" href="/log-templates/">
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>log-templates</div>
+                        <div class="cell"><span class="badge print">log</span></div>
+                        <div class="cell status active">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Printable tracking templates for home, habits, and daily logs</div>
+                    </a>
                     <a class="row" href="/one-true-story/">
                         <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>one-true-story</div>
                         <div class="cell"><span class="badge story">story</span></div>
@@ -1044,6 +1053,17 @@
                         <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Short real-world stories for print and couch reading</div>
+                    </a>
+                </section>
+
+                <section id="log-templates">
+                    <div class="section-title"><span>Log Templates</span><span class="section-count">1 item</span></div>
+                    <a class="row" href="/log-templates/">
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>water-tracker</div>
+                        <div class="cell"><span class="badge print">log</span></div>
+                        <div class="cell status active">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Two-page weekly water tracker with notes and daily check boxes</div>
                     </a>
                 </section>
 
