@@ -6,9 +6,6 @@
     <title>mama.dev - Index</title>
     <meta name="description" content="A personal index of practical tools, kid builds, printables, and small experiments from a developer mom.">
     <link rel="canonical" href="https://mama.dev/">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
             --outer: #eaeaea;
@@ -24,10 +21,18 @@
             --button-shadow: #a0a0a0;
             --button-active: #f4bae0;
             --text: #111111;
+            --tab-text: #d58dbb;
             --muted: #565656;
             --blue: #b4d8e7;
             --yellow: #e7e7b4;
             --green: #4caf50;
+            --status-active: #2f8f35;
+            --status-maintained: #8b821f;
+            --status-experiment: #c36ba4;
+            --status-archive: #565656;
+            --icon-folder: #e4bd3e;
+            --icon-html: #d58dbb;
+            --icon-js: #8b821f;
             --outer-dot: #d0d0d0;
             --row-selected: rgba(244, 186, 224, 0.08);
             --row-selected-hover: rgba(244, 186, 224, 0.24);
@@ -45,7 +50,7 @@
             --pressed-light: rgba(255, 255, 255, 0.58);
             --detail-inset: rgba(0, 0, 0, 0.06);
             --grid: 36px;
-            --font: "VT323", "Courier New", Courier, monospace;
+            --font: "Courier New", Courier, "Liberation Mono", monospace;
         }
 
         * {
@@ -71,9 +76,8 @@
             background-image: radial-gradient(var(--outer-dot) 1px, transparent 1px);
             background-size: 16px 16px;
             font-family: var(--font);
-            font-size: 24px;
-            line-height: 1.1;
-            -webkit-font-smoothing: none;
+            font-size: 15px;
+            line-height: 1.25;
         }
 
         a {
@@ -83,6 +87,13 @@
         ::selection {
             background: var(--pink);
             color: var(--text);
+        }
+
+        .icon-sprite {
+            position: absolute;
+            width: 0;
+            height: 0;
+            overflow: hidden;
         }
 
         .device {
@@ -123,7 +134,7 @@
                 2px 2px 0 rgba(0, 0, 0, 0.12);
             color: var(--text);
             font-family: var(--font);
-            font-size: 24px;
+            font-size: 16px;
             font-weight: 700;
             letter-spacing: 0.02em;
             text-decoration: none;
@@ -178,12 +189,12 @@
             display: inline-flex;
             align-items: center;
             padding: 0 20px;
-            border-right: 2px solid var(--case-dark);
+            border-right: 2px solid var(--pink-border);
             border-bottom: 2px solid var(--pink-border);
             border-bottom-right-radius: 8px;
             background: var(--pink);
-            color: var(--text);
-            font-size: 31px;
+            color: var(--tab-text);
+            font-size: 21px;
             font-weight: 700;
             letter-spacing: 1px;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
@@ -191,7 +202,10 @@
 
         .sparkle {
             margin-left: 12px;
-            font-size: 22px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 17px;
+            font-weight: 700;
+            letter-spacing: 0;
         }
 
         .ruled {
@@ -222,13 +236,13 @@
         .screen-intro p {
             max-width: 58ch;
             color: var(--muted);
-            font-size: 30px;
+            font-size: 17px;
         }
 
         .mini-stats {
             min-width: 150px;
             color: var(--muted);
-            font-size: 25px;
+            font-size: 15px;
         }
 
         .mini-stats div {
@@ -252,7 +266,7 @@
             border-bottom: 2px solid var(--case-dark);
             background: var(--pink-light);
             color: var(--text);
-            font-size: 28px;
+            font-size: 17px;
             font-weight: 700;
             text-transform: uppercase;
             transition: background 120ms ease, box-shadow 120ms ease;
@@ -275,7 +289,7 @@
 
         .section-count {
             color: var(--muted);
-            font-size: 25px;
+            font-size: 15px;
             text-transform: none;
         }
 
@@ -303,7 +317,7 @@
         .list-header,
         .row {
             display: grid;
-            grid-template-columns: minmax(160px, 2.2fr) 82px 105px 90px minmax(190px, 3fr);
+            grid-template-columns: minmax(220px, 2.45fr) 82px 130px 92px minmax(140px, 2.65fr);
             gap: 12px;
             align-items: center;
             padding: 0 24px;
@@ -314,7 +328,7 @@
             border-bottom: 2px solid var(--case-dark);
             background: var(--screen);
             color: var(--muted);
-            font-size: 22px;
+            font-size: 12px;
             text-transform: uppercase;
         }
 
@@ -345,7 +359,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            font-size: 28px;
+            font-size: 16px;
             font-weight: 700;
         }
 
@@ -362,6 +376,28 @@
         .dot.maintained { background: var(--yellow); }
         .dot.experiment { background: var(--pink); }
 
+        .file-icon {
+            width: 20px;
+            height: 20px;
+            flex: 0 0 20px;
+            display: inline-flex;
+            filter:
+                drop-shadow(0 0 0.8px var(--case-dark))
+                drop-shadow(1px 1px 0 var(--screen-bevel-dark));
+            transform: translateY(-1px);
+        }
+
+        .file-icon.folder { color: var(--icon-folder); }
+        .file-icon.html { color: var(--icon-html); }
+        .file-icon.js { color: var(--icon-js); }
+
+        .file-icon svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            overflow: visible;
+        }
+
         .badge {
             display: inline-block;
             height: 24px;
@@ -369,7 +405,7 @@
             border: 2px solid var(--case-dark);
             border-radius: 4px;
             background: var(--button);
-            font-size: 22px;
+            font-size: 13px;
             line-height: 20px;
             font-weight: 700;
             text-transform: lowercase;
@@ -386,6 +422,30 @@
         .annotation {
             color: var(--muted);
         }
+
+        .status,
+        .date {
+            font-style: normal;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            line-height: 1.2;
+        }
+
+        .status::before { content: "["; }
+        .status::after { content: "]"; }
+        .date::before {
+            content: "◷";
+            margin-right: 6px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1.18em;
+            line-height: 0;
+            vertical-align: -0.06em;
+        }
+
+        .status.active { color: var(--status-active); }
+        .status.maintained { color: var(--status-maintained); }
+        .status.experiment { color: var(--status-experiment); }
+        .status.archive { color: var(--status-archive); }
 
         .annotation {
             font-style: italic;
@@ -427,7 +487,7 @@
             padding: 6px 10px 6px 14px;
             border-bottom: 2px solid var(--case-dark);
             background: var(--pink);
-            font-size: 26px;
+            font-size: 17px;
             font-weight: 700;
         }
 
@@ -446,7 +506,7 @@
             color: var(--text);
             cursor: pointer;
             font-family: var(--font);
-            font-size: 22px;
+            font-size: 14px;
             font-weight: 700;
             line-height: 1;
         }
@@ -462,11 +522,11 @@
             display: grid;
             gap: 12px;
             padding: 18px;
-            font-size: 25px;
+            font-size: 15px;
         }
 
         .detail-name {
-            font-size: 34px;
+            font-size: 21px;
             font-weight: normal;
             line-height: 1;
             word-break: break-word;
@@ -525,7 +585,7 @@
                 inset 2px 2px 0 var(--button-bevel-light);
             color: var(--text);
             font-family: var(--font);
-            font-size: 25px;
+            font-size: 15px;
             font-weight: 700;
             text-decoration: none;
             text-transform: uppercase;
@@ -557,10 +617,18 @@
                 --button-shadow: #050301;
                 --button-active: #ffb743;
                 --text: #ffd98d;
+                --tab-text: #100900;
                 --muted: #c08d3e;
                 --blue: #8e5a18;
                 --yellow: #d7a43a;
                 --green: #f6c15a;
+                --status-active: #f6c15a;
+                --status-maintained: #d7a43a;
+                --status-experiment: #f0a24f;
+                --status-archive: #b18749;
+                --icon-folder: #d7a43a;
+                --icon-html: #8e5a18;
+                --icon-js: #d7a43a;
                 --outer-dot: #382105;
                 --row-selected: rgba(255, 183, 67, 0.1);
                 --row-selected-hover: rgba(255, 183, 67, 0.2);
@@ -726,7 +794,7 @@
                 min-height: 42px;
                 justify-content: center;
                 padding: 0 8px;
-                font-size: 22px;
+                font-size: 13px;
                 text-align: center;
             }
 
@@ -747,12 +815,42 @@
             }
 
             .screen-intro p {
-                font-size: 21px;
+                font-size: 15px;
             }
 
             .mini-stats {
                 width: min(220px, 100%);
                 margin-top: 8px;
+            }
+
+            .mini-stats {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+                width: auto;
+                min-width: 0;
+                font-size: 12px;
+                font-weight: 700;
+                letter-spacing: 0.03em;
+                text-transform: lowercase;
+            }
+
+            .mini-stats div {
+                display: inline-flex;
+                justify-content: flex-start;
+                gap: 6px;
+                width: max-content;
+                padding: 2px 7px;
+                border: 1px solid var(--pink-line);
+                border-radius: 4px;
+                background: var(--pink-light);
+                box-shadow:
+                    inset 1px 1px 0 var(--screen-bevel-light),
+                    inset -1px -1px 0 var(--screen-bevel-dark);
+            }
+
+            .mini-stats span {
+                color: var(--muted);
             }
 
             .list-header {
@@ -791,11 +889,11 @@
             }
 
             .detail-body {
-                font-size: 25px;
+                font-size: 15px;
             }
 
             .detail-name {
-                font-size: 34px;
+                font-size: 21px;
             }
 
             .row:hover {
@@ -806,6 +904,12 @@
             .badge { grid-area: badge; justify-self: end; }
             .status { grid-area: status; }
             .date { grid-area: date; justify-self: end; }
+            .status,
+            .date {
+                align-self: start;
+                font-size: 12px;
+            }
+
             .annotation {
                 grid-area: annotation;
                 white-space: nowrap;
@@ -818,7 +922,7 @@
         @media (max-width: 460px) {
             body {
                 padding: 10px;
-                font-size: 20px;
+                font-size: 14px;
             }
 
             .device {
@@ -832,7 +936,7 @@
 
             .plastic-btn {
                 min-height: 38px;
-                font-size: 18px;
+                font-size: 11px;
             }
 
             .screen {
@@ -841,7 +945,7 @@
 
             .top-tab {
                 min-height: 42px;
-                font-size: 26px;
+                font-size: 19px;
             }
 
             .ruled {
@@ -849,7 +953,7 @@
             }
 
             .name {
-                font-size: 22px;
+                font-size: 15px;
             }
         }
     </style>
@@ -861,6 +965,17 @@
     </script>
 </head>
 <body>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+        <symbol id="icon-folder" viewBox="-1 -1 18 18">
+            <path fill="currentColor" d="M9.828 3h3.982a2 2 0 0 1 1.992 2.181l-.637 7A2 2 0 0 1 13.174 14H2.825a2 2 0 0 1-1.991-1.819l-.637-7a2 2 0 0 1 .342-1.31L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3m-8.322.12q.322-.119.684-.12h5.396l-.707-.707A1 1 0 0 0 6.172 2H2.5a1 1 0 0 0-1 .981z"></path>
+        </symbol>
+        <symbol id="icon-file-html" viewBox="-1 -1 18 18">
+            <path fill="currentColor" fill-rule="evenodd" d="M14 4.5V11h-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zm-9.736 7.35v3.999h-.791v-1.714H1.79v1.714H1V11.85h.791v1.626h1.682V11.85h.79Zm2.251.662v3.337h-.794v-3.337H4.588v-.662h3.064v.662zm2.176 3.337v-2.66h.038l.952 2.159h.516l.946-2.16h.038v2.661h.715V11.85h-.8l-1.14 2.596H9.93L8.79 11.85h-.805v3.999zm4.71-.674h1.696v.674H12.61V11.85h.79v3.325Z"></path>
+        </symbol>
+        <symbol id="icon-file-js" viewBox="-1 -1 18 18">
+            <path fill="currentColor" fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2H8v-1h4a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM3.186 15.29a1.2 1.2 0 0 1-.111-.449h.765a.58.58 0 0 0 .255.384q.105.073.249.114.143.041.319.041.246 0 .413-.07a.56.56 0 0 0 .255-.193.5.5 0 0 0 .085-.29.39.39 0 0 0-.153-.326q-.151-.12-.462-.193l-.619-.143a1.7 1.7 0 0 1-.539-.214 1 1 0 0 1-.351-.367 1.1 1.1 0 0 1-.123-.524q0-.366.19-.639.19-.272.528-.422.336-.15.776-.149.457 0 .78.152.324.153.5.41.18.255.2.566h-.75a.56.56 0 0 0-.12-.258.6.6 0 0 0-.247-.181.9.9 0 0 0-.369-.068q-.325 0-.513.152a.47.47 0 0 0-.184.384q0 .18.143.3a1 1 0 0 0 .405.175l.62.143q.327.075.566.211.24.136.375.358t.135.56q0 .37-.188.656a1.2 1.2 0 0 1-.539.439q-.351.158-.858.158-.381 0-.665-.09a1.4 1.4 0 0 1-.478-.252 1.1 1.1 0 0 1-.29-.375m-3.104-.033A1.3 1.3 0 0 1 0 14.791h.765a.6.6 0 0 0 .073.27.5.5 0 0 0 .454.246q.285 0 .422-.164.138-.165.138-.466v-2.745h.79v2.725q0 .66-.357 1.005-.354.345-.984.345a1.6 1.6 0 0 1-.569-.094 1.15 1.15 0 0 1-.407-.266 1.1 1.1 0 0 1-.243-.39"></path>
+        </symbol>
+    </svg>
     <div class="device">
         <nav class="controls" aria-label="directory sections">
             <a class="plastic-btn active" href="#recents">Recents</a>
@@ -869,7 +984,7 @@
         </nav>
 
         <main class="screen">
-            <div class="top-tab">mama.dev <span class="sparkle">* *</span></div>
+            <div class="top-tab">mama.dev <span class="sparkle">✧✦</span></div>
             <div class="ruled">
                 <section class="screen-intro" aria-label="site introduction">
                     <p>Small practical tools, kid builds, printable pages, and experiments from the family lab.</p>
@@ -885,30 +1000,30 @@
                         <div>Item Name</div><div>Type</div><div>Status</div><div>Updated</div><div>Annotation</div>
                     </div>
                     <a class="row" href="/one-true-story/">
-                        <div class="cell name"><span class="dot active"></span>one-true-story</div>
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>one-true-story</div>
                         <div class="cell"><span class="badge story">story</span></div>
-                        <div class="cell status">active</div>
+                        <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Printable nonfiction readers with real photos and big facts</div>
                     </a>
                     <a class="row" href="/worksheets/">
-                        <div class="cell name"><span class="dot active"></span>worksheets</div>
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>worksheets</div>
                         <div class="cell"><span class="badge print">pdf</span></div>
-                        <div class="cell status">active</div>
+                        <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Direct-download drawer of coloring and tracing pages</div>
                     </a>
                     <a class="row" href="/2026-calendar/">
-                        <div class="cell name"><span class="dot maintained"></span>2026-calendar</div>
+                        <div class="cell name"><span class="file-icon html" aria-hidden="true"><svg><use href="#icon-file-html"></use></svg></span>2026-calendar.html</div>
                         <div class="cell"><span class="badge tool">tool</span></div>
-                        <div class="cell status">maintained</div>
+                        <div class="cell status maintained">maintained</div>
                         <div class="cell date">26-01</div>
                         <div class="cell annotation">Holiday calendar with tiny animations and occasion markers</div>
                     </a>
                     <a class="row" href="/what-to-eat/">
-                        <div class="cell name"><span class="dot maintained"></span>what-to-eat</div>
+                        <div class="cell name"><span class="file-icon html" aria-hidden="true"><svg><use href="#icon-file-html"></use></svg></span>what-to-eat.html</div>
                         <div class="cell"><span class="badge tool">tool</span></div>
-                        <div class="cell status">maintained</div>
+                        <div class="cell status maintained">maintained</div>
                         <div class="cell date">25-12</div>
                         <div class="cell annotation">Visual food menu for blank-stare decision moments</div>
                     </a>
@@ -917,16 +1032,16 @@
                 <section id="printables">
                     <div class="section-title"><span>Printables</span><span class="section-count">2 items</span></div>
                     <a class="row" href="/worksheets/">
-                        <div class="cell name"><span class="dot active"></span>worksheet-gallery</div>
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>worksheet-gallery</div>
                         <div class="cell"><span class="badge print">pdf</span></div>
-                        <div class="cell status">active</div>
+                        <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Maintained drawer of direct-download worksheet PDFs</div>
                     </a>
                     <a class="row" href="/one-true-story/">
-                        <div class="cell name"><span class="dot active"></span>nonfiction-readers</div>
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>nonfiction-readers</div>
                         <div class="cell"><span class="badge story">read</span></div>
-                        <div class="cell status">active</div>
+                        <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Short real-world stories for print and couch reading</div>
                     </a>
@@ -935,16 +1050,16 @@
                 <section id="kid-builds">
                     <div class="section-title"><span>Kid Builds</span><span class="section-count">2 items</span></div>
                     <a class="row" href="/word-train/">
-                        <div class="cell name"><span class="dot maintained"></span>word-train</div>
+                        <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>word-train.js</div>
                         <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status">maintained</div>
+                        <div class="cell status maintained">maintained</div>
                         <div class="cell date">25-11</div>
                         <div class="cell annotation">Phonics practice by snapping train cars into words</div>
                     </a>
                     <a class="row" href="/bigger-than-race/">
-                        <div class="cell name"><span class="dot maintained"></span>bigger-than-race</div>
+                        <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>bigger-than-race.js</div>
                         <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status">maintained</div>
+                        <div class="cell status maintained">maintained</div>
                         <div class="cell date">25-10</div>
                         <div class="cell annotation">Number comparison as a race, from small to bigger numbers</div>
                     </a>
@@ -957,16 +1072,16 @@
                     </button>
                     <div id="archive-rows">
                         <a class="row" href="/bigger-ramp-jump/">
-                            <div class="cell name"><span class="dot experiment"></span>bigger-ramp-jump</div>
+                            <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>bigger-ramp-jump.js</div>
                             <div class="cell"><span class="badge tool">lab</span></div>
-                            <div class="cell status">experiment</div>
+                            <div class="cell status experiment">experiment</div>
                             <div class="cell date">25-09</div>
                             <div class="cell annotation">Ramp height, angle, and gravity tuning for truck launches</div>
                         </a>
                         <a class="row" href="/shapes/">
-                            <div class="cell name"><span class="dot"></span>shapes</div>
+                            <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>shapes.js</div>
                             <div class="cell"><span class="badge game">game</span></div>
-                            <div class="cell status">archive</div>
+                            <div class="cell status archive">archive</div>
                             <div class="cell date">25-08</div>
                             <div class="cell annotation">2D and 3D shape playground with tap-to-reveal practice</div>
                         </a>
@@ -1072,11 +1187,13 @@
 
                 detailTitle.textContent = readCell(row, ".name").replace(/\s+/g, " ");
                 const rowBadge = row.querySelector(".badge");
-                const rowDot = row.querySelector(".dot");
+                const rowStatus = row.querySelector(".status");
+                const stateClass = [...(rowStatus?.classList || [])]
+                    .find((className) => ["active", "maintained", "experiment"].includes(className));
 
                 detailType.textContent = rowBadge?.textContent.trim() || "";
                 detailType.className = rowBadge?.className || "badge";
-                detailStateDot.className = rowDot?.className || "dot";
+                detailStateDot.className = stateClass ? `dot ${stateClass}` : "dot";
                 detailStatus.textContent = readCell(row, ".status");
                 detailDate.textContent = readCell(row, ".date");
                 detailAnnotation.textContent = readCell(row, ".annotation");

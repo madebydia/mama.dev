@@ -18,8 +18,8 @@
     inset -3px -3px 0 #d58dbb,
     2px 3px 0 rgba(0, 0, 0, 0.14);
   color: #111;
-  font-family: ui-monospace, "SF Mono", "Cascadia Code", "Roboto Mono", "Courier New", monospace;
-  font-size: 13px;
+  font-family: "Courier New", Courier, "Liberation Mono", monospace;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -79,7 +79,7 @@
   .mama-home-tab {
     min-height: 32px;
     padding: 5px 10px 5px 9px;
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .mama-home-tab svg {
