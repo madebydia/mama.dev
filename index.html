@@ -1,440 +1,828 @@
-<html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mama.dev | Workshop</title>
-    
+    <title>mama.dev - Index</title>
+    <meta name="description" content="A personal index of practical tools, kid builds, printables, and small experiments from a developer mom.">
+    <link rel="canonical" href="https://mama.dev/">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&amp;family=Special+Elite&amp;family=Walter+Turncoat&amp;family=Nanum+Pen+Script&amp;display=swap" rel="stylesheet">
-    
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         :root {
-            --paper-bg: #f3f0ea;
-            --paper-dark: #e8e3d8;
-            --ink-black: #2c2a27;
-            --ink-blue: #1c457a;
-            --ink-red: #a83a32;
-            --pencil: #5a5954;
-            --tape-yellow: rgba(232, 222, 172, 0.7);
-            --tape-blue: rgba(162, 192, 212, 0.65);
-            --tape-pink: rgba(212, 162, 172, 0.65);
-            
-            --font-typewriter: 'Special Elite', monospace;
-            --font-hand: 'Just Another Hand', cursive;
-            --font-marker: 'Walter Turncoat', cursive;
-            --font-scribble: 'Nanum Pen Script', cursive;
-
-            --shadow-flat: 1px 1px 2px rgba(44, 42, 39, 0.15);
-            --shadow-lift: 2px 4px 8px rgba(44, 42, 39, 0.2);
-            --shadow-high: 5px 10px 15px rgba(44, 42, 39, 0.15);
+            --outer: #eaeaea;
+            --case: #989898;
+            --case-dark: #222222;
+            --screen: #ffffff;
+            --pink: #f4bae0;
+            --pink-border: #d58dbb;
+            --pink-light: #fce8f5;
+            --pink-line: #efc5da;
+            --button: #e0e0e0;
+            --button-hover: #ededed;
+            --button-shadow: #a0a0a0;
+            --button-active: #f4bae0;
+            --text: #111111;
+            --muted: #565656;
+            --blue: #b4d8e7;
+            --yellow: #e7e7b4;
+            --green: #4caf50;
+            --outer-dot: #d0d0d0;
+            --row-selected: rgba(244, 186, 224, 0.08);
+            --row-selected-hover: rgba(244, 186, 224, 0.24);
+            --row-hover: rgba(244, 186, 224, 0.22);
+            --row-hover-mobile: rgba(244, 186, 224, 0.18);
+            --row-open: rgba(244, 186, 224, 0.3);
+            --overlay-bg: rgba(0, 0, 0, 0.34);
+            --shadow-light: rgba(255, 255, 255, 0.82);
+            --shadow-dark: rgba(0, 0, 0, 0.2);
+            --bevel-light: rgba(255, 255, 255, 0.3);
+            --screen-bevel-light: rgba(255, 255, 255, 0.35);
+            --screen-bevel-dark: rgba(0, 0, 0, 0.08);
+            --button-bevel-light: rgba(255, 255, 255, 0.7);
+            --pressed-shadow: rgba(0, 0, 0, 0.22);
+            --pressed-light: rgba(255, 255, 255, 0.58);
+            --detail-inset: rgba(0, 0, 0, 0.06);
+            --grid: 36px;
+            --font: "VT323", "Courier New", Courier, monospace;
         }
 
-        *, *::before, *::after {
+        * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
         html {
-            overflow-x: clip;
+            background: var(--outer);
+            color: var(--text);
+            color-scheme: light dark;
         }
 
         body {
-            background-color: var(--paper-bg);
-            
-            background-image: 
-                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
-                radial-gradient(circle at 50% 50%, transparent 20%, rgba(200, 190, 170, 0.1) 100%),
-                linear-gradient(to right, rgba(0,0,0,0.02) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.03) 100%);
-            color: var(--ink-black);
-            font-family: var(--font-hand);
-            font-size: 24px;
-            line-height: 1.2;
             min-height: 100vh;
-            overflow-x: clip;
-            padding: 40px 20px;
-            position: relative;
-        }
-
-        
-        .coffee-ring {
-            position: absolute;
-            width: 300px;
-            height: 280px;
-            border-radius: 45% 55% 40% 60% / 55% 45% 60% 40%;
-            border: 4px solid rgba(139, 90, 43, 0.15);
-            top: -50px;
-            right: -80px;
-            transform: rotate(20deg);
-            pointer-events: none;
-            z-index: 0;
-        }
-        .coffee-ring::after {
-            content: '';
-            position: absolute;
-            width: 280px;
-            height: 290px;
-            border-radius: 50% 50% 45% 55% / 40% 60% 50% 50%;
-            border: 2px solid rgba(139, 90, 43, 0.08);
-            top: 10px;
-            left: -5px;
-            transform: rotate(-15deg);
-        }
-
-        
-        .desk-surface {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        header {
-            margin-bottom: 80px;
-            position: relative;
-            display: inline-block;
-            transform: rotate(-2deg);
-            padding-left: 20px;
-        }
-
-        h1 {
-            font-family: var(--font-typewriter);
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            color: var(--ink-black);
-            letter-spacing: -2px;
-            display: inline-block;
-            position: relative;
-            background: rgba(255,255,255,0.5);
-            padding: 10px 20px;
-            border: 1px solid rgba(0,0,0,0.1);
-            box-shadow: var(--shadow-flat);
-        }
-
-        
-        .stamp-dev {
-            color: var(--ink-red);
-            border: 3px solid var(--ink-red);
-            padding: 2px 8px;
-            border-radius: 4px;
-            transform: rotate(4deg) translateY(-5px);
-            display: inline-block;
-            opacity: 0.85;
-            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.3'/%3E%3C/svg%3E");
-            -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' fill='white'/%3E%3Crect width='100' height='100' filter='url(%23n)' opacity='0.5' mix-blend-mode='multiply'/%3E%3C/svg%3E");
-            mask-mode: luminance;
-        }
-
-        .tagline {
-            font-family: var(--font-marker);
-            font-size: clamp(1.2rem, 2vw, 1.8rem);
-            color: var(--pencil);
-            margin-top: 15px;
-            margin-left: 30px;
-            transform: rotate(1deg);
-        }
-
-        .tagline .arrow {
-            display: inline-block;
-            width: 40px;
-            height: 20px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 20"><path d="M0 10 Q 25 20, 45 5 L 40 0 M 45 5 L 50 15" fill="none" stroke="%232c2a27" stroke-width="2" stroke-linecap="round"/></svg>') no-repeat center;
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-
-        
-        .projects-board {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 60px;
+            margin: 0;
             padding: 20px;
-            position: relative;
-        }
-
-        
-        .item {
-            position: relative;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .item:hover {
-            transform: scale(1.02) translateY(-5px) !important;
-            z-index: 10;
-        }
-
-        
-        .tape {
-            position: absolute;
-            height: 30px;
-            width: 100px;
-            background-color: var(--tape-yellow);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            z-index: 5;
-            
-            clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%, 3% 50%);
-            
-            background-image: linear-gradient(90deg, transparent 50%, rgba(255,255,255,0.2) 50%);
-            background-size: 4px 100%;
-        }
-
-        
-        .proj-story {
-            transform: rotate(-3deg);
-            justify-self: center;
-        }
-        
-        .proj-story .paper {
-            background: #fff;
-            padding: 15px 15px 40px 15px;
-            box-shadow: var(--shadow-lift);
-            width: 300px;
-            max-width: 100%;
-            position: relative;
-        }
-
-        .proj-story .tape-top {
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%) rotate(2deg);
-            width: 120px;
-        }
-
-        .proj-story .photo-container {
-            width: 100%;
-            height: 220px;
-            background: #ddd;
-            overflow: hidden;
-            position: relative;
-            filter: sepia(0.2) contrast(1.1);
-        }
-
-        .proj-story img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .proj-story .meta-scribble {
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            font-family: var(--font-scribble);
-            font-size: 1.2rem;
-            color: var(--ink-blue);
-            transform: rotate(-5deg);
-        }
-
-        
-        .proj-train {
-            transform: rotate(2deg) translateY(30px);
-            justify-self: center;
-        }
-
-        .proj-train .paper {
-            background: #fbf9f4;
-            padding: 30px 20px;
-            box-shadow: var(--shadow-flat);
-            width: 320px;
-            max-width: 100%;
-            border-left: 2px solid rgba(200, 50, 50, 0.4); 
-            position: relative;
-            background-image: repeating-linear-gradient(transparent, transparent 29px, rgba(0,100,200,0.1) 30px);
-            background-position: 0 40px;
-        }
-
-        .proj-train .paperclip {
-            position: absolute;
-            top: -20px;
-            right: 30px;
-            width: 40px;
-            height: 80px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 50"><path d="M10,45 C4,45 1,40 1,35 L1,15 C1,8 6,3 12,3 C18,3 19,8 19,15 L19,30 C19,34 16,37 12,37 C8,37 6,35 6,31 L6,15" fill="none" stroke="%23777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat;
-            z-index: 6;
-            transform: rotate(15deg);
-        }
-
-        .stamp-circle {
-            position: absolute;
-            top: 20px;
-            right: 10px;
-            width: 60px;
-            height: 60px;
-            border: 2px dashed var(--ink-red);
-            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-family: var(--font-typewriter);
-            font-size: 0.6rem;
-            color: var(--ink-red);
-            transform: rotate(-20deg);
-            opacity: 0.6;
-            text-align: center;
-            line-height: 1;
+            background-color: var(--outer);
+            background-image: radial-gradient(var(--outer-dot) 1px, transparent 1px);
+            background-size: 16px 16px;
+            font-family: var(--font);
+            font-size: 24px;
+            line-height: 1.1;
+            -webkit-font-smoothing: none;
         }
 
-        
-        .proj-ramp {
-            transform: rotate(-1deg) translateY(-20px);
-            justify-self: center;
+        a {
+            color: inherit;
         }
 
-        .proj-ramp .paper {
-            background: #faf8f5;
-            padding: 30px;
-            width: 340px;
-            max-width: 100%;
-            box-shadow: var(--shadow-lift);
-            
-            background-image: 
-                linear-gradient(rgba(100,150,200,0.15) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(100,150,200,0.15) 1px, transparent 1px);
-            background-size: 20px 20px;
-            position: relative;
-            border-radius: 2px;
+        ::selection {
+            background: var(--pink);
+            color: var(--text);
         }
 
-        .proj-ramp .tape-corner-1 {
-            background-color: var(--tape-blue);
-            width: 60px;
-            top: -10px;
-            left: -20px;
-            transform: rotate(-45deg);
-        }
-        
-        .proj-ramp .tape-corner-2 {
-            background-color: var(--tape-blue);
-            width: 60px;
-            bottom: -10px;
-            right: -20px;
-            transform: rotate(-45deg);
-        }
-
-        .sketch-drawing {
-            width: 100%;
-            height: 120px;
-            border: 2px solid var(--pencil);
-            margin-bottom: 15px;
-            position: relative;
-            background: rgba(255,255,255,0.5);
-            
-            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+        .device {
+            width: min(1100px, 100%);
+            display: grid;
+            grid-template-columns: 164px minmax(0, 1fr);
+            gap: 8px;
+            padding: 12px;
+            border: 2px solid var(--case-dark);
+            border-radius: 12px;
+            background: var(--case);
+            box-shadow:
+                inset 2px 2px 0 var(--bevel-light),
+                inset -2px -2px 0 rgba(0, 0, 0, 0.2),
+                4px 4px 0 rgba(0, 0, 0, 0.1),
+                18px 24px 44px rgba(0, 0, 0, 0.18);
         }
 
-        .sketch-drawing::before {
-            content: '';
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 80%;
-            height: 2px;
-            background: var(--pencil);
-            transform: rotate(-5deg);
-        }
-        
-        .sketch-drawing::after {
-            content: '';
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-bottom: 20px solid var(--pencil);
-            transform: rotate(20deg) translate(30px, -20px);
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-right: 8px;
+            border-right: 3px dotted var(--case-dark);
         }
 
-        
-        .proj-title {
-            font-family: var(--font-marker);
-            font-size: 1.8rem;
-            color: var(--ink-black);
-            margin-bottom: 5px;
-            line-height: 1;
-        }
-
-        .proj-desc {
-            font-family: var(--font-scribble);
-            font-size: 1.4rem;
-            color: var(--pencil);
-            line-height: 1.2;
-        }
-
-        .typewriter-title {
-            font-family: var(--font-typewriter);
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin-bottom: 10px;
+        .plastic-btn {
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            padding: 0 13px;
+            border: 2px solid var(--case-dark);
+            border-radius: 7px;
+            background: var(--button);
+            box-shadow:
+                inset -3px -3px 0 var(--button-shadow),
+                inset 2px 2px 0 var(--button-bevel-light),
+                2px 2px 0 rgba(0, 0, 0, 0.12);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: -0.5px;
+            transform: translate(0, 0);
+            transition: transform 70ms ease, box-shadow 70ms ease, background 100ms ease;
         }
 
-        .link-indicator {
+        .plastic-btn:focus-visible {
+            outline: 2px solid var(--screen);
+            outline-offset: 3px;
+        }
+
+        .plastic-btn:hover {
+            transform: translateY(-1px);
+            background: var(--button-hover);
+        }
+
+        .plastic-btn.active,
+        .plastic-btn.is-pressed,
+        .plastic-btn:active {
+            background: var(--button-active);
+            border-color: var(--pink-border);
+            color: var(--text);
+            transform: translate(2px, 2px);
+            box-shadow:
+                inset 3px 3px 0 var(--pressed-shadow),
+                inset -2px -2px 0 var(--pressed-light);
+        }
+
+        .screen {
+            min-width: 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 650px;
+            border: 2px solid var(--case-dark);
+            border-radius: 8px;
+            background: var(--screen);
+            box-shadow:
+                inset 2px 2px 0 var(--screen-bevel-light),
+                inset -2px -2px 0 var(--screen-bevel-dark);
+        }
+
+        .top-tab {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            min-height: 44px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0 20px;
+            border-right: 2px solid var(--case-dark);
+            border-bottom: 2px solid var(--pink-border);
+            border-bottom-right-radius: 8px;
+            background: var(--pink);
+            color: var(--text);
+            font-size: 31px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            clip-path: polygon(0 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%);
+        }
+
+        .sparkle {
+            margin-left: 12px;
+            font-size: 22px;
+        }
+
+        .ruled {
+            flex: 1;
+            margin-top: 44px;
+            padding-bottom: 18px;
+            background-image: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent calc(var(--grid) - 2px),
+                var(--pink-line) calc(var(--grid) - 2px),
+                var(--pink-line) var(--grid)
+            );
+            background-size: 100% var(--grid);
+        }
+
+        .screen-intro {
+            min-height: calc(var(--grid) * 2);
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 20px;
+            align-items: center;
+            padding: 0 24px;
+            border-bottom: 2px solid var(--case-dark);
+            background: var(--screen);
+        }
+
+        .screen-intro p {
+            max-width: 58ch;
+            color: var(--muted);
+            font-size: 30px;
+        }
+
+        .mini-stats {
+            min-width: 150px;
+            color: var(--muted);
+            font-size: 25px;
+        }
+
+        .mini-stats div {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .mini-stats strong {
+            color: var(--text);
+            font-weight: normal;
+        }
+
+        .section-title {
+            height: var(--grid);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            padding: 0 24px;
+            border-bottom: 2px solid var(--case-dark);
+            background: var(--pink-light);
+            color: var(--text);
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: background 120ms ease, box-shadow 120ms ease;
+        }
+
+        section.is-selected .section-title {
+            background: var(--pink);
+            box-shadow:
+                inset 0 2px 0 var(--pressed-light),
+                inset 0 -2px 0 var(--pink-border);
+        }
+
+        section.is-selected .row {
+            background-color: var(--row-selected);
+        }
+
+        section.is-selected .row:hover {
+            background-color: var(--row-selected-hover);
+        }
+
+        .section-count {
+            color: var(--muted);
+            font-size: 25px;
+            text-transform: none;
+        }
+
+        .list-header,
+        .row {
+            display: grid;
+            grid-template-columns: minmax(160px, 2.2fr) 82px 105px 90px minmax(190px, 3fr);
+            gap: 12px;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .list-header {
+            height: var(--grid);
+            border-bottom: 2px solid var(--case-dark);
+            background: var(--screen);
+            color: var(--muted);
+            font-size: 22px;
+            text-transform: uppercase;
+        }
+
+        .row {
+            height: var(--grid);
+            color: var(--text);
+            text-decoration: none;
+            transition: background-color 100ms ease;
+        }
+
+        .row:hover {
+            background: var(--row-hover);
+        }
+
+        .row.is-open {
+            background: var(--row-open);
+            border-left: 4px solid var(--pink-border);
+        }
+
+        .cell {
+            min-width: 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            flex: 0 0 auto;
+            border: 2px solid var(--case-dark);
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        .dot.active { background: var(--green); }
+        .dot.maintained { background: var(--yellow); }
+        .dot.experiment { background: var(--pink); }
+
+        .badge {
             display: inline-block;
-            margin-top: 15px;
-            font-family: var(--font-scribble);
-            font-size: 1.5rem;
-            color: var(--ink-red);
-            border-bottom: 2px solid var(--ink-red);
-            padding-bottom: 2px;
-            transition: color 0.2s;
+            height: 24px;
+            padding: 0 8px;
+            border: 2px solid var(--case-dark);
+            border-radius: 4px;
+            background: var(--button);
+            font-size: 22px;
+            line-height: 20px;
+            font-weight: 700;
+            text-transform: lowercase;
         }
 
-        
-        .marginalia {
+        .badge.tool { background: var(--pink); }
+        .badge.game { background: var(--blue); }
+        .badge.story { background: var(--yellow); }
+        .badge.print { background: var(--pink-light); }
+        .badge.site { background: var(--button); }
+
+        .status,
+        .date,
+        .annotation {
+            color: var(--muted);
+        }
+
+        .annotation {
+            font-style: italic;
+        }
+
+        .detail-overlay {
             position: absolute;
-            font-family: var(--font-scribble);
-            color: var(--pencil);
-            font-size: 1.2rem;
-            pointer-events: none;
+            inset: 0;
+            z-index: 20;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: var(--overlay-bg);
         }
 
-        .note-1 { top: -40px; left: 100px; transform: rotate(-10deg); }
-        .note-2 { bottom: -30px; right: 20px; transform: rotate(5deg); color: var(--ink-blue); }
-
-        
-        .built-with {
-            font-family: var(--font-typewriter);
-            font-size: 0.7rem;
-            background: var(--ink-black);
-            color: var(--paper-bg);
-            padding: 2px 6px;
-            position: absolute;
-            bottom: 10px;
-            left: -10px;
-            transform: rotate(-90deg);
-            transform-origin: left bottom;
+        .detail-overlay.is-visible {
+            display: flex;
         }
 
-        @media (max-width: 768px) {
-            .projects-board {
+        .detail-dialog {
+            width: min(440px, 100%);
+            overflow: hidden;
+            border: 2px solid var(--case-dark);
+            border-radius: 5px;
+            background: var(--outer);
+            box-shadow:
+                inset 2px 2px 0 var(--screen-bevel-light),
+                inset -2px -2px 0 var(--screen-bevel-dark),
+                6px 6px 0 rgba(0, 0, 0, 0.22);
+        }
+
+        .detail-header {
+            min-height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 6px 10px 6px 14px;
+            border-bottom: 2px solid var(--case-dark);
+            background: var(--pink);
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .detail-close {
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--case-dark);
+            border-radius: 4px;
+            background: var(--button);
+            box-shadow:
+                inset -2px -2px 0 var(--button-shadow),
+                inset 1px 1px 0 var(--button-bevel-light);
+            color: var(--text);
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .detail-close:active {
+            transform: translate(1px, 1px);
+            box-shadow:
+                inset 2px 2px 0 var(--shadow-dark),
+                inset -1px -1px 0 var(--pressed-light);
+        }
+
+        .detail-body {
+            display: grid;
+            gap: 12px;
+            padding: 18px;
+            font-size: 25px;
+        }
+
+        .detail-name {
+            font-size: 34px;
+            font-weight: normal;
+            line-height: 1;
+            word-break: break-word;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 82px minmax(0, 1fr);
+            gap: 6px 12px;
+            color: var(--muted);
+        }
+
+        .detail-grid strong {
+            color: var(--text);
+            font-weight: normal;
+        }
+
+        .detail-value,
+        .detail-state {
+            min-width: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+        }
+
+        .detail-annotation {
+            min-height: 72px;
+            padding: 10px;
+            border: 2px solid var(--case-dark);
+            background: var(--screen);
+            box-shadow: inset 2px 2px 0 var(--detail-inset);
+            color: var(--text);
+            font-style: italic;
+            line-height: 1.15;
+        }
+
+        .detail-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 0 18px 18px;
+        }
+
+        .detail-action {
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 18px;
+            border: 2px solid var(--case-dark);
+            border-radius: 4px;
+            background: var(--button);
+            box-shadow:
+                inset -3px -3px 0 var(--button-shadow),
+                inset 2px 2px 0 var(--button-bevel-light);
+            color: var(--text);
+            font-family: var(--font);
+            font-size: 25px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .detail-action.primary {
+            background: var(--pink);
+        }
+
+        .detail-action:active {
+            transform: translate(1px, 1px);
+            box-shadow:
+                inset 2px 2px 0 var(--shadow-dark),
+                inset -1px -1px 0 var(--pressed-light);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --outer: #070502;
+                --case: #17110b;
+                --case-dark: #e8a537;
+                --screen: #040302;
+                --pink: #ffb743;
+                --pink-border: #ffe2a0;
+                --pink-light: #241505;
+                --pink-line: #73480f;
+                --button: #1e1509;
+                --button-hover: #302006;
+                --button-shadow: #050301;
+                --button-active: #ffb743;
+                --text: #ffd98d;
+                --muted: #c08d3e;
+                --blue: #8e5a18;
+                --yellow: #d7a43a;
+                --green: #f6c15a;
+                --outer-dot: #382105;
+                --row-selected: rgba(255, 183, 67, 0.1);
+                --row-selected-hover: rgba(255, 183, 67, 0.2);
+                --row-hover: rgba(255, 183, 67, 0.16);
+                --row-hover-mobile: rgba(255, 183, 67, 0.14);
+                --row-open: rgba(255, 183, 67, 0.24);
+                --overlay-bg: rgba(0, 0, 0, 0.64);
+                --shadow-light: rgba(255, 210, 122, 0.28);
+                --shadow-dark: rgba(0, 0, 0, 0.62);
+                --bevel-light: rgba(255, 204, 95, 0.2);
+                --screen-bevel-light: rgba(255, 207, 105, 0.16);
+                --screen-bevel-dark: rgba(0, 0, 0, 0.58);
+                --button-bevel-light: rgba(255, 218, 141, 0.28);
+                --pressed-shadow: rgba(0, 0, 0, 0.7);
+                --pressed-light: rgba(255, 210, 122, 0.2);
+                --detail-inset: rgba(255, 182, 61, 0.08);
+            }
+
+            .device {
+                box-shadow:
+                    inset 3px 3px 0 rgba(255, 225, 151, 0.34),
+                    inset -4px -4px 0 rgba(0, 0, 0, 0.72),
+                    4px 4px 0 rgba(116, 72, 15, 0.7),
+                    10px 12px 0 rgba(0, 0, 0, 0.54),
+                    22px 28px 48px rgba(0, 0, 0, 0.68),
+                    0 0 0 1px rgba(255, 198, 91, 0.24);
+            }
+
+            .screen {
+                box-shadow:
+                    inset 3px 3px 0 rgba(255, 215, 133, 0.24),
+                    inset -4px -4px 0 rgba(0, 0, 0, 0.66),
+                    0 0 0 1px rgba(255, 183, 67, 0.12),
+                    0 0 28px rgba(255, 153, 28, 0.07);
+            }
+
+            .top-tab {
+                box-shadow:
+                    inset 2px 2px 0 rgba(255, 230, 166, 0.54),
+                    inset -3px -3px 0 #8e5a18,
+                    3px 3px 0 rgba(0, 0, 0, 0.42);
+            }
+
+            .section-title {
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 216, 143, 0.16),
+                    inset 0 -2px 0 rgba(0, 0, 0, 0.42);
+            }
+
+            section.is-selected .section-title {
+                box-shadow:
+                    inset 0 2px 0 rgba(255, 238, 185, 0.58),
+                    inset 0 -3px 0 #9f6519,
+                    0 2px 0 rgba(0, 0, 0, 0.36);
+            }
+
+            .plastic-btn {
+                box-shadow:
+                    inset -4px -4px 0 #050301,
+                    inset 3px 3px 0 rgba(255, 226, 160, 0.32),
+                    3px 3px 0 rgba(0, 0, 0, 0.45),
+                    0 0 0 1px rgba(255, 183, 67, 0.15);
+            }
+
+            .plastic-btn:hover {
+                box-shadow:
+                    inset -4px -4px 0 #050301,
+                    inset 3px 3px 0 rgba(255, 226, 160, 0.4),
+                    4px 4px 0 rgba(0, 0, 0, 0.5),
+                    0 0 14px rgba(255, 183, 67, 0.12);
+            }
+
+            .plastic-btn.active,
+            .plastic-btn.is-pressed,
+            .plastic-btn:active {
+                box-shadow:
+                    inset 4px 4px 0 rgba(0, 0, 0, 0.54),
+                    inset -2px -2px 0 rgba(255, 240, 195, 0.4),
+                    1px 1px 0 rgba(255, 183, 67, 0.18);
+            }
+
+            .badge {
+                box-shadow:
+                    inset 1px 1px 0 rgba(255, 230, 166, 0.22),
+                    inset -2px -2px 0 rgba(0, 0, 0, 0.36),
+                    1px 1px 0 rgba(0, 0, 0, 0.35);
+            }
+
+            .plastic-btn,
+            .detail-action,
+            .detail-close {
+                text-shadow: 0 0 8px rgba(255, 187, 68, 0.24);
+            }
+
+            .section-title {
+                color: var(--text);
+            }
+
+            .section-title .section-count {
+                color: var(--muted);
+            }
+
+            .detail-dialog {
+                box-shadow:
+                    inset 2px 2px 0 var(--screen-bevel-light),
+                    inset -2px -2px 0 var(--screen-bevel-dark),
+                    6px 6px 0 rgba(255, 189, 69, 0.18),
+                    0 0 30px rgba(255, 169, 36, 0.13);
+            }
+
+            .top-tab,
+            .detail-header,
+            .detail-action.primary,
+            section.is-selected .section-title,
+            .plastic-btn.active,
+            .plastic-btn.is-pressed,
+            .plastic-btn:active {
+                color: #100900;
+                text-shadow: none;
+            }
+
+            .badge {
+                color: var(--text);
+            }
+
+            .badge.tool,
+            .badge.story,
+            .detail-action.primary {
+                color: #100900;
+            }
+
+            .badge.game,
+            .badge.print,
+            .badge.site {
+                color: var(--text);
+            }
+
+            section.is-selected .section-title .section-count {
+                color: #3a2200;
+            }
+        }
+
+        @media (max-width: 850px) {
+            body {
+                align-items: flex-start;
+                padding: 14px;
+            }
+
+            .device {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .controls {
+                display: grid;
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                border-right: 0;
+                border-bottom: 3px dotted var(--case-dark);
+                padding: 0 0 8px;
+            }
+
+            .plastic-btn {
+                min-height: 42px;
+                justify-content: center;
+                padding: 0 8px;
+                font-size: 22px;
+                text-align: center;
+            }
+
+            .screen {
+                min-height: 0;
+            }
+
+            .ruled {
+                background-image: none;
+                background-color: var(--screen);
+            }
+
+            .screen-intro {
                 grid-template-columns: 1fr;
-                gap: 80px;
+                gap: 0;
+                min-height: auto;
+                padding: 12px 18px;
             }
-            .proj-story, .proj-train, .proj-ramp {
-                transform: rotate(0) translateY(0);
-                margin-bottom: 20px;
+
+            .screen-intro p {
+                font-size: 21px;
             }
-            .coffee-ring { display: none; }
-            .tape-corner-1, .tape-corner-2 {
+
+            .mini-stats {
+                width: min(220px, 100%);
+                margin-top: 8px;
+            }
+
+            .list-header {
                 display: none;
             }
-            .paperclip {
-                display: none;
+
+            .section-title {
+                padding: 0 18px;
             }
-            .projects-board {
-                padding: 10px;
-                overflow: hidden;
+
+            .row {
+                background: var(--screen);
+                height: auto;
+                min-height: 68px;
+                grid-template-columns: minmax(0, 1fr) auto;
+                grid-template-areas:
+                    "name badge"
+                    "annotation annotation"
+                    "status date";
+                gap: 2px 12px;
+                padding: 7px 18px;
+                border-bottom: 1px solid var(--pink-line);
             }
-            .desk-surface {
+
+            .detail-overlay {
+                align-items: flex-start;
+                padding: 56px 16px 16px;
+            }
+
+            .detail-body {
+                font-size: 25px;
+            }
+
+            .detail-name {
+                font-size: 34px;
+            }
+
+            .row:hover {
+                background: var(--row-hover-mobile);
+            }
+
+            .name { grid-area: name; }
+            .badge { grid-area: badge; justify-self: end; }
+            .status { grid-area: status; }
+            .date { grid-area: date; justify-self: end; }
+            .annotation {
+                grid-area: annotation;
+                white-space: nowrap;
                 overflow: hidden;
+                text-overflow: ellipsis;
+                line-height: 1.05;
             }
         }
 
+        @media (max-width: 460px) {
+            body {
+                padding: 10px;
+                font-size: 20px;
+            }
+
+            .device {
+                padding: 8px;
+                border-width: 2px;
+            }
+
+            .controls {
+                gap: 7px;
+            }
+
+            .plastic-btn {
+                min-height: 38px;
+                font-size: 18px;
+            }
+
+            .screen {
+                border-width: 2px;
+            }
+
+            .top-tab {
+                min-height: 42px;
+                font-size: 26px;
+            }
+
+            .ruled {
+                margin-top: 42px;
+            }
+
+            .name {
+                font-size: 22px;
+            }
+        }
     </style>
     <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
@@ -444,141 +832,264 @@
     </script>
 </head>
 <body>
+    <div class="device">
+        <nav class="controls" aria-label="directory sections">
+            <a class="plastic-btn active" href="#current-tools">Current</a>
+            <a class="plastic-btn" href="#kid-builds">Kid Builds</a>
+            <a class="plastic-btn" href="#printables">Printables</a>
+            <a class="plastic-btn" href="#elsewhere">Elsewhere</a>
+        </nav>
 
-    <div class="coffee-ring"></div>
-
-    <div class="desk-surface">
-        <header>
-            <h1>mama.<span class="stamp-dev">dev</span></h1>
-            <div class="tagline">small things built for a small person <span class="arrow"></span></div>
-            <div class="marginalia note-1">drawer of treasures ↓</div>
-        </header>
-
-        <main class="projects-board">
-            
-            
-            <a href="/one-true-story/" class="item proj-story" aria-label="One True Story">
-                <div class="tape tape-top"></div>
-                <div class="paper">
-                    <div class="photo-container">
-                        <img
-                            src="/assets/images/wright-first-flight-640.jpg"
-                            srcset="/assets/images/wright-first-flight-360.jpg 360w, /assets/images/wright-first-flight-640.jpg 640w"
-                            sizes="(max-width: 700px) 82vw, 360px"
-                            width="640"
-                            height="415"
-                            alt="Wright Brothers first flight, 1903"
-                            decoding="async"
-                            fetchpriority="high">
+        <main class="screen">
+            <div class="top-tab">mama.dev <span class="sparkle">* *</span></div>
+            <div class="ruled">
+                <section class="screen-intro" aria-label="site introduction">
+                    <p>Small practical tools, kid builds, printable pages, and experiments from the family lab.</p>
+                    <div class="mini-stats" aria-label="directory stats">
+                        <div><span>status</span><strong>online</strong></div>
+                        <div><span>entries</span><strong>13</strong></div>
                     </div>
-                    <div style="margin-top: 20px;">
-                        <h2 class="proj-title">one-true-story</h2>
-                        <p class="proj-desc">Printable nonfiction stories for early readers. Real photos, big facts.</p>
-                        <span class="link-indicator">read it</span>
+                </section>
+
+                <section id="current-tools">
+                    <div class="section-title"><span>Current Tools</span><span class="section-count">4 items</span></div>
+                    <div class="list-header" aria-hidden="true">
+                        <div>Item Name</div><div>Type</div><div>Status</div><div>Updated</div><div>Annotation</div>
                     </div>
-                    <div class="meta-scribble">4 stories</div>
-                </div>
-            </a>
+                    <a class="row" href="/one-true-story/">
+                        <div class="cell name"><span class="dot active"></span>one-true-story</div>
+                        <div class="cell"><span class="badge story">story</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Printable nonfiction readers with real photos and big facts</div>
+                    </a>
+                    <a class="row" href="/worksheets/">
+                        <div class="cell name"><span class="dot active"></span>worksheets</div>
+                        <div class="cell"><span class="badge print">pdf</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Direct-download drawer of coloring and tracing pages</div>
+                    </a>
+                    <a class="row" href="/2026-calendar/">
+                        <div class="cell name"><span class="dot maintained"></span>2026-calendar</div>
+                        <div class="cell"><span class="badge tool">tool</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">26-01</div>
+                        <div class="cell annotation">Holiday calendar with tiny animations and occasion markers</div>
+                    </a>
+                    <a class="row" href="/what-to-eat/">
+                        <div class="cell name"><span class="dot maintained"></span>what-to-eat</div>
+                        <div class="cell"><span class="badge tool">tool</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">25-12</div>
+                        <div class="cell annotation">Visual food menu for blank-stare decision moments</div>
+                    </a>
+                </section>
 
-            <a href="/word-train/" class="item proj-train" aria-label="Word Train">
-                <div class="paperclip"></div>
-                <div class="paper">
-                    <div class="stamp-circle">TESTED<br>&amp;<br>APPROVED</div>
-                    <h2 class="typewriter-title">&gt;&gt; word-train.exe</h2>
-                    <p class="proj-desc" style="margin-top: 15px; font-size: 1.6rem; color: var(--ink-black);">
-                        A phonics game. Build words by snapping train cars together.
-                        Choo choo! 🚂
-                    </p>
-                    <div style="margin-top: 20px; border-top: 1px dashed var(--pencil); padding-top: 10px;">
-                        <span style="font-family: var(--font-typewriter); font-size: 0.8rem; color: var(--pencil);">STATUS: ACTIVE / DAILY USE</span>
+                <section id="kid-builds">
+                    <div class="section-title"><span>Kid Builds</span><span class="section-count">4 items</span></div>
+                    <a class="row" href="/word-train/">
+                        <div class="cell name"><span class="dot maintained"></span>word-train</div>
+                        <div class="cell"><span class="badge game">game</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">25-11</div>
+                        <div class="cell annotation">Phonics practice by snapping train cars into words</div>
+                    </a>
+                    <a class="row" href="/bigger-than-race/">
+                        <div class="cell name"><span class="dot maintained"></span>bigger-than-race</div>
+                        <div class="cell"><span class="badge game">game</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">25-10</div>
+                        <div class="cell annotation">Number comparison as a race, from small to bigger numbers</div>
+                    </a>
+                    <a class="row" href="/bigger-ramp-jump/">
+                        <div class="cell name"><span class="dot experiment"></span>bigger-ramp-jump</div>
+                        <div class="cell"><span class="badge tool">lab</span></div>
+                        <div class="cell status">experiment</div>
+                        <div class="cell date">25-09</div>
+                        <div class="cell annotation">Ramp height, angle, and gravity tuning for truck launches</div>
+                    </a>
+                    <a class="row" href="/shapes/">
+                        <div class="cell name"><span class="dot"></span>shapes</div>
+                        <div class="cell"><span class="badge game">game</span></div>
+                        <div class="cell status">archive</div>
+                        <div class="cell date">25-08</div>
+                        <div class="cell annotation">2D and 3D shape playground with tap-to-reveal practice</div>
+                    </a>
+                </section>
+
+                <section id="printables">
+                    <div class="section-title"><span>Printables</span><span class="section-count">2 items</span></div>
+                    <a class="row" href="/worksheets/">
+                        <div class="cell name"><span class="dot active"></span>worksheet-gallery</div>
+                        <div class="cell"><span class="badge print">pdf</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Maintained drawer of direct-download worksheet PDFs</div>
+                    </a>
+                    <a class="row" href="/one-true-story/">
+                        <div class="cell name"><span class="dot active"></span>nonfiction-readers</div>
+                        <div class="cell"><span class="badge story">read</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">26-06</div>
+                        <div class="cell annotation">Short real-world stories for print and couch reading</div>
+                    </a>
+                </section>
+
+                <section id="elsewhere">
+                    <div class="section-title"><span>Elsewhere</span><span class="section-count">3 links</span></div>
+                    <a class="row" href="https://buildwithyourkid.com/">
+                        <div class="cell name"><span class="dot active"></span>buildwithyourkid.com</div>
+                        <div class="cell"><span class="badge site">site</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">2026</div>
+                        <div class="cell annotation">Computational thinking curriculum and parent-dev resources</div>
+                    </a>
+                    <a class="row" href="https://toddlerlabs.com/">
+                        <div class="cell name"><span class="dot maintained"></span>toddlerlabs.com</div>
+                        <div class="cell"><span class="badge site">site</span></div>
+                        <div class="cell status">maintained</div>
+                        <div class="cell date">2026</div>
+                        <div class="cell annotation">Activity catalog and free educational games</div>
+                    </a>
+                    <a class="row" href="https://madebydia.com/">
+                        <div class="cell name"><span class="dot active"></span>madebydia.com</div>
+                        <div class="cell"><span class="badge site">index</span></div>
+                        <div class="cell status">active</div>
+                        <div class="cell date">2026</div>
+                        <div class="cell annotation">Public index for projects, open source, writing, and contact</div>
+                    </a>
+                </section>
+            </div>
+
+            <div class="detail-overlay" id="detailOverlay" hidden>
+                <div class="detail-dialog" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+                    <div class="detail-header">
+                        <span>DETAIL VIEW</span>
+                        <button class="detail-close" type="button" aria-label="Close detail view">x</button>
                     </div>
-                    <span class="link-indicator" style="color: var(--ink-blue); border-color: var(--ink-blue);">play game</span>
-                </div>
-            </a>
-
-            <a href="/bigger-ramp-jump/" class="item proj-ramp" aria-label="Bigger Ramp Jump">
-                <div class="tape tape-corner-1"></div>
-                <div class="tape tape-corner-2"></div>
-                <div class="paper">
-                    <div class="sketch-drawing">
-                        <div style="position: absolute; top: 10px; right: 10px; font-family: var(--font-scribble); font-size: 1rem;">fig. 1 - physics test</div>
+                    <div class="detail-body">
+                        <div class="detail-name" id="detailTitle"></div>
+                        <div class="detail-grid">
+                            <span>type</span><span class="detail-value"><span class="badge" id="detailType"></span></span>
+                            <span>state</span><strong class="detail-state"><span class="dot" id="detailStateDot"></span><span id="detailStatus"></span></strong>
+                            <span>updated</span><strong id="detailDate"></strong>
+                        </div>
+                        <div class="detail-annotation" id="detailAnnotation"></div>
                     </div>
-                    <h2 class="proj-title" style="font-size: 2.2rem; margin-top: -10px; transform: rotate(-2deg);">Bigger Ramp Jump!</h2>
-                    <p class="proj-desc">Adjust height. Adjust angle. Launch the truck into the stratosphere.</p>
-                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 15px;">
-                        <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">launch →</span>
+                    <div class="detail-actions">
+                        <button class="detail-action" type="button" data-detail-close>Cancel</button>
+                        <a class="detail-action primary" id="detailOpen" href="#">Open</a>
                     </div>
                 </div>
-                <div class="marginalia note-2">mostly tuning gravity...</div>
-            </a>
-
-            <a href="/bigger-than-race/" class="item proj-story" style="transform: rotate(2deg);" aria-label="Bigger Than Race">
-                <div class="tape tape-top" style="background-color: var(--tape-pink);"></div>
-                <div class="paper">
-                    <div style="padding: 20px 15px 15px;">
-                        <h2 class="proj-title">Bigger Than Race</h2>
-                        <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">Two cars, two numbers. Tap the bigger one to win the race! 🏎️</p>
-                        <p class="proj-desc" style="margin-top: 8px;">Number comparison from 1–9 up to 100–999. Adaptive difficulty.</p>
-                        <span class="link-indicator">race!</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="/shapes/" class="item proj-train" style="transform: rotate(-2deg) translateY(20px);" aria-label="Shapes">
-                <div class="paperclip" style="right: 20px;"></div>
-                <div class="paper">
-                    <h2 class="proj-title" style="font-size: 2.4rem; text-align: center; margin-top: 15px;">shapes!</h2>
-                    <p class="proj-desc" style="text-align: center; margin-top: 10px; font-size: 1.6rem; color: var(--ink-black);">
-                        2D and 3D shapes that reveal their names and spin when you tap them
-                    </p>
-                    <div style="text-align: center; margin-top: 15px;">
-                        <span class="link-indicator" style="color: var(--ink-blue); border-color: var(--ink-blue);">tap →</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="/what-to-eat/" class="item proj-ramp" style="transform: rotate(1.5deg) translateY(-10px);" aria-label="What To Eat">
-                <div class="tape tape-corner-1" style="background-color: var(--tape-pink);"></div>
-                <div class="tape tape-corner-2" style="background-color: var(--tape-yellow);"></div>
-                <div class="paper">
-                    <h2 class="typewriter-title">&gt;&gt; what-to-eat.exe</h2>
-                    <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
-                        A menu of simple foods. Tap to choose what sounds good. 🍳
-                    </p>
-                    <p class="proj-desc" style="margin-top: 8px;">For when "what do you want to eat" gets a blank stare.</p>
-                    <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">pick food</span>
-                </div>
-            </a>
-
-            <a href="/2026-calendar/" class="item proj-story" style="transform: rotate(-1deg);" aria-label="2026 Calendar">
-                <div class="tape tape-top"></div>
-                <div class="paper">
-                    <div style="padding: 20px 15px 15px;">
-                        <h2 class="proj-title" style="font-size: 2rem;">2026 Calendar</h2>
-                        <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
-                            Interactive holiday calendar. Tap a holiday for confetti and animations! 🎉
-                        </p>
-                        <p class="proj-desc" style="margin-top: 8px;">27 holidays with cute clipart.</p>
-                        <span class="link-indicator">explore</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="/worksheets/" class="item proj-ramp" style="transform: rotate(2deg) translateY(12px);" aria-label="Worksheets">
-                <div class="tape tape-corner-1" style="background-color: var(--tape-blue);"></div>
-                <div class="tape tape-corner-2" style="background-color: var(--tape-pink);"></div>
-                <div class="paper">
-                    <h2 class="typewriter-title">&gt;&gt; worksheets/</h2>
-                    <p class="proj-desc" style="font-size: 1.6rem; color: var(--ink-black); margin-top: 10px;">
-                        Printable pages for coloring, sorting, counting, and table-time resets.
-                    </p>
-                    <p class="proj-desc" style="margin-top: 8px;">PDF gallery with direct downloads.</p>
-                    <span class="link-indicator" style="color: var(--pencil); border-color: var(--pencil);">download</span>
-                </div>
-            </a>
-
+            </div>
         </main>
     </div>
+    <script>
+        (() => {
+            const links = [...document.querySelectorAll(".plastic-btn[href^='#']")];
+            const sections = links
+                .map((link) => document.querySelector(link.getAttribute("href")))
+                .filter(Boolean);
 
+            const setActive = (id) => {
+                links.forEach((link) => {
+                    link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+                });
+                sections.forEach((section) => {
+                    section.classList.toggle("is-selected", section.id === id);
+                });
+            };
 
-</body></html>
+            links.forEach((link) => {
+                const press = () => link.classList.add("is-pressed");
+                const release = () => link.classList.remove("is-pressed");
+
+                link.addEventListener("pointerdown", press);
+                link.addEventListener("pointerup", release);
+                link.addEventListener("pointercancel", release);
+                link.addEventListener("pointerleave", release);
+                link.addEventListener("blur", release);
+
+                link.addEventListener("click", () => {
+                    const id = link.getAttribute("href").slice(1);
+                    setActive(id);
+                });
+            });
+
+            setActive("current-tools");
+
+            if ("IntersectionObserver" in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    const visible = entries
+                        .filter((entry) => entry.isIntersecting)
+                        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                    if (visible) setActive(visible.target.id);
+                }, { rootMargin: "-20% 0px -55% 0px", threshold: [0.12, 0.3, 0.55] });
+
+                sections.forEach((section) => observer.observe(section));
+            }
+
+            const overlay = document.querySelector("#detailOverlay");
+            const closeButtons = [
+                document.querySelector(".detail-close"),
+                document.querySelector("[data-detail-close]")
+            ].filter(Boolean);
+            const detailTitle = document.querySelector("#detailTitle");
+            const detailType = document.querySelector("#detailType");
+            const detailStateDot = document.querySelector("#detailStateDot");
+            const detailStatus = document.querySelector("#detailStatus");
+            const detailDate = document.querySelector("#detailDate");
+            const detailAnnotation = document.querySelector("#detailAnnotation");
+            const detailOpen = document.querySelector("#detailOpen");
+            let lastFocusedRow = null;
+
+            const readCell = (row, selector) => row.querySelector(selector)?.textContent.trim() || "";
+
+            const closeDetail = () => {
+                overlay.classList.remove("is-visible");
+                overlay.hidden = true;
+                document.querySelectorAll(".row.is-open").forEach((row) => row.classList.remove("is-open"));
+                if (lastFocusedRow) lastFocusedRow.focus();
+            };
+
+            const openDetail = (row) => {
+                lastFocusedRow = row;
+                document.querySelectorAll(".row.is-open").forEach((item) => item.classList.remove("is-open"));
+                row.classList.add("is-open");
+
+                detailTitle.textContent = readCell(row, ".name").replace(/\s+/g, " ");
+                const rowBadge = row.querySelector(".badge");
+                const rowDot = row.querySelector(".dot");
+
+                detailType.textContent = rowBadge?.textContent.trim() || "";
+                detailType.className = rowBadge?.className || "badge";
+                detailStateDot.className = rowDot?.className || "dot";
+                detailStatus.textContent = readCell(row, ".status");
+                detailDate.textContent = readCell(row, ".date");
+                detailAnnotation.textContent = readCell(row, ".annotation");
+                detailOpen.href = row.href;
+
+                overlay.hidden = false;
+                overlay.classList.add("is-visible");
+                document.querySelector(".detail-close").focus();
+            };
+
+            document.querySelectorAll(".row").forEach((row) => {
+                row.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    openDetail(row);
+                });
+            });
+
+            closeButtons.forEach((button) => button.addEventListener("click", closeDetail));
+            overlay.addEventListener("click", (event) => {
+                if (event.target === overlay) closeDetail();
+            });
+            document.addEventListener("keydown", (event) => {
+                if (event.key === "Escape" && !overlay.hidden) closeDetail();
+            });
+        })();
+    </script>
+</body>
+</html>
