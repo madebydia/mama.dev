@@ -88,6 +88,7 @@
   .story-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    align-items: start;
     gap: 2rem;
     padding: 0.5rem;
   }
@@ -99,6 +100,7 @@
     text-decoration: none;
     color: inherit;
     position: relative;
+    align-self: start;
     box-shadow: 2px 3px 8px rgba(0,0,0,0.1), 0 0 0 1px rgba(0,0,0,0.04);
     transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s;
   }
@@ -141,6 +143,7 @@
   /* Photo area */
   .card-photo {
     width: 100%;
+    height: clamp(135px, 18vw, 185px);
     aspect-ratio: 4/3;
     object-fit: cover;
     display: block;
@@ -205,9 +208,15 @@
   }
 
   @media (max-width: 500px) {
-    .story-grid { grid-template-columns: repeat(2, 1fr); gap: 1.2rem; }
+    .story-grid {
+      grid-template-columns: minmax(0, 320px);
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.5rem 0;
+    }
+    .card-photo { height: 210px; }
     h1 { font-size: 2.5rem; }
-    .card-title { font-size: 1.15rem; }
+    .card-title { font-size: 1.35rem; }
     .desk-note { display: none; }
     .sticker { display: none; }
   }
