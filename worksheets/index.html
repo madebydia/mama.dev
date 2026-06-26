@@ -4,132 +4,198 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Worksheets | mama.dev</title>
+<meta name="description" content="Printable worksheet PDFs from mama.dev, including mazes, tracing pages, and early learning activities.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Just+Another+Hand&family=Special+Elite&family=Walter+Turncoat&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mama-home-tab.css">
 <style>
   :root {
-    --paper-bg: #f3f0ea;
-    --paper-dark: #e8e3d8;
-    --ink-black: #2c2a27;
-    --ink-blue: #1c457a;
-    --ink-red: #a83a32;
-    --pencil: #5a5954;
-    --tape-yellow: rgba(232, 222, 172, 0.78);
-    --tape-blue: rgba(162, 192, 212, 0.72);
-    --font-typewriter: 'Special Elite', monospace;
-    --font-hand: 'Just Another Hand', cursive;
-    --font-marker: 'Walter Turncoat', cursive;
-    --font-scribble: 'Nanum Pen Script', cursive;
-    --shadow-flat: 1px 1px 2px rgba(44, 42, 39, 0.15);
-    --shadow-lift: 2px 4px 8px rgba(44, 42, 39, 0.2);
+    --bg-canvas: #fdf4ec;
+    --bg-white: #ffffff;
+    --bg-soft: #fff9f2;
+    --accent-orange: #f29d38;
+    --accent-orange-hover: #e58c27;
+    --accent-green: #8ac926;
+    --accent-blue: #4f93b0;
+    --text-main: #2d2a32;
+    --text-muted: #76777c;
+    --line-soft: rgba(45, 42, 50, 0.08);
+    --shadow-soft: 0 12px 36px rgba(212, 185, 160, 0.25);
+    --shadow-hover: 0 20px 48px rgba(212, 185, 160, 0.38);
   }
 
-  *, *::before, *::after {
+  * {
     box-sizing: border-box;
   }
 
   body {
-    margin: 0;
     min-height: 100vh;
+    margin: 0;
     background:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E"),
-      var(--paper-bg);
-    color: var(--ink-black);
-    font-family: var(--font-hand);
-    font-size: 24px;
-    line-height: 1.2;
-    padding: 34px 18px 54px;
+      radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.95) 0 18%, transparent 32%),
+      radial-gradient(circle at 100% 18%, rgba(246, 233, 223, 0.8) 0 16%, transparent 34%),
+      radial-gradient(circle at 92% 100%, rgba(255, 246, 235, 0.9) 0 22%, transparent 42%),
+      var(--bg-canvas);
+    color: var(--text-main);
+    font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.45;
   }
 
-  .desk {
-    max-width: 1180px;
+  .blob {
+    position: fixed;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.74;
+  }
+
+  .blob.one {
+    top: -150px;
+    left: -140px;
+    width: min(46vw, 560px);
+    color: #fff9f2;
+  }
+
+  .blob.two {
+    right: -180px;
+    bottom: -240px;
+    width: min(58vw, 720px);
+    color: #f6e9df;
+  }
+
+  .site-header {
+    width: min(1200px, 100%);
     margin: 0 auto;
+    padding: 40px 24px 24px;
   }
 
-  .back-link {
-    display: inline-block;
-    color: var(--ink-blue);
-    font-family: var(--font-typewriter);
-    font-size: 0.82rem;
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-main);
+    font-size: 24px;
+    font-weight: 800;
     text-decoration: none;
-    border-bottom: 2px solid var(--ink-blue);
-    margin-bottom: 34px;
   }
 
-  header {
-    max-width: 760px;
-    margin-bottom: 38px;
-    transform: rotate(-1deg);
+  .brand-mark {
+    width: 28px;
+    height: 28px;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 9px;
+    background: var(--accent-orange);
+    color: var(--bg-white);
+    box-shadow: 0 8px 20px rgba(242, 157, 56, 0.22);
+  }
+
+  .brand small {
+    color: var(--accent-orange);
+    font-size: inherit;
+  }
+
+  .main-container {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  .hero {
+    max-width: 660px;
+    margin: 0 auto 28px;
+    text-align: center;
   }
 
   h1 {
-    display: inline-block;
     margin: 0;
-    padding: 12px 20px 8px;
-    background: rgba(255, 255, 255, 0.65);
-    border: 1px solid rgba(0, 0, 0, 0.12);
-    box-shadow: var(--shadow-flat);
-    font-family: var(--font-typewriter);
-    font-size: clamp(2.2rem, 6vw, 4.3rem);
-    line-height: 1;
+    font-size: clamp(2.2rem, 5vw, 4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
   }
 
-  .subtitle {
-    margin: 18px 0 0 28px;
-    max-width: 620px;
-    color: var(--pencil);
-    font-family: var(--font-marker);
-    font-size: clamp(1.25rem, 3.4vw, 1.75rem);
+  .hero p {
+    margin: 16px auto 0;
+    color: var(--text-muted);
+    font-size: 18px;
+    line-height: 1.6;
+  }
+
+  .filters {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin: 0 0 34px;
+  }
+
+  .filter-btn {
+    min-height: 44px;
+    padding: 0 22px;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background: var(--bg-white);
+    box-shadow: 0 4px 12px rgba(212, 185, 160, 0.12);
+    color: var(--text-muted);
+    cursor: pointer;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 800;
+    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
+  }
+
+  .filter-btn:hover,
+  .filter-btn:focus-visible {
+    color: var(--text-main);
+    box-shadow: 0 8px 18px rgba(212, 185, 160, 0.22);
+    transform: translateY(-1px);
+    outline: none;
+  }
+
+  .filter-btn.active {
+    background: var(--accent-orange);
+    color: var(--bg-white);
+    box-shadow: 0 10px 26px rgba(242, 157, 56, 0.3);
   }
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 34px;
-    align-items: start;
+    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    gap: 30px;
   }
 
-  .worksheet-card {
+  .card {
     position: relative;
     display: flex;
+    min-width: 0;
     min-height: 100%;
     flex-direction: column;
-    padding: 14px 14px 22px;
-    background: #fffdf8;
+    gap: 20px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    border-radius: 24px;
+    background: var(--bg-white);
+    box-shadow: var(--shadow-soft);
     color: inherit;
     text-decoration: none;
-    box-shadow: var(--shadow-lift);
-    transform: rotate(var(--tilt));
-    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    transition: transform 180ms ease, box-shadow 180ms ease;
   }
 
-  .worksheet-card:hover,
-  .worksheet-card:focus-visible {
-    transform: rotate(0deg) translateY(-4px);
-    box-shadow: 4px 8px 16px rgba(44, 42, 39, 0.2);
+  .card:hover,
+  .card:focus-visible {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
     outline: none;
   }
 
-  .worksheet-card::before {
-    content: "";
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    width: 112px;
-    height: 30px;
-    transform: translateX(-50%) rotate(var(--tape-tilt));
-    background: var(--tape-yellow);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    clip-path: polygon(2% 0, 98% 3%, 100% 97%, 0 100%, 3% 50%);
-  }
-
   .preview {
-    aspect-ratio: var(--preview-ratio);
-    width: 100%;
+    position: relative;
     overflow: hidden;
-    border: 1px solid rgba(44, 42, 39, 0.14);
-    background: #fffdf8;
+    border-radius: 16px;
+    background: var(--bg-canvas);
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--line-soft);
   }
 
   .preview img {
@@ -139,252 +205,324 @@
     object-fit: contain;
   }
 
-  .card-body {
+  .preview.landscape img {
+    object-fit: cover;
+  }
+
+  .status-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 3px solid var(--bg-white);
+    border-radius: 999px;
+    background: var(--accent-green);
+    box-shadow: 0 6px 16px rgba(138, 201, 38, 0.3);
+    color: var(--bg-white);
+  }
+
+  .status-badge svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3;
+  }
+
+  .card-content {
     display: flex;
     flex: 1;
     flex-direction: column;
-    padding: 18px 4px 0;
+    gap: 12px;
+  }
+
+  .meta-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0 10px;
+    border-radius: 7px;
+    background: var(--bg-canvas);
+    color: var(--accent-orange);
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .tag.age {
+    background: #e8f5d8;
+    color: #5c8c14;
+  }
+
+  .tag.type {
+    background: #e8f4f7;
+    color: var(--accent-blue);
   }
 
   h2 {
     margin: 0;
-    font-family: var(--font-marker);
-    font-size: 1.8rem;
-    line-height: 1;
-  }
-
-  .meta {
-    margin: 8px 0 0;
-    color: var(--pencil);
-    font-family: var(--font-typewriter);
-    font-size: 0.72rem;
-    line-height: 1.45;
+    color: var(--text-main);
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1.24;
   }
 
   .desc {
-    margin: 12px 0 0;
-    color: var(--pencil);
-    font-family: var(--font-scribble);
-    font-size: 1.36rem;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   .download {
-    position: relative;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    align-self: flex-start;
+    width: 100%;
+    min-height: 50px;
     margin-top: auto;
-    padding: 18px 2px 1px;
-    color: var(--ink-red);
-    border-bottom: 2px solid var(--ink-red);
-    font-family: var(--font-scribble);
-    font-size: 1.45rem;
-    line-height: 1;
-    transform: rotate(-1deg);
-    transform-origin: 18px 100%;
-    transition: color 0.18s ease, transform 0.18s ease;
+    border-radius: 999px;
+    background: var(--accent-orange);
+    color: var(--bg-white);
+    font-size: 16px;
+    font-weight: 800;
+    transition: background 160ms ease;
   }
 
-  .download::before {
-    content: "";
+  .card:hover .download,
+  .card:focus-visible .download {
+    background: var(--accent-orange-hover);
+  }
+
+  .download svg {
     width: 18px;
     height: 18px;
-    flex: 0 0 auto;
-    background: currentColor;
-    clip-path: polygon(39% 0, 61% 0, 61% 48%, 78% 48%, 50% 76%, 22% 48%, 39% 48%, 39% 0, 0 86%, 100% 86%, 100% 100%, 0 100%);
-    transform: translateY(-2px);
-    transition: transform 0.18s ease;
-  }
-
-  .download::after {
-    content: "";
-    position: absolute;
-    right: -18px;
-    top: 6px;
-    width: 12px;
-    height: 12px;
-    border: 2px solid currentColor;
-    border-left: 0;
-    border-bottom: 0;
-    opacity: 0;
-    transform: rotate(14deg) scale(0.5);
-    transition: opacity 0.18s ease, transform 0.18s ease;
-  }
-
-  .worksheet-card:hover .download,
-  .worksheet-card:focus-visible .download {
-    color: var(--ink-blue);
-    transform: rotate(0deg) translateY(-2px);
-  }
-
-  .worksheet-card:hover .download::before,
-  .worksheet-card:focus-visible .download::before {
-    animation: download-bounce 0.72s ease both;
-  }
-
-  .worksheet-card:hover .download::after,
-  .worksheet-card:focus-visible .download::after {
-    opacity: 0.85;
-    transform: rotate(14deg) scale(1);
-  }
-
-  .download-pop {
-    position: absolute;
-    left: var(--x);
-    top: var(--y);
-    width: 7px;
-    height: 7px;
-    pointer-events: none;
-    border-radius: 50%;
-    background: var(--dot-color);
-    box-shadow: 0 0 0 1px rgba(44, 42, 39, 0.08);
-    animation: paper-pop 620ms ease-out forwards;
-  }
-
-  @keyframes download-bounce {
-    0%,
-    100% {
-      transform: translateY(-2px);
-    }
-
-    38% {
-      transform: translateY(4px);
-    }
-
-    68% {
-      transform: translateY(-5px);
-    }
-  }
-
-  @keyframes paper-pop {
-    0% {
-      opacity: 1;
-      transform: translate(-50%, -50%) rotate(0deg) scale(0.7);
-    }
-
-    100% {
-      opacity: 0;
-      transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) rotate(var(--spin)) scale(0.15);
-    }
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2.5;
   }
 
   .note {
-    max-width: 660px;
-    margin: 42px auto 0;
-    padding: 18px 22px;
-    background: rgba(255, 255, 255, 0.55);
-    border: 1px dashed rgba(44, 42, 39, 0.28);
-    color: var(--pencil);
-    font-family: var(--font-typewriter);
-    font-size: 0.78rem;
-    line-height: 1.55;
+    max-width: 680px;
+    margin: 44px auto 0;
+    color: var(--text-muted);
+    font-size: 14px;
     text-align: center;
   }
 
-  @media (max-width: 700px) {
-    body {
-      padding: 24px 14px 40px;
+  @media (max-width: 720px) {
+    .site-header {
+      padding: 26px 18px 14px;
+    }
+
+    .main-container {
+      padding: 0 18px 56px;
+    }
+
+    .hero {
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .hero p {
+      font-size: 16px;
+    }
+
+    .filters {
+      justify-content: flex-start;
+      margin-bottom: 26px;
+    }
+
+    .filter-btn {
+      min-height: 40px;
+      padding: 0 16px;
+      font-size: 14px;
     }
 
     .gallery {
       grid-template-columns: 1fr;
-      gap: 42px;
+      gap: 24px;
     }
 
-    .worksheet-card {
-      transform: none;
+    .card {
+      border-radius: 20px;
+      padding: 14px;
+    }
+
+    .preview {
+      border-radius: 14px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .worksheet-card,
-    .download,
-    .download::before,
-    .download::after {
-      animation: none;
+    .filter-btn,
+    .card,
+    .download {
       transition: none;
     }
   }
 </style>
-<link rel="stylesheet" href="/assets/mama-home-tab.css">
 </head>
 <body>
-<a class="mama-home-tab" href="/" aria-label="Back to mama.dev"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>mama.dev</span></a>
-  <div class="desk">
-    <header>
-      <h1>worksheets</h1>
-      <p class="subtitle">Printable pages for quiet tables, marker bins, rainy mornings, and tiny hands that want a job.</p>
+  <a class="mama-home-tab" href="/" aria-label="Back to mama.dev"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>mama.dev</span></a>
+
+  <svg class="blob one" viewBox="0 0 200 200" aria-hidden="true">
+    <path fill="currentColor" d="M44.7,-76.4C58.8,-69.2,71.8,-59.1,81.6,-46.3C91.4,-33.5,98,-18,97.6,-2.8C97.1,12.5,89.5,27.5,78.8,39.6C68.1,51.8,54.3,61.1,39.9,67.8C25.5,74.5,10.6,78.5,-3.9,79.5C-18.4,80.5,-32.5,78.5,-45.3,71.7C-58.1,64.9,-69.6,53.2,-77.9,39.2C-86.2,25.2,-91.3,8.8,-88.4,-6.2C-85.5,-21.2,-74.6,-34.8,-62.4,-44.6C-50.2,-54.4,-36.7,-60.4,-23.4,-66.9C-10.1,-73.4,3.1,-80.4,17.2,-80.6C31.3,-80.7,45.4,-74.1,44.7,-76.4Z" transform="translate(100 100)"></path>
+  </svg>
+  <svg class="blob two" viewBox="0 0 200 200" aria-hidden="true">
+    <path fill="currentColor" d="M51.9,-71.4C66.3,-61.7,76.6,-45.8,81.2,-29.1C85.8,-12.3,84.7,5.3,77.7,20.1C70.6,34.9,57.5,47,43.2,56.5C28.8,66,13.2,72.9,-2.4,76.3C-18,79.7,-36,79.6,-49.8,70.8C-63.6,62.1,-73.2,44.7,-79.1,26.4C-85,-8.1,-87.2,-10.8,-79.1,-26.8C-71,-42.8,-52.6,-56.3,-36.2,-64.8C-19.8,-73.3,-5.4,-76.7,11.2,-73.2C27.8,-69.7,44.4,-59.4,51.9,-71.4Z" transform="translate(100 100)"></path>
+  </svg>
+
+  <nav class="site-header" aria-label="Worksheets">
+    <a href="/worksheets/" class="brand" aria-label="mama.dev worksheets">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="4" fill="currentColor" opacity="0.24"></rect><path d="M7 14l3-5 3 5 2-3 2 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+      </span>
+      mama.dev<small>/worksheets</small>
+    </a>
+  </nav>
+
+  <main class="main-container">
+    <header class="hero">
+      <h1>Joyful learning, ready to print.</h1>
+      <p>Beautiful worksheet PDFs for mazes, early penmanship, quiet tables, and small hands that want a job.</p>
     </header>
 
-    <main class="gallery" aria-label="Worksheet downloads">
-      <a class="worksheet-card" style="--tilt: -1.1deg; --tape-tilt: 3deg; --preview-ratio: 900 / 696;" href="files/airport-words-tracing.pdf" download>
-        <div class="preview">
-          <img src="previews/airport-words-tracing.jpg" width="900" height="696" alt="Preview of Airport Words Tracing worksheet" loading="eager" decoding="async">
+    <div class="filters" aria-label="Filter worksheets">
+      <button class="filter-btn active" type="button" data-filter="all">All Activities</button>
+      <button class="filter-btn" type="button" data-filter="maze">Mazes</button>
+      <button class="filter-btn" type="button" data-filter="tracing">Tracing</button>
+    </div>
+
+    <section class="gallery" aria-label="Worksheet downloads">
+      <a class="card" href="files/mars-rover-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/mars-rover-maze.jpg" width="928" height="597" alt="Preview of Mars Rover Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Mars Rover Maze</h2>
+          <p class="desc">Guide the rover across a Mars base scene with a clear start and finish path.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
         </div>
-        <div class="card-body">
+      </a>
+
+      <a class="card" href="files/safari-jeep-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/safari-jeep-maze.jpg" width="932" height="600" alt="Preview of Safari Jeep Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Safari Jeep Maze</h2>
+          <p class="desc">Drive the jeep through a leafy jungle route toward the treehouse.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="files/train-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/train-maze.jpg" width="932" height="598" alt="Preview of Train Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Train Maze</h2>
+          <p class="desc">Follow the train tracks and drive the train to the station.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="files/tractor-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/tractor-maze.jpg" width="930" height="599" alt="Preview of Tractor Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Tractor Maze</h2>
+          <p class="desc">Drive the tractor through a farm path and finish at the barn.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="files/fire-truck-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/fire-truck-maze.jpg" width="930" height="598" alt="Preview of Fire Truck Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Fire Truck Maze</h2>
+          <p class="desc">Help the fire truck find the station in a neighborhood scene.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="files/submarine-maze.pdf" download data-category="maze">
+        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
+        <div class="preview landscape"><img src="previews/submarine-maze.jpg" width="930" height="598" alt="Preview of Submarine Maze worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
+          <h2>Submarine Maze</h2>
+          <p class="desc">Guide the submarine through coral toward the reef cave.</p>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+        </div>
+      </a>
+
+      <a class="card" href="files/airport-words-tracing.pdf" download data-category="tracing">
+        <div class="preview landscape"><img src="previews/airport-words-tracing.jpg" width="900" height="696" alt="Preview of Airport Words Tracing worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
           <h2>Airport Words Tracing</h2>
-          <p class="meta">PDF download · word tracing</p>
           <p class="desc">Airport vocabulary practice with dotted words for plane, tower, gate, terminal, fuel, tug, and belt.</p>
-          <span class="download">download PDF</span>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
         </div>
       </a>
 
-      <a class="worksheet-card" style="--tilt: 1.6deg; --tape-tilt: -2deg; --preview-ratio: 900 / 696;" href="files/airport-line-tracing.pdf" download>
-        <div class="preview">
-          <img src="previews/airport-line-tracing.jpg" width="900" height="696" alt="Preview of Trace the Airport worksheet" loading="eager" decoding="async">
-        </div>
-        <div class="card-body">
+      <a class="card" href="files/airport-line-tracing.pdf" download data-category="tracing">
+        <div class="preview landscape"><img src="previews/airport-line-tracing.jpg" width="900" height="696" alt="Preview of Trace the Airport worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
           <h2>Trace the Airport</h2>
-          <p class="meta">PDF download · line tracing</p>
           <p class="desc">A vehicle tracing page with dotted airplanes, service trucks, luggage, and sticker spaces.</p>
-          <span class="download">download PDF</span>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
         </div>
       </a>
 
-      <a class="worksheet-card" style="--tilt: -0.6deg; --tape-tilt: 4deg; --preview-ratio: 637 / 900;" href="files/airport-sign-words-tracing.pdf" download>
-        <div class="preview">
-          <img src="previews/airport-sign-words-tracing.jpg" width="637" height="900" alt="Preview of Airport Sign Words Tracing worksheet" loading="lazy" decoding="async">
-        </div>
-        <div class="card-body">
+      <a class="card" href="files/airport-sign-words-tracing.pdf" download data-category="tracing">
+        <div class="preview"><img src="previews/airport-sign-words-tracing.jpg" width="637" height="900" alt="Preview of Airport Sign Words Tracing worksheet" loading="eager" decoding="async"></div>
+        <div class="card-content">
+          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
           <h2>Airport Sign Words</h2>
-          <p class="meta">PDF download · word tracing</p>
           <p class="desc">Trace short airport words on signboards, including plane, gate, crate, cone, tape, and lane.</p>
-          <span class="download">download PDF</span>
+          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
         </div>
       </a>
+    </section>
 
-    </main>
+    <p class="note">All downloads are plain PDFs. Print at actual size unless your printer needs fit-to-page.</p>
+  </main>
 
-    <p class="note">All files are plain PDFs. Print at actual size unless your printer needs fit-to-page.</p>
-  </div>
   <script>
-    const burstColors = ["#a83a32", "#1c457a", "#d6b84a", "#5a5954"];
+    const filterButtons = [...document.querySelectorAll(".filter-btn")];
+    const cards = [...document.querySelectorAll(".card")];
 
-    document.querySelectorAll(".worksheet-card").forEach((card) => {
-      card.addEventListener("click", () => {
-        const button = card.querySelector(".download");
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const filter = button.dataset.filter;
 
-        if (!button || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-          return;
-        }
-
-        for (let i = 0; i < 9; i += 1) {
-          const dot = document.createElement("span");
-          const angle = (Math.PI * 2 * i) / 9;
-          const distance = 22 + Math.random() * 18;
-
-          dot.className = "download-pop";
-          dot.style.setProperty("--x", `${button.offsetWidth - 18}px`);
-          dot.style.setProperty("--y", "16px");
-          dot.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
-          dot.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
-          dot.style.setProperty("--spin", `${Math.round(Math.random() * 160 - 80)}deg`);
-          dot.style.setProperty("--dot-color", burstColors[i % burstColors.length]);
-
-          button.append(dot);
-          dot.addEventListener("animationend", () => dot.remove(), { once: true });
-        }
+        filterButtons.forEach((item) => item.classList.toggle("active", item === button));
+        cards.forEach((card) => {
+          const shouldShow = filter === "all" || card.dataset.category === filter;
+          card.hidden = !shouldShow;
+        });
       });
     });
   </script>
