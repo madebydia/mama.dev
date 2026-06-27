@@ -38,10 +38,47 @@
     line-height: 1.45;
   }
 
+  .mama-home-tab {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    display: inline-flex;
+    min-height: 34px;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px 6px 10px;
+    border: 2px solid #222;
+    border-top: 0;
+    border-left: 0;
+    border-bottom-right-radius: 10px;
+    background: #f4bae0;
+    box-shadow:
+      inset 2px 2px 0 rgba(255, 255, 255, 0.58),
+      inset -3px -3px 0 #d58dbb,
+      2px 3px 0 rgba(0, 0, 0, 0.14);
+    color: #111;
+    font-family: "Courier New", Courier, "Liberation Mono", monospace;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: lowercase;
+  }
+
+  .mama-home-tab svg {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 auto;
+    stroke: currentColor;
+    stroke-width: 2.5;
+  }
+
   .wrap {
     width: min(1120px, 100%);
     margin: 0 auto;
-    padding: 52px 24px 76px;
+    padding: 24px 24px 76px;
   }
 
   .brand {
@@ -72,7 +109,7 @@
 
   .hero {
     max-width: 660px;
-    margin: 64px auto 34px;
+    margin: 14px auto 28px;
     text-align: center;
   }
 
@@ -212,13 +249,77 @@
     text-align: center;
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #111923;
+      --paper: #1d2835;
+      --ink: #eef6ff;
+      --muted: #aebdcd;
+      --blue: #86a9d6;
+      --blue-dark: #9ebce2;
+      --blue-pale: #263647;
+      --line: rgba(238, 246, 255, 0.12);
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+    }
+
+    body {
+      background:
+        radial-gradient(circle at 9% 8%, rgba(134, 169, 214, 0.15) 0 18%, transparent 34%),
+        radial-gradient(circle at 96% 18%, rgba(38, 54, 71, 0.62) 0 14%, transparent 32%),
+        linear-gradient(180deg, #0c1219 0%, var(--page) 100%);
+    }
+
+    .brand-mark {
+      color: #07111d;
+      box-shadow: inset 2px 2px 0 rgba(255, 255, 255, 0.32), inset -2px -2px 0 rgba(0, 0, 0, 0.24);
+    }
+
+    .brand small {
+      color: var(--blue-dark);
+    }
+
+    .template-card {
+      border-color: rgba(238, 246, 255, 0.08);
+    }
+
+    .page-preview {
+      background: #111923;
+    }
+
+    .tag {
+      background: rgba(134, 169, 214, 0.16);
+      color: #bfd8f7;
+    }
+
+    .download {
+      background: #86a9d6;
+      color: #07111d;
+    }
+
+    .download:hover,
+    .download:focus-visible {
+      background: #a1c0e8;
+    }
+
+    .mama-home-tab {
+      border-color: #e8a537;
+      background: #ffb743;
+      box-shadow:
+        inset 2px 2px 0 rgba(255, 226, 160, 0.42),
+        inset -3px -3px 0 #8e5a18,
+        2px 3px 0 rgba(0, 0, 0, 0.48),
+        0 0 18px rgba(255, 183, 67, 0.16);
+      color: #100900;
+    }
+  }
+
   @media (max-width: 720px) {
     .wrap {
-      padding: 58px 18px 56px;
+      padding: 38px 18px 56px;
     }
 
     .hero {
-      margin: 42px 0 28px;
+      margin: 14px 0 24px;
       text-align: left;
     }
 
@@ -254,6 +355,31 @@
     </header>
 
     <main class="templates" aria-label="Log template downloads">
+      <article class="template-card">
+        <div class="preview-stack" aria-label="Plane Spotting Log Book previews">
+          <div class="page-preview"><img src="previews/plane-spotting-log-book-page-1.jpg" width="900" height="1164" alt="Plane Spotting Log Book cover preview" loading="eager" decoding="async"></div>
+          <div class="page-preview"><img src="previews/plane-spotting-log-book-page-2.jpg" width="900" height="1164" alt="Plane Spotting Log Book log page preview" loading="eager" decoding="async"></div>
+        </div>
+        <div class="content">
+          <div class="tags"><span class="tag">Plane spotting</span><span class="tag">24 pages</span><span class="tag">Letter PDF</span></div>
+          <h2>Plane Spotting Log Book</h2>
+          <p class="desc">A printable airplane spotting booklet with a cover, weather prompts, location fields, aircraft model rows, tail numbers, and notes.</p>
+          <a class="download" href="files/plane-spotting-log-book.pdf" download>Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></a>
+        </div>
+      </article>
+
+      <article class="template-card">
+        <div class="preview-stack single" aria-label="Daily Newborn Log preview">
+          <div class="page-preview"><img src="previews/daily-newborn-log-page-1.jpg" width="900" height="1164" alt="Daily Newborn Log template preview" loading="eager" decoding="async"></div>
+        </div>
+        <div class="content">
+          <div class="tags"><span class="tag">Newborn</span><span class="tag">Daily log</span><span class="tag">Letter PDF</span></div>
+          <h2>Daily Newborn Log</h2>
+          <p class="desc">A one-page daily tracker for sleep, nursing, wet diapers, notes, and end-of-day totals.</p>
+          <a class="download" href="files/daily-newborn-log.pdf" download>Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></a>
+        </div>
+      </article>
+
       <article class="template-card">
         <div class="preview-stack single" aria-label="Water Tracker preview">
           <div class="page-preview"><img src="previews/water-tracker-page-1.jpg" width="900" height="1165" alt="Water Tracker template preview" loading="eager" decoding="async"></div>

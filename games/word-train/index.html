@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#bde9ff">
+
+    <!-- Basic Meta Tags -->
+    <meta name="description" content="A 3D word building game for early readers. Fill the blank, spell the picture, then build your own words and watch the train chug away.">
+    <meta name="author" content="Diana (@madebydia)">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mama.dev/games/word-train">
+    <meta property="og:title" content="Word Train | madebydia">
+    <meta property="og:description" content="A 3D word building game for early readers. Fill the blank, spell the picture, then build your own words.">
+    <meta property="og:image" content="https://mama.dev/games/word-train.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mama.dev/games/word-train">
+    <meta property="twitter:title" content="Word Train | madebydia">
+    <meta property="twitter:description" content="A 3D word building game for early readers. Fill the blank, spell the picture, then build your own words.">
+    <meta property="twitter:image" content="https://mama.dev/games/word-train.jpg">
+    <meta property="twitter:creator" content="@madebydia">
+
+    <!-- Additional -->
+    <link rel="canonical" href="https://mama.dev/games/word-train">
+
+    <title>Word Train | madebydia</title>
+    <style>
+        :root {
+            --bg: #fff7d8;
+            --panel: #fffdf4;
+            --panel-strong: #ffe995;
+            --ink: #272014;
+            --muted: #6e5b40;
+            --orange: #ff9f45;
+            --yellow: #f8d86f;
+            --green: #96d65f;
+            --blue: #79c7ed;
+            --pink: #f0a8d8;
+            --line: rgba(39, 32, 20, 0.16);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
+            background: linear-gradient(#bde9ff 0 56%, #90d86f 56% 100%);
+            color: var(--ink);
+            -webkit-tap-highlight-color: transparent;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        #scene {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .ui {
+            position: fixed;
+            inset: 0;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: max(14px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+        }
+
+        .ui > * { pointer-events: auto; }
+
+        /* ---- Top bar ---- */
+        .top {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .levels {
+            display: flex;
+            gap: 8px;
+            padding: 7px;
+            background: rgba(255, 253, 244, 0.82);
+            border: 3px solid var(--ink);
+            border-radius: 999px;
+            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.18);
+            backdrop-filter: blur(4px);
+        }
+
+        .level-btn {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            min-height: 46px;
+            padding: 0 14px;
+            border: 3px solid transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: var(--muted);
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 1000;
+            cursor: pointer;
+            transition: transform 80ms ease;
+        }
+
+        .level-btn .ico { font-size: 1.4rem; line-height: 1; }
+        .level-btn .lbl { display: none; }
+
+        .level-btn.active {
+            background: var(--yellow);
+            border-color: var(--ink);
+            color: var(--ink);
+        }
+        .level-btn.active .lbl { display: inline; }
+        .level-btn:active { transform: scale(0.94); }
+
+        .stars {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            min-height: 52px;
+            padding: 8px 16px;
+            background: rgba(255, 253, 244, 0.82);
+            border: 3px solid var(--ink);
+            border-radius: 999px;
+            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.18);
+            backdrop-filter: blur(4px);
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .stars span { filter: grayscale(1) opacity(0.35); transition: filter 200ms ease, transform 200ms ease; }
+        .stars span.on { filter: none; transform: scale(1.12); }
+
+        /* ---- Prompt ---- */
+        .prompt {
+            align-self: center;
+            padding: 9px 20px;
+            background: rgba(255, 253, 244, 0.9);
+            border: 3px solid var(--ink);
+            border-radius: 999px;
+            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.18);
+            font-size: clamp(1rem, 3.4vw, 1.35rem);
+            font-weight: 1000;
+            text-align: center;
+        }
+
+        /* ---- Bottom controls ---- */
+        .dock {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .letter-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 9px;
+            max-width: 640px;
+        }
+
+        .letter-btn {
+            width: clamp(52px, 13vw, 72px);
+            height: clamp(52px, 13vw, 72px);
+            font-size: clamp(1.6rem, 5vw, 2.2rem);
+            font-weight: 1000;
+            border: 3px solid var(--ink);
+            border-radius: 16px;
+            cursor: pointer;
+            color: var(--ink);
+            font-family: inherit;
+            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.22);
+            transition: transform 70ms ease, box-shadow 70ms ease;
+        }
+
+        .letter-btn.consonant { background: var(--green); }
+        .letter-btn.vowel { background: var(--orange); }
+
+        .letter-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 rgba(39, 32, 20, 0.22);
+        }
+
+        .controls { display: flex; gap: 10px; }
+
+        .ctl-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 60px;
+            height: 54px;
+            padding: 0 16px;
+            font-size: 1.5rem;
+            border: 3px solid var(--ink);
+            border-radius: 16px;
+            background: var(--panel);
+            color: var(--ink);
+            font-family: inherit;
+            font-weight: 1000;
+            cursor: pointer;
+            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.22);
+            transition: transform 70ms ease, box-shadow 70ms ease;
+        }
+        .ctl-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 1px 0 rgba(39, 32, 20, 0.22);
+        }
+        .ctl-btn[hidden] { display: none; }
+
+        /* ---- Level-up toast ---- */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 5;
+            transform: translate(-50%, -50%) scale(0.6);
+            padding: 22px 34px;
+            background: var(--panel-strong);
+            border: 4px solid var(--ink);
+            border-radius: 28px;
+            box-shadow: 0 14px 0 rgba(39, 32, 20, 0.2);
+            font-size: clamp(1.6rem, 6vw, 2.6rem);
+            font-weight: 1000;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .toast.show { animation: pop 2s ease forwards; }
+        @keyframes pop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+            14% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+            24% { transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -52%) scale(0.95); }
+        }
+
+        /* ---- Sparkles ---- */
+        .sparkle {
+            position: fixed;
+            z-index: 4;
+            font-size: 1.8rem;
+            pointer-events: none;
+            animation: sparkleFloat 1.1s ease-out forwards;
+        }
+        @keyframes sparkleFloat {
+            0% { opacity: 0.95; transform: translate(-50%, 0) scale(0.5) rotate(0deg); }
+            100% { opacity: 0; transform: translate(-50%, -120px) scale(1.1) rotate(120deg); }
+        }
+
+        footer {
+            position: fixed;
+            bottom: 4px;
+            right: 10px;
+            z-index: 3;
+            font-size: 0.72rem;
+            color: var(--muted);
+            opacity: 0.8;
+        }
+        footer a { color: inherit; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .toast.show { animation-duration: 0.01ms; }
+            .sparkle { animation-duration: 0.01ms; }
+        }
+    </style>
+
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
+    <script>
+     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+     plausible.init()
+    </script>
+    <link rel="stylesheet" href="/assets/mama-home-tab.css">
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+      }
+    }
+    </script>
+</head>
+<body>
+    <a class="mama-home-tab" href="/games/" aria-label="Back to games"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>games</span></a>
+
+    <canvas id="scene"></canvas>
+
+    <div class="ui">
+        <div class="top">
+            <div class="topbar">
+                <div class="levels" role="tablist" aria-label="Levels">
+                    <button class="level-btn active" data-mode="1" role="tab"><span class="ico">🧩</span><span class="lbl">Fill it</span></button>
+                    <button class="level-btn" data-mode="2" role="tab"><span class="ico">🖼️</span><span class="lbl">Spell it</span></button>
+                    <button class="level-btn" data-mode="3" role="tab"><span class="ico">✏️</span><span class="lbl">Make it</span></button>
+                </div>
+                <div class="stars" id="stars" aria-label="Progress">
+                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                </div>
+            </div>
+            <div class="prompt" id="prompt">Tap the missing letter</div>
+        </div>
+
+        <div class="dock">
+            <div class="controls">
+                <button class="ctl-btn" id="speakBtn" aria-label="Say the word">🔊</button>
+                <button class="ctl-btn" id="backBtn" aria-label="Undo last letter" hidden>⌫</button>
+            </div>
+            <div class="letter-grid" id="letters"></div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <footer>Made with care by <a href="https://x.com/madebydia" target="_blank" rel="noopener">@madebydia</a></footer>
+
+    <script type="module">
+    import * as THREE from 'three';
+
+    /* ============================================================
+       WORD DATA
+       ============================================================ */
+
+    // Validity dictionary — any real short word formed counts (cat/cot/cut all ok).
+    const validWords = new Set([
+        'van','cab','can','man','ran','fan','pan','tan','bad','dad','had','mad','sad','lad','pad',
+        'bag','tag','wag','bat','cat','hat','mat','pat','rat','sat','vat','fat','dab','gab','jab',
+        'lab','nab','tab','dam','ham','jam','ram','yam','cap','gap','lap','map','nap','rap','sap',
+        'tap','zap','gas','pal','wax','max','tax','fax','was','has',
+        'bed','red','led','fed','wed','beg','leg','peg','den','hen','men','pen','ten','bet','get',
+        'jet','let','met','net','pet','set','vet','wet','yet','pep','web','egg','elf','elk','elm',
+        'bid','did','hid','kid','lid','rid','big','dig','fig','gig','jig','pig','wig','bin','din',
+        'fin','kin','pin','sin','tin','win','bit','fit','hit','kit','lit','pit','sit','wit','dip',
+        'hip','lip','nip','rip','sip','tip','zip','dim','him','rim','fix','mix','six','rib','bib',
+        'bog','cog','dog','fog','hog','jog','log','box','fox','not','cot','dot','got','hot','lot',
+        'pot','rot','tot','cop','hop','mop','pop','top','bop','bob','cob','job','mob','rob','sob',
+        'god','nod','pod','rod','sod','mom','bud','cud','mud','bug','dug','hug','jug','mug','pug',
+        'rug','tug','bun','fun','gun','nun','pun','run','sun','but','cut','gut','hut','jut','nut',
+        'rut','bus','cub','hub','pub','rub','sub','tub','bum','gum','hum','sum','yum','cup','pup',
+        'sup','put','jet','yak','yes','yet','wax','zoo','bee','sea','tea','pie','key','saw','gem',
+        'ear','eye','arm','toe','jar','car','bar','far','tar','war','cow','bow','paw','jaw','law',
+        'raw','saw','ace','age','ant','arc','ark','art','ash','ask','add','aid','aim','air','ape'
+    ]);
+
+    // Curated CVC words for Level 1 puzzles (blank one slot).
+    const PUZZLE_WORDS = [
+        'cat','hat','bat','mat','rat','sat','fan','can','man','pan','ran','van','bag','tag','rag',
+        'wag','cap','map','nap','tap','lap','dad','bad','mad','sad','ham','jam','ram',
+        'bed','red','hen','pen','ten','net','jet','pet','wet','web','leg','peg','beg','den','men',
+        'big','pig','dig','wig','fig','pin','win','bin','tin','fin','sit','hit','bit','fit','lip',
+        'dip','rip','tip','zip','rib','bib','six','fix','mix',
+        'dog','log','fog','hog','jog','cot','dot','hot','pot','rot','box','fox','top','hop','mop',
+        'pop','cop','cob','job','mob','rob','nod','rod',
+        'bus','cup','pup','cut','nut','hut','rug','bug','hug','jug','mug','tug','sun','run','fun',
+        'bun','gun','mud','cub','tub','rub','sub'
+    ];
+
+    // Picture words for Level 2 (spell what you see).
+    const PICTURE_WORDS = [
+        ['cat','🐱'],['dog','🐶'],['pig','🐷'],['cow','🐮'],['fox','🦊'],['owl','🦉'],['bee','🐝'],
+        ['ant','🐜'],['bug','🐛'],['hen','🐔'],['bat','🦇'],['rat','🐭'],['ram','🐏'],
+        ['sun','☀️'],['bus','🚌'],['car','🚗'],['hat','🎩'],['cap','🧢'],['bed','🛏️'],['pen','🖊️'],
+        ['cup','🥤'],['box','📦'],['egg','🥚'],['leg','🦵'],['ear','👂'],['eye','👁️'],['lip','👄'],
+        ['gem','💎'],['log','🪵'],['fan','🪭'],['map','🗺️'],['nut','🥜'],['pie','🥧'],['axe','🪓'],
+        ['web','🕸️'],['bow','🎀'],['jam','🍯'],['key','🔑'],['saw','🪚']
+    ];
+
+    const VOWELS = ['a','e','i','o','u'];
+    const ALPHABET = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+    /* ============================================================
+       PALETTE
+       ============================================================ */
+    const COL = {
+        ink: '#272014', orange: '#ff9f45', yellow: '#f8d86f', green: '#96d65f',
+        blue: '#79c7ed', pink: '#f0a8d8', cream: '#fffdf4',
+        sky: '#bde9ff', grass: '#8fd56a'
+    };
+    const CAR_COLORS = [COL.orange, COL.pink, COL.green, COL.yellow];
+
+    /* ============================================================
+       THREE.JS SCENE
+       ============================================================ */
+    const canvas = document.getElementById('scene');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.Fog(COL.sky, 38, 85);
+
+    const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+    const camTarget = new THREE.Vector3(-1.2, 2, 0);
+    const camDir = new THREE.Vector3(0.08, 0.18, 0.98).normalize();
+    // Distance is computed in resize() so the whole train fits in any aspect.
+
+    // Lights
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, 0.95));
+    const sun = new THREE.DirectionalLight(0xfff4d6, 1.15);
+    sun.position.set(-6, 12, 8);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024, 1024);
+    sun.shadow.camera.left = -14; sun.shadow.camera.right = 14;
+    sun.shadow.camera.top = 14; sun.shadow.camera.bottom = -14;
+    scene.add(sun);
+
+    // Ground
+    const ground = new THREE.Mesh(
+        new THREE.PlaneGeometry(120, 80),
+        new THREE.MeshStandardMaterial({ color: COL.grass, roughness: 1 })
+    );
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = 0;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Rails + ties
+    const rails = new THREE.Group();
+    const railMat = new THREE.MeshStandardMaterial({ color: '#9aa0a6', roughness: 0.5, metalness: 0.3 });
+    for (const z of [-0.55, 0.55]) {
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(120, 0.12, 0.12), railMat);
+        rail.position.set(0, 0.18, z);
+        rails.add(rail);
+    }
+    const tieMat = new THREE.MeshStandardMaterial({ color: '#7a5a3a', roughness: 1 });
+    for (let i = -28; i <= 28; i++) {
+        const tie = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.1, 1.5), tieMat);
+        tie.position.set(i * 1.1, 0.1, 0);
+        tie.receiveShadow = true;
+        rails.add(tie);
+    }
+    scene.add(rails);
+
+    // Sun disc + clouds
+    const sunDisc = new THREE.Mesh(
+        new THREE.CircleGeometry(2.6, 40),
+        new THREE.MeshBasicMaterial({ color: '#fff0a8' })
+    );
+    sunDisc.position.set(-15, 15, -34);
+    scene.add(sunDisc);
+
+    const clouds = [];
+    function makeCloud(x, y, z, s) {
+        const g = new THREE.Group();
+        const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 });
+        [[0, 0, 1.3], [1.1, -0.1, 1], [-1.1, -0.1, 1], [0.5, 0.5, 0.9]].forEach(([dx, dy, r]) => {
+            const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 12), mat);
+            puff.position.set(dx, dy, 0);
+            g.add(puff);
+        });
+        g.position.set(x, y, z);
+        g.scale.setScalar(s);
+        scene.add(g);
+        clouds.push(g);
+    }
+    makeCloud(-12, 11, -26, 1.1);
+    makeCloud(8, 13, -30, 1.4);
+    makeCloud(16, 10, -24, 0.9);
+    makeCloud(0, 15, -34, 1.2);
+
+    // Hills
+    const hillMat = new THREE.MeshStandardMaterial({ color: '#7cc257', roughness: 1 });
+    [[-15, -34, 4.5, -3], [16, -40, 5.5, -3.5], [2, -46, 6, -4]].forEach(([x, z, r, y]) => {
+        const hill = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), hillMat);
+        hill.position.set(x, y, z);
+        scene.add(hill);
+    });
+
+    /* ============================================================
+       TEXTURES
+       ============================================================ */
+    function roundRect(ctx, x, y, w, h, r) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+    }
+
+    function letterTexture(letter, bg, opts = {}) {
+        const S = 256;
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = S;
+        const ctx = cv.getContext('2d');
+        // panel
+        ctx.fillStyle = bg;
+        roundRect(ctx, 16, 16, S - 32, S - 32, 34);
+        ctx.fill();
+        // inner cream tile
+        ctx.fillStyle = opts.empty ? 'rgba(255,253,244,0.35)' : COL.cream;
+        roundRect(ctx, 40, 40, S - 80, S - 80, 24);
+        ctx.fill();
+        if (opts.empty) {
+            ctx.strokeStyle = COL.ink;
+            ctx.lineWidth = 6;
+            ctx.setLineDash([14, 12]);
+            roundRect(ctx, 44, 44, S - 88, S - 88, 22);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+        if (letter) {
+            ctx.fillStyle = COL.ink;
+            ctx.font = '900 150px ui-rounded, "Arial Rounded MT Bold", Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(letter, S / 2, S / 2 + 12);
+        }
+        const tex = new THREE.CanvasTexture(cv);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    function emojiTexture(emoji) {
+        const S = 256;
+        const cv = document.createElement('canvas');
+        cv.width = cv.height = S;
+        const ctx = cv.getContext('2d');
+        ctx.fillStyle = COL.cream;
+        roundRect(ctx, 8, 8, S - 16, S - 16, 28);
+        ctx.fill();
+        ctx.strokeStyle = COL.ink;
+        ctx.lineWidth = 8;
+        roundRect(ctx, 8, 8, S - 16, S - 16, 28);
+        ctx.stroke();
+        ctx.font = '170px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(emoji, S / 2, S / 2 + 12);
+        const tex = new THREE.CanvasTexture(cv);
+        tex.anisotropy = 4;
+        return tex;
+    }
+
+    /* ============================================================
+       TRAIN
+       ============================================================ */
+    const train = new THREE.Group();
+    scene.add(train);
+
+    const spinWheels = [];
+
+    function makeWheel(x, y, z) {
+        const w = new THREE.Mesh(
+            new THREE.CylinderGeometry(0.34, 0.34, 0.18, 18),
+            new THREE.MeshStandardMaterial({ color: COL.ink, roughness: 0.6 })
+        );
+        w.rotation.x = Math.PI / 2;
+        w.position.set(x, y, z);
+        w.castShadow = true;
+        spinWheels.push(w);
+        return w;
+    }
+
+    // Engine (leads to the left)
+    const engine = new THREE.Group();
+    const engineBody = new THREE.Mesh(
+        new THREE.BoxGeometry(2.1, 1.3, 1.5),
+        new THREE.MeshStandardMaterial({ color: COL.blue, roughness: 0.7 })
+    );
+    engineBody.position.y = 1.05;
+    engineBody.castShadow = true;
+    engine.add(engineBody);
+    const cabin = new THREE.Mesh(
+        new THREE.BoxGeometry(0.95, 0.95, 1.45),
+        new THREE.MeshStandardMaterial({ color: '#5fb6e0', roughness: 0.7 })
+    );
+    cabin.position.set(0.5, 2.0, 0);
+    cabin.castShadow = true;
+    engine.add(cabin);
+    const chimney = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.26, 0.32, 0.8, 16),
+        new THREE.MeshStandardMaterial({ color: COL.ink, roughness: 0.7 })
+    );
+    chimney.position.set(-0.7, 2.0, 0);
+    chimney.castShadow = true;
+    engine.add(chimney);
+    // cute eyes on the front (-x face)
+    const eyeMat = new THREE.MeshStandardMaterial({ color: '#ffffff' });
+    const pupilMat = new THREE.MeshStandardMaterial({ color: COL.ink });
+    for (const dz of [-0.4, 0.4]) {
+        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 12), eyeMat);
+        eye.position.set(-1.06, 1.2, dz);
+        engine.add(eye);
+        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 10), pupilMat);
+        pupil.position.set(-1.22, 1.2, dz);
+        engine.add(pupil);
+    }
+    engine.add(makeWheel(-0.6, 0.45, 0.78));
+    engine.add(makeWheel(-0.6, 0.45, -0.78));
+    engine.add(makeWheel(0.6, 0.45, 0.78));
+    engine.add(makeWheel(0.6, 0.45, -0.78));
+    engine.position.x = -4.0;
+    train.add(engine);
+
+    // Cars — recreated per round to match word length
+    let cars = [];
+    function buildCars(count) {
+        cars.forEach(c => {
+            train.remove(c.group);
+            c.faceMat.map?.dispose();
+        });
+        cars = [];
+        const startX = -1.6;
+        const spacing = 1.8;
+        for (let i = 0; i < count; i++) {
+            const group = new THREE.Group();
+            const color = CAR_COLORS[i % CAR_COLORS.length];
+            const faceMat = new THREE.MeshStandardMaterial({ map: letterTexture('', color, { empty: true }), roughness: 0.7 });
+            const sideMat = new THREE.MeshStandardMaterial({ color, roughness: 0.7 });
+            // face order: +x,-x,+y,-y,+z,-z  → letter on +z (toward camera)
+            const mats = [sideMat, sideMat, sideMat, sideMat, faceMat, sideMat];
+            const body = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.4, 1.5), mats);
+            body.position.y = 1.05;
+            body.castShadow = true;
+            group.add(body);
+            group.add(makeWheel(-0.45, 0.45, 0.78));
+            group.add(makeWheel(0.45, 0.45, 0.78));
+            group.add(makeWheel(-0.45, 0.45, -0.78));
+            group.add(makeWheel(0.45, 0.45, -0.78));
+            group.position.x = startX + i * spacing;
+            group.userData = { baseX: group.position.x, color, body, shakeUntil: 0, bobUntil: 0 };
+            train.add(group);
+            cars.push({ group, body, faceMat, color });
+        }
+    }
+
+    function setCar(i, letter, state) {
+        const car = cars[i];
+        car.faceMat.map?.dispose();
+        car.faceMat.map = letterTexture(letter, car.color, { empty: state === 'empty' });
+        car.faceMat.needsUpdate = true;
+    }
+
+    // Picture signboard (Level 2)
+    const sign = new THREE.Group();
+    const post = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.12, 3, 12),
+        new THREE.MeshStandardMaterial({ color: '#7a5a3a', roughness: 1 })
+    );
+    post.position.y = 1.5;
+    sign.add(post);
+    const signMat = new THREE.MeshStandardMaterial({ transparent: true, roughness: 0.8 });
+    const signBoard = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4), signMat);
+    signBoard.position.y = 4;
+    sign.add(signBoard);
+    sign.position.set(0.4, 0, -2.2);
+    sign.visible = false;
+    scene.add(sign);
+
+    /* ============================================================
+       GAME STATE
+       ============================================================ */
+    const state = {
+        mode: 1,
+        target: '',        // target word (modes 1 & 2)
+        slots: [],         // current letters
+        len: 3,
+        blankIndex: -1,    // mode 1: which slot is open
+        locked: [],        // slots that are pre-filled (mode 1)
+        activeIndex: -1,   // car that glows
+        busy: false,       // animating in/out
+        stars: 0,
+    };
+
+    const STARS_TO_LEVEL = 5;
+
+    const els = {
+        letters: document.getElementById('letters'),
+        prompt: document.getElementById('prompt'),
+        stars: document.getElementById('stars'),
+        toast: document.getElementById('toast'),
+        speakBtn: document.getElementById('speakBtn'),
+        backBtn: document.getElementById('backBtn'),
+        levelBtns: [...document.querySelectorAll('.level-btn')],
+    };
+
+    function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function shuffle(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // Letters that complete a Level-1 blank into a real word.
+    function validLettersForBlank(fixed, blankIdx) {
+        const out = [];
+        for (const L of ALPHABET) {
+            const w = fixed.slice(0, blankIdx) + L + fixed.slice(blankIdx + 1);
+            if (validWords.has(w)) out.push(L);
+        }
+        return out;
+    }
+
+    /* ============================================================
+       ROUNDS
+       ============================================================ */
+    function newRound() {
+        state.busy = true;
+        if (state.mode === 1) setupFillBlank();
+        else if (state.mode === 2) setupPicture();
+        else setupFree();
+
+        buildCars(state.len);
+        for (let i = 0; i < state.len; i++) {
+            const L = state.slots[i];
+            setCar(i, L, L ? 'filled' : 'empty');
+        }
+        sign.visible = state.mode === 2;
+        renderGrid();
+        updateControls();
+
+        // drive in
+        train.position.x = 16;
+        driveTween(0, 1100, () => { state.busy = false; });
+    }
+
+    function setupFillBlank() {
+        const word = rand(PUZZLE_WORDS);
+        state.target = word;
+        state.len = word.length;
+        const blank = Math.floor(Math.random() * word.length);
+        state.blankIndex = blank;
+        state.activeIndex = blank;
+        state.slots = word.split('');
+        state.slots[blank] = '';
+        state.locked = word.split('').map((_, i) => i !== blank);
+        els.prompt.textContent = 'Tap the missing letter';
+    }
+
+    function setupPicture() {
+        const [word, emoji] = rand(PICTURE_WORDS);
+        state.target = word;
+        state.len = word.length;
+        state.slots = Array(word.length).fill('');
+        state.blankIndex = -1;
+        state.activeIndex = 0;
+        state.locked = Array(word.length).fill(false);
+        signMat.map?.dispose();
+        signMat.map = emojiTexture(emoji);
+        signMat.needsUpdate = true;
+        els.prompt.textContent = 'Spell what you see';
+        setTimeout(() => speak(word), 700);
+    }
+
+    function setupFree() {
+        state.target = '';
+        state.len = 3;
+        state.slots = ['', '', ''];
+        state.blankIndex = -1;
+        state.activeIndex = 0;
+        state.locked = [false, false, false];
+        els.prompt.textContent = 'Make your own word!';
+    }
+
+    /* ============================================================
+       LETTER GRID
+       ============================================================ */
+    function renderGrid() {
+        els.letters.innerHTML = '';
+        let pool;
+        if (state.mode === 1) {
+            const fixed = state.target;
+            const good = validLettersForBlank(fixed, state.blankIndex);
+            const distractors = shuffle(ALPHABET.filter(l => !good.includes(l)));
+            const set = new Set(good);
+            for (const d of distractors) {
+                if (set.size >= 6) break;
+                set.add(d);
+            }
+            pool = shuffle([...set]);
+        } else {
+            pool = [...ALPHABET];
+        }
+        for (const L of pool) {
+            const btn = document.createElement('button');
+            btn.className = 'letter-btn ' + (VOWELS.includes(L) ? 'vowel' : 'consonant');
+            btn.textContent = L;
+            btn.addEventListener('click', () => placeLetter(L));
+            els.letters.appendChild(btn);
+        }
+    }
+
+    function updateControls() {
+        // speak: modes 1 & 2 (1 says the full target word as a hint)
+        els.speakBtn.hidden = state.mode === 3;
+        // backspace: modes 2 & 3 (free fill)
+        els.backBtn.hidden = state.mode === 1;
+    }
+
+    /* ============================================================
+       PLACE / REMOVE
+       ============================================================ */
+    function placeLetter(letter) {
+        if (state.busy) return;
+        if (state.mode === 1) {
+            const i = state.blankIndex;
+            state.slots[i] = letter;
+            setCar(i, letter, 'filled');
+            const word = state.slots.join('');
+            if (validWords.has(word)) {
+                state.activeIndex = -1;
+                succeed(word);
+            } else {
+                wrongFeedback([i], () => {
+                    state.slots[i] = '';
+                    setCar(i, '', 'empty');
+                });
+            }
+        } else {
+            // fill next empty slot
+            let idx = state.slots.indexOf('');
+            if (idx === -1) return;
+            state.slots[idx] = letter;
+            setCar(idx, letter, 'filled');
+            state.activeIndex = state.slots.indexOf('');
+            if (state.slots.indexOf('') === -1) checkFilled();
+        }
+    }
+
+    function backspace() {
+        if (state.busy || state.mode === 1) return;
+        let idx = -1;
+        for (let i = state.slots.length - 1; i >= 0; i--) {
+            if (state.slots[i] !== '') { idx = i; break; }
+        }
+        if (idx === -1) return;
+        state.slots[idx] = '';
+        setCar(idx, '', 'empty');
+        state.activeIndex = idx;
+    }
+
+    function checkFilled() {
+        const word = state.slots.join('');
+        const ok = state.mode === 2 ? word === state.target : validWords.has(word);
+        if (ok) {
+            state.activeIndex = -1;
+            succeed(word);
+        } else {
+            const all = state.slots.map((_, i) => i);
+            wrongFeedback(all, () => {
+                state.slots = state.slots.map(() => '');
+                for (let i = 0; i < state.len; i++) setCar(i, '', 'empty');
+                state.activeIndex = 0;
+            });
+        }
+    }
+
+    /* ============================================================
+       FEEDBACK
+       ============================================================ */
+    function wrongFeedback(indices, after) {
+        state.busy = true;
+        boop();
+        const until = elapsed + 0.45;
+        indices.forEach(i => { cars[i].group.userData.shakeUntil = until; });
+        setTimeout(() => { after(); state.busy = false; }, 480);
+    }
+
+    function succeed(word) {
+        state.busy = true;
+        const until = elapsed + 0.8;
+        cars.forEach(c => { c.group.userData.bobUntil = until; });
+        choo();
+        sparkleBurst();
+        addStar();
+        setTimeout(() => {
+            driveTween(-22, 1300, () => {
+                if (state.pendingLevelUp) { state.pendingLevelUp = false; advanceLevel(); }
+                else newRound();
+            });
+        }, 850);
+    }
+
+    function addStar() {
+        state.stars = Math.min(STARS_TO_LEVEL, state.stars + 1);
+        paintStars();
+        if (state.stars >= STARS_TO_LEVEL && state.mode < 3) {
+            state.pendingLevelUp = true;
+        }
+    }
+
+    function paintStars() {
+        [...els.stars.children].forEach((s, i) => s.classList.toggle('on', i < state.stars));
+    }
+
+    function advanceLevel() {
+        const next = state.mode + 1;
+        showToast(next === 2 ? '🎉 Level 2!\nSpell the picture' : '🎉 Level 3!\nMake your own words');
+        setTimeout(() => setMode(next), 1400);
+    }
+
+    function showToast(text) {
+        els.toast.textContent = text;
+        els.toast.classList.remove('show');
+        void els.toast.offsetWidth;
+        els.toast.classList.add('show');
+    }
+
+    function sparkleBurst() {
+        const emojis = ['✨', '⭐', '💫', '🌟'];
+        const cx = window.innerWidth / 2;
+        const cy = window.innerHeight * 0.5;
+        for (let i = 0; i < 12; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.textContent = rand(emojis);
+            s.style.left = (cx + (Math.random() - 0.5) * 360) + 'px';
+            s.style.top = (cy + (Math.random() - 0.5) * 120) + 'px';
+            s.style.animationDelay = (Math.random() * 0.2) + 's';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 1300);
+        }
+    }
+
+    /* ============================================================
+       MODE SWITCHING
+       ============================================================ */
+    function setMode(mode) {
+        state.mode = mode;
+        state.stars = 0;
+        state.pendingLevelUp = false;
+        paintStars();
+        els.levelBtns.forEach(b => b.classList.toggle('active', +b.dataset.mode === mode));
+        // snap train offscreen, then start fresh round
+        state.busy = true;
+        train.position.x = 16;
+        newRound();
+    }
+
+    els.levelBtns.forEach(b => b.addEventListener('click', () => {
+        if (state.busy && +b.dataset.mode === state.mode) return;
+        setMode(+b.dataset.mode);
+    }));
+
+    /* ============================================================
+       TRAIN MOTION
+       ============================================================ */
+    let tween = null;
+    function driveTween(toX, dur, done) {
+        tween = { from: train.position.x, to: toX, t: 0, dur, done };
+    }
+
+    /* ============================================================
+       AUDIO
+       ============================================================ */
+    let audioCtx = null;
+    function ac() {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        return audioCtx;
+    }
+    function tone(freq, dur, type = 'sine', vol = 0.25) {
+        const c = ac();
+        const osc = c.createOscillator();
+        const g = c.createGain();
+        osc.connect(g); g.connect(c.destination);
+        osc.type = type;
+        osc.frequency.value = freq;
+        g.gain.setValueAtTime(vol, c.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + dur);
+        osc.start();
+        osc.stop(c.currentTime + dur);
+    }
+    function choo() {
+        tone(523, 0.18, 'triangle', 0.3);
+        setTimeout(() => tone(659, 0.18, 'triangle', 0.3), 130);
+        setTimeout(() => tone(784, 0.32, 'triangle', 0.3), 270);
+    }
+    function boop() { tone(200, 0.18, 'sine', 0.22); }
+
+    function speak(word) {
+        if (!('speechSynthesis' in window)) return;
+        try {
+            speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(word);
+            u.rate = 0.8; u.pitch = 1.15;
+            speechSynthesis.speak(u);
+        } catch (e) { /* ignore */ }
+    }
+
+    els.speakBtn.addEventListener('click', () => {
+        if (state.mode === 2 || state.mode === 1) speak(state.target);
+    });
+    els.backBtn.addEventListener('click', backspace);
+
+    /* ============================================================
+       KEYBOARD
+       ============================================================ */
+    document.addEventListener('keydown', (e) => {
+        const k = e.key.toLowerCase();
+        if (/^[a-z]$/.test(k)) {
+            // honor mode-1 limited grid by checking grid contents
+            if (state.mode === 1) {
+                const available = [...els.letters.children].some(b => b.textContent === k);
+                if (available) placeLetter(k);
+            } else {
+                placeLetter(k);
+            }
+        } else if (k === 'backspace') {
+            e.preventDefault();
+            backspace();
+        }
+    });
+
+    /* ============================================================
+       RENDER LOOP
+       ============================================================ */
+    const clock = new THREE.Clock();
+    let elapsed = 0;
+    function resize() {
+        const w = window.innerWidth, h = window.innerHeight;
+        renderer.setSize(w, h, false);
+        const aspect = w / h;
+        camera.aspect = aspect;
+        const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+        const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+        // Dolly so the whole train (~8 wide, centred on x=-1.2) fits horizontally.
+        const dist = Math.min(34, Math.max(9, 4.8 / Math.tan(hHalf)));
+        // Aim above the train so it always sits ~70% down the screen, sky above.
+        camTarget.y = 1.05 + 0.40 * dist * Math.tan(vHalf);
+        camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+        camera.lookAt(camTarget);
+        camera.updateProjectionMatrix();
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    function animate() {
+        requestAnimationFrame(animate);
+        const dt = Math.min(clock.getDelta(), 0.05);
+        elapsed += dt;
+        const t = elapsed;
+
+        // train motion tween
+        let moving = false;
+        if (tween) {
+            tween.t += dt * 1000;
+            const p = Math.min(1, tween.t / tween.dur);
+            const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; // easeInOut
+            train.position.x = tween.from + (tween.to - tween.from) * e;
+            moving = p < 1;
+            if (p >= 1) { const d = tween.done; tween = null; d && d(); }
+        }
+        if (moving) {
+            for (const w of spinWheels) w.rotation.z -= dt * 6;
+        }
+
+        // car effects
+        for (let i = 0; i < cars.length; i++) {
+            const ud = cars[i].group.userData;
+            let yOff = 0, xOff = 0, sc = 1;
+            if (t < ud.bobUntil) {
+                yOff = Math.abs(Math.sin((ud.bobUntil - t) * 14)) * 0.3;
+            }
+            if (t < ud.shakeUntil) {
+                xOff = Math.sin((ud.shakeUntil - t) * 50) * 0.12;
+            }
+            if (i === state.activeIndex && !moving) {
+                yOff += (Math.sin(t * 3) * 0.5 + 0.5) * 0.12;
+                sc = 1 + (Math.sin(t * 3) * 0.5 + 0.5) * 0.05;
+            }
+            cars[i].group.position.y = yOff;
+            cars[i].group.position.x = ud.baseX + xOff;
+            cars[i].group.scale.setScalar(sc);
+        }
+
+        // drifting clouds
+        for (const c of clouds) {
+            c.position.x += dt * 0.4;
+            if (c.position.x > 22) c.position.x = -22;
+        }
+
+        // sign faces camera
+        sign.lookAt(camera.position.x, sign.position.y + 4, camera.position.z);
+
+        renderer.render(scene, camera);
+    }
+
+    /* ============================================================
+       GO
+       ============================================================ */
+    buildCars(3);
+    newRound();
+    paintStars();
+    animate();
+    </script>
+</body>
+</html>

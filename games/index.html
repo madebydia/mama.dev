@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#c1d7b8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="mama.dev games">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Games | mama.dev</title>
+<meta name="description" content="A kid-friendly launcher for the games on mama.dev.">
+<link rel="canonical" href="https://mama.dev/games/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/mama-home-tab.css">
+<style>
+  :root {
+    --bg-sky-top: #e6f0e1;
+    --bg-sky-bottom: #c1d7b8;
+    --hill-back: #a8c69d;
+    --hill-front: #8fa984;
+    --card-surface: #fdfcf8;
+    --card-thickness: #e0dacb;
+    --ink: #4a3a35;
+    --muted: #725f55;
+    --terracotta: #b86c53;
+    --terracotta-shadow: #8a4e3a;
+    --mustard: #d19c4c;
+    --mustard-shadow: #a37735;
+    --teal: #689e95;
+    --teal-shadow: #45736b;
+    --cream: #fdf1dd;
+    --blue: #e8f1f2;
+    --green: #e2ece5;
+    --line: rgba(74, 58, 53, 0.15);
+    --soft-shadow: rgba(74, 58, 53, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+    -webkit-user-drag: none;
+    user-select: none;
+  }
+
+  html {
+    min-height: 100%;
+    background: var(--bg-sky-bottom);
+  }
+
+  body {
+    min-height: 100vh;
+    margin: 0;
+    overflow-x: hidden;
+    background: linear-gradient(to bottom, var(--bg-sky-top), var(--bg-sky-bottom));
+    color: var(--ink);
+    font-family: "Fredoka", ui-rounded, "Arial Rounded MT Bold", system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .scenery {
+    position: fixed;
+    inset: auto 0 0;
+    height: 42vh;
+    min-height: 260px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hill {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .hill-back {
+    height: 100%;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    background: var(--hill-back);
+    transform: scaleX(1.5) translateY(24%);
+  }
+
+  .hill-front {
+    height: 62%;
+    border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    background: var(--hill-front);
+    transform: scaleX(1.2) translateX(-10%) translateY(13%);
+  }
+
+  .clouds {
+    position: fixed;
+    top: 8vh;
+    left: 0;
+    width: 100%;
+    height: 16vh;
+    min-height: 88px;
+    opacity: 0.58;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .cloud {
+    position: absolute;
+    width: clamp(88px, 12vw, 154px);
+    height: clamp(32px, 4vw, 52px);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .cloud::before,
+  .cloud::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: inherit;
+  }
+
+  .cloud::before {
+    left: 18%;
+    bottom: 35%;
+    width: 38%;
+    aspect-ratio: 1;
+  }
+
+  .cloud::after {
+    right: 16%;
+    bottom: 28%;
+    width: 45%;
+    aspect-ratio: 1;
+  }
+
+  .cloud.one {
+    top: 18%;
+    left: 11%;
+  }
+
+  .cloud.two {
+    top: 38%;
+    right: 13%;
+    transform: scale(0.82);
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    width: min(1120px, 100%);
+    margin: 0 auto;
+    padding: max(56px, calc(env(safe-area-inset-top) + 38px)) clamp(18px, 4vw, 44px) max(34px, env(safe-area-inset-bottom));
+  }
+
+  .hero {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin: 0 0 clamp(18px, 3vw, 28px);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(3.5rem, 12vw, 7.5rem);
+    font-weight: 700;
+    letter-spacing: -0.055em;
+    line-height: 0.86;
+  }
+
+  .subtitle {
+    max-width: 19rem;
+    margin: 0 0 10px;
+    color: var(--muted);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    font-weight: 600;
+    line-height: 1.22;
+  }
+
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+    gap: clamp(20px, 3.2vw, 34px);
+    align-items: stretch;
+  }
+
+  .game-card {
+    min-height: clamp(368px, 42vw, 462px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(16px, 2vw, 22px);
+    border-radius: clamp(32px, 5vw, 48px);
+    background: var(--card-surface);
+    box-shadow:
+      0 24px 48px var(--soft-shadow),
+      0 16px 0 var(--card-thickness);
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+    transform: translateY(0);
+    transition: transform 140ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 140ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .game-card:active {
+    box-shadow:
+      0 8px 16px var(--soft-shadow),
+      0 0 0 var(--card-thickness);
+    transform: translateY(16px);
+  }
+
+  .game-card:focus-visible {
+    outline: 5px solid #fff;
+    outline-offset: 5px;
+  }
+
+  .card-window {
+    position: relative;
+    width: 100%;
+    height: clamp(190px, 24vw, 248px);
+    margin-bottom: clamp(16px, 2.4vw, 22px);
+    overflow: hidden;
+    border-radius: clamp(24px, 4vw, 34px);
+  }
+
+  .window-bg {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 8px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  .illustration {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .card-title {
+    margin: 0 auto auto;
+    color: var(--ink);
+    font-size: clamp(2rem, 4.5vw, 2.8rem);
+    font-weight: 700;
+    line-height: 0.98;
+    text-align: center;
+  }
+
+  .play-btn {
+    width: clamp(66px, 8vw, 76px);
+    height: clamp(66px, 8vw, 76px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: clamp(14px, 1.8vw, 20px);
+    border-radius: 50%;
+    transform: translateY(0);
+    transition: transform 140ms ease, box-shadow 140ms ease;
+  }
+
+  .play-icon {
+    width: 0;
+    height: 0;
+    margin-left: 6px;
+    border-style: solid;
+    border-width: 14px 0 14px 23px;
+    border-color: transparent transparent transparent var(--card-surface);
+  }
+
+  .theme-train .window-bg {
+    background: var(--blue);
+  }
+
+  .theme-train .play-btn {
+    background: var(--terracotta);
+    box-shadow: 0 7px 0 var(--terracotta-shadow);
+  }
+
+  .theme-train:active .play-btn {
+    box-shadow: 0 0 0 var(--terracotta-shadow);
+    transform: translateY(7px);
+  }
+
+  .theme-race .window-bg {
+    background: var(--cream);
+  }
+
+  .theme-race .play-btn {
+    background: var(--mustard);
+    box-shadow: 0 7px 0 var(--mustard-shadow);
+  }
+
+  .theme-race:active .play-btn {
+    box-shadow: 0 0 0 var(--mustard-shadow);
+    transform: translateY(7px);
+  }
+
+  .older {
+    width: min(760px, 100%);
+    margin: clamp(28px, 4vw, 42px) auto 0;
+    border: 3px solid rgba(74, 58, 53, 0.12);
+    border-radius: 28px;
+    background: rgba(253, 252, 248, 0.74);
+    box-shadow: 0 10px 26px rgba(74, 58, 53, 0.06);
+    backdrop-filter: blur(8px);
+  }
+
+  .older summary {
+    min-height: 66px;
+    padding: 18px 22px;
+    cursor: pointer;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  .older-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0 18px 18px;
+  }
+
+  .older-link {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 16px;
+    border: 2px solid rgba(74, 58, 53, 0.13);
+    border-radius: 18px;
+    background: var(--card-surface);
+    box-shadow: 0 5px 0 var(--card-thickness);
+    color: inherit;
+    font-size: 1.08rem;
+    font-weight: 700;
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .older-link:active {
+    box-shadow: 0 0 0 var(--card-thickness);
+    transform: translateY(5px);
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes drive {
+    0%, 100% { transform: translateX(-10px); }
+    50% { transform: translateX(10px); }
+  }
+
+  .anim-float {
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .anim-drive-fast {
+    animation: drive 2s ease-in-out infinite;
+  }
+
+  .anim-drive-slow {
+    animation: drive 3s ease-in-out infinite reverse;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-sky-top: #161d16;
+      --bg-sky-bottom: #24311f;
+      --hill-back: #354a2c;
+      --hill-front: #263c24;
+      --card-surface: #f4ead6;
+      --card-thickness: #a98d68;
+      --ink: #30241b;
+      --muted: #ead6b6;
+      --soft-shadow: rgba(0, 0, 0, 0.34);
+    }
+
+    .hero {
+      color: #ffe9bd;
+    }
+
+    .older {
+      background: rgba(28, 23, 17, 0.76);
+      border-color: rgba(255, 233, 189, 0.18);
+      color: #ffe9bd;
+    }
+
+    .older-link {
+      color: #30241b;
+    }
+  }
+
+  @media (max-width: 740px) {
+    .clouds {
+      display: none;
+    }
+
+    .page {
+      padding-top: max(60px, calc(env(safe-area-inset-top) + 44px));
+    }
+
+    .hero {
+      display: block;
+    }
+
+    .subtitle {
+      margin-top: 12px;
+    }
+
+    .game-card {
+      min-height: 360px;
+    }
+
+    .card-window {
+      height: 190px;
+    }
+
+    .older-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 390px) {
+    .game-card {
+      min-height: 360px;
+      border-radius: 30px;
+    }
+
+    .card-window {
+      height: 196px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-card,
+    .play-btn,
+    .older-link {
+      transition: none;
+    }
+
+    .anim-float,
+    .anim-drive-fast,
+    .anim-drive-slow {
+      animation: none;
+    }
+  }
+</style>
+</head>
+<body>
+  <a class="mama-home-tab" href="/" aria-label="Back to mama.dev"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>mama.dev</span></a>
+
+  <div class="clouds" aria-hidden="true">
+    <span class="cloud one"></span>
+    <span class="cloud two"></span>
+  </div>
+  <div class="scenery" aria-hidden="true">
+    <div class="hill hill-back"></div>
+    <div class="hill hill-front"></div>
+  </div>
+
+  <main class="page">
+    <header class="hero">
+      <h1>games</h1>
+      <p class="subtitle">Pick one big card and start playing.</p>
+    </header>
+
+    <section class="games-grid" aria-label="Games">
+      <a class="game-card theme-train" href="/games/word-train/" aria-label="Play Word Train">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="18" y="150" width="164" height="8" rx="4" fill="#a4b8c4"></rect>
+            <g class="anim-float">
+              <circle cx="130" cy="50" r="12" fill="#fff" opacity="0.82"></circle>
+              <circle cx="145" cy="35" r="16" fill="#fff" opacity="0.62"></circle>
+              <circle cx="165" cy="20" r="20" fill="#fff" opacity="0.42"></circle>
+              <rect x="90" y="80" width="60" height="60" rx="12" fill="#b86c53"></rect>
+              <rect x="130" y="60" width="20" height="20" rx="6" fill="#4a3a35"></rect>
+              <rect x="100" y="90" width="24" height="24" rx="6" fill="#e8f1f2"></rect>
+              <rect x="30" y="100" width="50" height="40" rx="10" fill="#d19c4c"></rect>
+              <rect x="40" y="110" width="30" height="16" rx="6" fill="#e8f1f2"></rect>
+              <rect x="80" y="120" width="10" height="8" fill="#4a3a35"></rect>
+              <circle cx="45" cy="145" r="14" fill="#4a3a35"></circle>
+              <circle cx="45" cy="145" r="6" fill="#a4b8c4"></circle>
+              <circle cx="105" cy="145" r="14" fill="#4a3a35"></circle>
+              <circle cx="105" cy="145" r="6" fill="#a4b8c4"></circle>
+              <circle cx="135" cy="145" r="14" fill="#4a3a35"></circle>
+              <circle cx="135" cy="145" r="6" fill="#a4b8c4"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Word<br>Train</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-race" href="/games/bigger-than-race/" aria-label="Play Bigger Than Race">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <path d="M -20 160 Q 100 120 220 160" fill="none" stroke="#e3cda4" stroke-width="40" stroke-linecap="round"></path>
+            <path d="M -20 160 Q 100 120 220 160" fill="none" stroke="#fdf1dd" stroke-width="4" stroke-dasharray="12 12"></path>
+            <g class="anim-drive-fast" style="transform-origin: center;">
+              <rect x="100" y="60" width="80" height="50" rx="16" fill="#d19c4c"></rect>
+              <rect x="110" y="70" width="24" height="20" rx="6" fill="#fff"></rect>
+              <rect x="146" y="70" width="24" height="20" rx="6" fill="#fff"></rect>
+              <circle cx="120" cy="115" r="16" fill="#4a3a35"></circle>
+              <circle cx="160" cy="115" r="16" fill="#4a3a35"></circle>
+            </g>
+            <g class="anim-drive-slow" style="transform-origin: center;">
+              <rect x="30" y="125" width="40" height="25" rx="8" fill="#689e95"></rect>
+              <rect x="35" y="130" width="12" height="10" rx="3" fill="#fff"></rect>
+              <rect x="53" y="130" width="12" height="10" rx="3" fill="#fff"></rect>
+              <circle cx="40" cy="152" r="8" fill="#4a3a35"></circle>
+              <circle cx="60" cy="152" r="8" fill="#4a3a35"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Bigger<br>Than Race</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+    </section>
+
+    <details class="older">
+      <summary>older experiments</summary>
+      <div class="older-list">
+        <a class="older-link" href="/games/bigger-ramp-jump/">Ramp Jump</a>
+        <a class="older-link" href="/games/shapes/">Shapes</a>
+      </div>
+    </details>
+  </main>
+</body>
+</html>

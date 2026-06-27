@@ -784,7 +784,7 @@
 
             .controls {
                 display: grid;
-                grid-template-columns: repeat(4, minmax(0, 1fr));
+                grid-template-columns: repeat(2, minmax(0, 1fr));
                 border-right: 0;
                 border-bottom: 3px dotted var(--case-dark);
                 padding: 0 0 8px;
@@ -981,23 +981,21 @@
         <nav class="controls" aria-label="directory sections">
             <a class="plastic-btn active" href="#recents">Recents</a>
             <a class="plastic-btn" href="#printables">Printables</a>
-            <a class="plastic-btn" href="#log-templates">Logs</a>
-            <a class="plastic-btn" href="#kid-builds">Kid Builds</a>
         </nav>
 
         <main class="screen">
             <div class="top-tab">mama.dev <span class="sparkle">✧✦</span></div>
             <div class="ruled">
                 <section class="screen-intro" aria-label="site introduction">
-                    <p>Small practical tools, kid builds, printable pages, log templates, and experiments from the family lab.</p>
+                    <p>Small practical tools, games, printable pages, log templates, and experiments from the family lab.</p>
                     <div class="mini-stats" aria-label="directory stats">
                         <div><span>status</span><strong>online</strong></div>
-                        <div><span>entries</span><strong>11</strong></div>
+                        <div><span>entries</span><strong>6</strong></div>
                     </div>
                 </section>
 
                 <section id="recents">
-                    <div class="section-title"><span>Recents</span><span class="section-count">5 items</span></div>
+                    <div class="section-title"><span>Recents</span><span class="section-count">4 items</span></div>
                     <div class="list-header" aria-hidden="true">
                         <div>Item Name</div><div>Type</div><div>Status</div><div>Updated</div><div>Annotation</div>
                     </div>
@@ -1008,19 +1006,12 @@
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Printable tracking templates for home, habits, and daily logs</div>
                     </a>
-                    <a class="row" href="/one-true-story/">
-                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>one-true-story</div>
-                        <div class="cell"><span class="badge story">story</span></div>
+                    <a class="row" href="/games/">
+                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>games</div>
+                        <div class="cell"><span class="badge game">play</span></div>
                         <div class="cell status active">active</div>
                         <div class="cell date">26-06</div>
-                        <div class="cell annotation">Printable nonfiction readers with real photos and big facts</div>
-                    </a>
-                    <a class="row" href="/worksheets/">
-                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>worksheets</div>
-                        <div class="cell"><span class="badge print">pdf</span></div>
-                        <div class="cell status active">active</div>
-                        <div class="cell date">26-06</div>
-                        <div class="cell annotation">Direct-download drawer of coloring and tracing pages</div>
+                        <div class="cell annotation">Kid-facing launcher for the small games on this site</div>
                     </a>
                     <a class="row" href="/2026-calendar/">
                         <div class="cell name"><span class="file-icon html" aria-hidden="true"><svg><use href="#icon-file-html"></use></svg></span>2026-calendar.html</div>
@@ -1054,58 +1045,6 @@
                         <div class="cell date">26-06</div>
                         <div class="cell annotation">Short real-world stories for print and couch reading</div>
                     </a>
-                </section>
-
-                <section id="log-templates">
-                    <div class="section-title"><span>Log Templates</span><span class="section-count">1 item</span></div>
-                    <a class="row" href="/log-templates/">
-                        <div class="cell name"><span class="file-icon folder" aria-hidden="true"><svg><use href="#icon-folder"></use></svg></span>water-tracker</div>
-                        <div class="cell"><span class="badge print">log</span></div>
-                        <div class="cell status active">active</div>
-                        <div class="cell date">26-06</div>
-                        <div class="cell annotation">Weekly water tracker template, duplicated for double-sided printing</div>
-                    </a>
-                </section>
-
-                <section id="kid-builds">
-                    <div class="section-title"><span>Kid Builds</span><span class="section-count">2 items</span></div>
-                    <a class="row" href="/word-train/">
-                        <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>word-train.js</div>
-                        <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status maintained">maintained</div>
-                        <div class="cell date">25-11</div>
-                        <div class="cell annotation">Phonics practice by snapping train cars into words</div>
-                    </a>
-                    <a class="row" href="/bigger-than-race/">
-                        <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>bigger-than-race.js</div>
-                        <div class="cell"><span class="badge game">game</span></div>
-                        <div class="cell status maintained">maintained</div>
-                        <div class="cell date">25-10</div>
-                        <div class="cell annotation">Number comparison as a race, from small to bigger numbers</div>
-                    </a>
-                </section>
-
-                <section id="archive" class="archive-section is-collapsed">
-                    <button class="section-title section-toggle" type="button" aria-expanded="false" aria-controls="archive-rows">
-                        <span><span class="archive-marker" aria-hidden="true">[+]</span>archive</span>
-                        <span class="section-count">2 items</span>
-                    </button>
-                    <div id="archive-rows">
-                        <a class="row" href="/bigger-ramp-jump/">
-                            <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>bigger-ramp-jump.js</div>
-                            <div class="cell"><span class="badge tool">lab</span></div>
-                            <div class="cell status experiment">experiment</div>
-                            <div class="cell date">25-09</div>
-                            <div class="cell annotation">Ramp height, angle, and gravity tuning for truck launches</div>
-                        </a>
-                        <a class="row" href="/shapes/">
-                            <div class="cell name"><span class="file-icon js" aria-hidden="true"><svg><use href="#icon-file-js"></use></svg></span>shapes.js</div>
-                            <div class="cell"><span class="badge game">game</span></div>
-                            <div class="cell status archive">archive</div>
-                            <div class="cell date">25-08</div>
-                            <div class="cell annotation">2D and 3D shape playground with tap-to-reveal practice</div>
-                        </a>
-                    </div>
                 </section>
 
             </div>
