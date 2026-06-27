@@ -658,19 +658,25 @@
         car.faceMat.needsUpdate = true;
     }
 
-    // Picture signboard (Level 2)
-    const sign = new THREE.Group();
-    const post = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.12, 0.12, 3, 12),
+    // Picture signboard (Level 2). The board billboards to face the camera;
+    // the post stays a separate, always-vertical mesh so it never tilts into the board.
+    const SIGN_X = 0.4, SIGN_Z = -2.2, BOARD_Y = 4;
+    const signPost = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.12, 2.85, 12),
         new THREE.MeshStandardMaterial({ color: '#7a5a3a', roughness: 1 })
     );
-    post.position.y = 1.5;
-    sign.add(post);
+    signPost.position.set(SIGN_X, 1.42, SIGN_Z); // top (~2.85) sits just under the board
+    signPost.castShadow = true;
+    signPost.visible = false;
+    scene.add(signPost);
+
+    const sign = new THREE.Group();
     const signMat = new THREE.MeshStandardMaterial({ transparent: true, roughness: 0.8 });
     const signBoard = new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.4), signMat);
-    signBoard.position.y = 4;
+    signBoard.position.y = BOARD_Y;
+    signBoard.castShadow = true;
     sign.add(signBoard);
-    sign.position.set(0.4, 0, -2.2);
+    sign.position.set(SIGN_X, 0, SIGN_Z);
     sign.visible = false;
     scene.add(sign);
 
@@ -734,7 +740,7 @@
             const L = state.slots[i];
             setCar(i, L, L ? 'filled' : 'empty');
         }
-        sign.visible = state.mode === 2;
+        sign.visible = signPost.visible = state.mode === 2;
         renderGrid();
         updateControls();
 
