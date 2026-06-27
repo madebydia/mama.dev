@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#87CEEB">
+<meta name="application-name" content="Airplanes Games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airplanes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/airplane-games/manifest.webmanifest">
+<link rel="icon" href="/airplane-games/icons/airplanes-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/airplane-games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/airplane-games/icons/apple-touch-icon.png">
+<script src="/airplane-games/app.js" defer></script>
+<title>Airplanes Games — Playful Learning for Future Pilots</title>
+<meta property="og:title" content="Airplanes Games — Playful Learning for Future Pilots">
+<meta property="og:description" content="Ignite your child's STEM journey with pattern recognition, logic, and problem-solving games designed for curious minds.">
+<meta property="og:url" content="https://mama.dev/airplane-games">
+<meta name="twitter:title" content="Airplanes Games — Playful Learning for Future Pilots">
+<meta name="twitter:description" content="Ignite your child's STEM journey with pattern recognition, logic, and problem-solving games designed for curious minds.">
+<meta property="og:image" content="https://mama.dev/airplane-games/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Airplanes Games">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mama.dev/airplane-games/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Fredoka', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4A90D9 0%, #87CEEB 40%, #B0E0F0 70%, #4CAF50 85%, #2E7D32 100%);
+    background-attachment: fixed;
+    padding: 20px;
+  }
+  header {
+    text-align: center;
+    padding: 30px 20px 20px;
+    position: relative;
+    z-index: 1;
+  }
+  header h1 {
+    font-size: 44px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 2px 3px 0 rgba(0,0,0,0.2);
+  }
+  header p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.92);
+    margin-top: 10px;
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+  .hero-planes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-plane {
+    height: 80px;
+    object-fit: contain;
+    filter: drop-shadow(2px 4px 8px rgba(0,0,0,0.2));
+  }
+  .hp1 { animation: float1 4s ease-in-out infinite; }
+  .hp2 { animation: float2 5s ease-in-out infinite; }
+  .hp3 { animation: float3 4.5s ease-in-out infinite; }
+  .hp4 { animation: float4 5.5s ease-in-out infinite; }
+  .hp5 { animation: float5 3.8s ease-in-out infinite; }
+  @keyframes float1 {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(1deg); }
+  }
+  @keyframes float2 {
+    0%, 100% { transform: translateY(0) rotate(1deg); }
+    50% { transform: translateY(-16px) rotate(-1deg); }
+  }
+  @keyframes float3 {
+    0%, 100% { transform: translateY(0) rotate(-1deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+  }
+  @keyframes float4 {
+    0%, 100% { transform: translateY(0) rotate(2deg); }
+    50% { transform: translateY(-14px) rotate(-2deg); }
+  }
+  @keyframes float5 {
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-18px) rotate(1deg); }
+  }
+  .sun {
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    width: 70px;
+    height: 70px;
+    background: #FFF176;
+    border-radius: 50%;
+    box-shadow: 0 0 40px rgba(255,241,118,0.5);
+    z-index: 0;
+  }
+  /* Realistic fluffy clouds */
+  .cloud {
+    position: fixed;
+    z-index: 0;
+  }
+  .cloud div {
+    position: absolute;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+  }
+  .cloud-1 { top: 50px; left: 6%; animation: drift 45s ease-in-out infinite; }
+  .cloud-1 .c1 { width: 100px; height: 70px; top: 20px; left: 0; }
+  .cloud-1 .c2 { width: 130px; height: 90px; top: 0; left: 40px; }
+  .cloud-1 .c3 { width: 110px; height: 70px; top: 15px; left: 100px; }
+  .cloud-1 .c4 { width: 80px; height: 55px; top: 30px; left: 150px; }
+
+  .cloud-2 { top: 100px; left: 52%; animation: drift 60s ease-in-out infinite reverse; }
+  .cloud-2 .c1 { width: 80px; height: 55px; top: 15px; left: 0; }
+  .cloud-2 .c2 { width: 100px; height: 70px; top: 0; left: 30px; }
+  .cloud-2 .c3 { width: 90px; height: 60px; top: 10px; left: 80px; }
+
+  .cloud-3 { top: 30px; left: 28%; animation: drift 70s ease-in-out infinite; }
+  .cloud-3 .c1 { width: 70px; height: 50px; top: 18px; left: 0; }
+  .cloud-3 .c2 { width: 110px; height: 75px; top: 0; left: 25px; }
+  .cloud-3 .c3 { width: 90px; height: 60px; top: 12px; left: 80px; }
+  .cloud-3 .c4 { width: 60px; height: 45px; top: 25px; left: 130px; }
+
+  @keyframes drift {
+    0% { transform: translateX(0); }
+    50% { transform: translateX(50px); }
+    100% { transform: translateX(0); }
+  }
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 960px;
+    margin: 24px auto 40px;
+    position: relative;
+    z-index: 1;
+  }
+  .game-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+  }
+  .game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  }
+  .game-card:active {
+    transform: translateY(-1px);
+  }
+  /* Dots in top-right */
+  .card-dots {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    font-size: 16px;
+    color: #ddd;
+    letter-spacing: 2px;
+  }
+  .card-dots .filled { color: #FF9800; }
+  .card-icon {
+    font-size: 44px;
+    line-height: 1;
+  }
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+  }
+  .card-tag {
+    display: inline-block;
+    background: #E3F2FD;
+    color: #1565C0;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    width: fit-content;
+  }
+  .card-tag.green { background: #E8F5E9; color: #2E7D32; }
+  .card-tag.orange { background: #FFF3E0; color: #E65100; }
+  .card-tag.purple { background: #F3E5F5; color: #6A1B9A; }
+  .card-tag.red { background: #FFEBEE; color: #C62828; }
+  .card-desc {
+    font-size: 13px;
+    color: #888;
+    line-height: 1.4;
+  }
+  /* Play button */
+  .card-play {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 10px 0;
+    background: #4A90D9;
+    color: #fff;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: filter 0.2s;
+  }
+  .game-card:hover .card-play {
+    filter: brightness(0.9);
+  }
+  .card-play.blue { background: #1565C0; }
+  .card-play.green { background: #2E7D32; }
+  .card-play.purple { background: #6A1B9A; }
+  .card-play.orange { background: #E65100; }
+  .card-play.red { background: #C62828; }
+  .play-icon {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7px 0 7px 12px;
+    border-color: transparent transparent transparent #fff;
+  }
+  .age-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.9);
+    color: #4A90D9;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 20px;
+    letter-spacing: 1.5px;
+    margin-bottom: 12px;
+  }
+  .why-play {
+    background: rgba(255,255,255,0.92);
+    border-radius: 24px;
+    max-width: 960px;
+    margin: 10px auto 30px;
+    padding: 40px 30px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+  }
+  .why-play h2 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  .why-sub {
+    font-size: 16px;
+    color: #666;
+    max-width: 520px;
+    margin: 0 auto 28px;
+    line-height: 1.5;
+  }
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+  .why-card {
+    border-radius: 16px;
+    padding: 24px 18px;
+    text-align: center;
+  }
+  .why-blue { background: #EBF4FF; border: 2px solid #D0E4FF; }
+  .why-pink { background: #FFF0F3; border: 2px solid #FFD6DE; }
+  .why-yellow { background: #FFFBE6; border: 2px solid #FFF0B3; }
+  .why-green { background: #E8F5E9; border: 2px solid #C8E6C9; }
+  .why-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  .why-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  .why-card p {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+  }
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  @media (max-width: 600px) {
+    header h1 { font-size: 32px; }
+    header p { font-size: 16px; }
+    .games-grid { grid-template-columns: 1fr; }
+    .sun { width: 50px; height: 50px; top: 16px; right: 16px; }
+  }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-npN8w62yxyktyIX5ssSBd.js"></script>
+<script>
+ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+ plausible.init()
+</script>
+</head>
+<body>
+
+<div class="sun"></div>
+<div class="cloud cloud-1"><div class="c1"></div><div class="c2"></div><div class="c3"></div><div class="c4"></div></div>
+<div class="cloud cloud-2"><div class="c1"></div><div class="c2"></div><div class="c3"></div></div>
+<div class="cloud cloud-3"><div class="c1"></div><div class="c2"></div><div class="c3"></div><div class="c4"></div></div>
+
+<header>
+  <div class="age-badge">AGES 3–5</div>
+  <h1>✈️ Playful Learning for Future Pilots</h1>
+  <p>Ignite your child's STEM journey with pattern recognition, logic, and problem-solving games designed for curious minds.</p>
+  <div class="hero-planes">
+    <img class="hero-plane hp1" src="assets/plane-1.png" alt="Cessna">
+    <img class="hero-plane hp2" src="assets/plane-2.png" alt="Spitfire">
+    <img class="hero-plane hp3" src="assets/plane-6.png" alt="Boeing 747">
+  </div>
+</header>
+
+<div class="games-grid">
+
+  <a href="landing-path.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+      <span>●</span>
+    </div>
+    <div class="card-icon">🛬</div>
+    <div class="card-title">Landing Path</div>
+    <span class="card-tag">Spatial Reasoning</span>
+    <div class="card-desc">Trace the glide path to guide your plane safely to the runway.</div>
+    <div class="card-play blue"><span class="play-icon"></span> Play</div>
+  </a>
+
+  <a href="takeoff-path.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+      <span>●</span>
+    </div>
+    <div class="card-icon">🛫</div>
+    <div class="card-title">Takeoff Path</div>
+    <span class="card-tag">Spatial Reasoning</span>
+    <div class="card-desc">Trace the flight path to launch your plane into the sky.</div>
+    <div class="card-play blue"><span class="play-icon"></span> Play</div>
+  </a>
+
+  <a href="pattern-lab.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+      <span>●</span>
+    </div>
+    <div class="card-icon">🔬</div>
+    <div class="card-title">Pattern Lab</div>
+    <span class="card-tag green">Pattern Recognition</span>
+    <div class="card-desc">Spot the repeating sequence and drag the right plane to complete it.</div>
+    <div class="card-play green"><span class="play-icon"></span> Play</div>
+  </a>
+
+  <a href="logic-hangar.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+      <span>●</span>
+    </div>
+    <div class="card-icon">🏗️</div>
+    <div class="card-title">Logic Hangar</div>
+    <span class="card-tag purple">Matching &amp; Sorting</span>
+    <div class="card-desc">Match each airplane to its hangar by looking carefully at the signs.</div>
+    <div class="card-play purple"><span class="play-icon"></span> Play</div>
+  </a>
+
+  <a href="flight-path.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+      <span class="filled">●</span>
+    </div>
+    <div class="card-icon">🗺️</div>
+    <div class="card-title">Flight Path</div>
+    <span class="card-tag orange">Problem Solving</span>
+    <div class="card-desc">Navigate a maze while dodging storm clouds to reach the runway.</div>
+    <div class="card-play orange"><span class="play-icon"></span> Play</div>
+  </a>
+
+  <a href="cargo-count.html" class="game-card">
+    <div class="card-dots">
+      <span class="filled">●</span>
+      <span>●</span>
+      <span>●</span>
+    </div>
+    <div class="card-icon">📦</div>
+    <div class="card-title">Cargo Count</div>
+    <span class="card-tag red">Counting</span>
+    <div class="card-desc">Count the cargo boxes as they load up, then tap the right number.</div>
+    <div class="card-play red"><span class="play-icon"></span> Play</div>
+  </a>
+
+</div>
+
+<section class="why-play">
+  <h2>Why Play Matters</h2>
+  <p class="why-sub">The seeds of computational thinking can be planted early through joyful, age-appropriate play.</p>
+  <div class="why-grid">
+    <div class="why-card why-blue">
+      <div class="why-icon">🧩</div>
+      <h3>Pattern Recognition</h3>
+      <p>Spot sequences, predict what comes next, and build the foundation for mathematical thinking.</p>
+    </div>
+    <div class="why-card why-pink">
+      <div class="why-icon">🧠</div>
+      <h3>Logical Thinking</h3>
+      <p>Follow clues, match by rules, and develop the reasoning skills that power future coding.</p>
+    </div>
+    <div class="why-card why-yellow">
+      <div class="why-icon">🗺️</div>
+      <h3>Problem Solving</h3>
+      <p>Navigate mazes, plan ahead, and learn that mistakes are just part of finding the answer.</p>
+    </div>
+    <div class="why-card why-green">
+      <div class="why-icon">🔢</div>
+      <h3>Counting & Quantity</h3>
+      <p>Build number sense through hands-on counting, connecting abstract numbers to real objects.</p>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:640px;margin:24px auto;padding:0 16px;">
+  <div style="display:grid;grid-template-columns:1fr;gap:16px;" class="cta-row">
+    <!-- Email Capture -->
+    <div style="background:rgba(255,255,255,0.92);border-radius:18px;padding:28px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);display:flex;flex-direction:column;justify-content:center;align-items:center;">
+      <div style="font-size:13px;letter-spacing:0.1em;text-transform:uppercase;color:#4A90D9;font-weight:700;margin-bottom:6px;">Weekly Flight Plan</div>
+      <h2 style="font-size:20px;color:#333;margin-bottom:6px;">New activities in your inbox</h2>
+      <p style="font-size:14px;color:#666;line-height:1.5;margin-bottom:16px;">Free weekly ideas for building, learning, and playing with your kid</p>
+      <form id="emailCaptureForm" onsubmit="return handleEmailCapture(event)" style="display:flex;gap:8px;width:100%;max-width:360px;">
+        <input type="email" name="email" placeholder="your@email.com" required autocomplete="email" aria-label="Email address" style="flex:1;font-family:'Fredoka',sans-serif;font-size:15px;padding:10px 14px;border:2px solid #ddd;border-radius:12px;outline:none;color:#333;background:#fff;min-width:0;" onfocus="this.style.borderColor='#4A90D9'" onblur="this.style.borderColor='#ddd'">
+        <button type="submit" id="emailCaptureBtn" style="font-family:'Fredoka',sans-serif;font-size:14px;font-weight:700;padding:10px 20px;background:#4A90D9;color:#fff;border:none;border-radius:12px;cursor:pointer;white-space:nowrap;transition:filter 0.2s;" onmouseover="this.style.filter='brightness(0.9)'" onmouseout="this.style.filter='none'">Subscribe</button>
+      </form>
+      <p id="emailCaptureStatus" aria-live="polite" style="font-size:13px;margin-top:10px;min-height:1.2em;"></p>
+      <p style="font-size:12px;color:#aaa;margin-top:6px;">Delivered via <a href="https://raisingpixels.dev" target="_blank" rel="noopener noreferrer" style="color:#aaa;text-decoration:underline;">Raising Pixels</a></p>
+    </div>
+  </div>
+  <style>.cta-row{grid-template-columns:1fr!important}</style>
+</section>
+
+<footer>
+  <div>Made by <a href="https://x.com/madebydia" style="color:rgba(255,255,255,0.9);text-decoration:underline;">@madebydia</a></div>
+  <div style="margin-top:6px;"><a href="https://buildwithyourkid.com" style="color:rgba(255,255,255,0.9);text-decoration:underline;">Want to make your own games with your kid?</a></div>
+</footer>
+
+<script>
+function handleEmailCapture(e) {
+  e.preventDefault();
+  var form = document.getElementById('emailCaptureForm');
+  var btn = document.getElementById('emailCaptureBtn');
+  var status = document.getElementById('emailCaptureStatus');
+  var email = form.email.value.trim();
+  if (!email) return false;
+
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+  btn.style.opacity = '0.5';
+  status.textContent = '';
+
+  var iframe = document.createElement('iframe');
+  iframe.style.display = 'none';
+  iframe.name = 'substack-capture-' + Date.now();
+  document.body.appendChild(iframe);
+
+  var proxyForm = document.createElement('form');
+  proxyForm.method = 'POST';
+  proxyForm.action = 'https://www.raisingpixels.dev/api/v1/free';
+  proxyForm.target = iframe.name;
+  proxyForm.style.display = 'none';
+
+  var fields = {
+    email: email,
+    first_url: 'https://mama.dev/airplane-games/',
+    current_url: window.location.href,
+    current_referrer: document.referrer || '',
+    type: 'subscribe'
+  };
+  for (var k in fields) {
+    var input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = k;
+    input.value = fields[k];
+    proxyForm.appendChild(input);
+  }
+
+  document.body.appendChild(proxyForm);
+  proxyForm.submit();
+
+  setTimeout(function() {
+    status.textContent = "You're in — check your inbox for a welcome email";
+    status.style.color = '#4A90D9';
+    btn.textContent = 'Subscribed';
+    form.email.value = '';
+    if (window.plausible) plausible('Email Capture', { props: { source: 'airplanes-games' } });
+    setTimeout(function() { iframe.remove(); proxyForm.remove(); }, 5000);
+  }, 2000);
+
+  return false;
+}
+</script>
+
+</body>
+</html>

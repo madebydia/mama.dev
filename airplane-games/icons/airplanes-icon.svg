@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Airplanes Games">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#4a90d9"/>
+      <stop offset=".6" stop-color="#87ceeb"/>
+      <stop offset="1" stop-color="#b0e0f0"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#sky)"/>
+  <circle cx="396" cy="116" r="42" fill="#ffe66d"/>
+  <path d="M0 382c83-52 168-61 255-25 67 28 152 24 257-11v166H0z" fill="#4caf50"/>
+  <text x="256" y="306" text-anchor="middle" dominant-baseline="middle" font-size="268" font-family="Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji, sans-serif">✈️</text>
+</svg>

@@ -328,6 +328,20 @@
     transform: translateY(7px);
   }
 
+  .theme-airplanes .window-bg {
+    background: linear-gradient(180deg, #87ceeb 0%, #b0e0f0 68%, #8fa984 68% 100%);
+  }
+
+  .theme-airplanes .play-btn {
+    background: #4a90d9;
+    box-shadow: 0 7px 0 #2f6da8;
+  }
+
+  .theme-airplanes:active .play-btn {
+    box-shadow: 0 0 0 #2f6da8;
+    transform: translateY(7px);
+  }
+
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
@@ -607,6 +621,26 @@
           </svg>
         </div>
         <div class="card-title">Shapes</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-airplanes" href="/airplane-games/" aria-label="Play Airplanes">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <circle cx="157" cy="42" r="18" fill="#ffe66d"></circle>
+            <path d="M-10 154c36-24 78-29 126-14 32 10 63 9 94-6v66H-10z" fill="#8fa984"></path>
+            <g class="anim-float" style="transform-origin: center;">
+              <g transform="rotate(-12 99 91)">
+                <path d="M34 105c39-28 84-42 136-42 14 0 25 11 25 25s-11 25-25 25H93l-25 31c-6 7-17 7-23 0l-9-10 18-25-25-3c-6-1-7-5-2-8z" fill="#fdfcf8" stroke="#4a3a35" stroke-width="7" stroke-linejoin="round"></path>
+                <path d="M105 81 66 39c-4-4-2-11 4-13l13-3 63 52z" fill="#d19c4c" stroke="#4a3a35" stroke-width="6" stroke-linejoin="round"></path>
+                <path d="M114 113 105 158l18 5 39-50z" fill="#d19c4c" stroke="#4a3a35" stroke-width="6" stroke-linejoin="round"></path>
+                <path d="M156 71c12 0 21 7 26 17" fill="none" stroke="#d7ecff" stroke-width="5" stroke-linecap="round"></path>
+              </g>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Airplanes</div>
         <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
       </a>
     </section>

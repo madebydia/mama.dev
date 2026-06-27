@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#87CEEB">
+<meta name="application-name" content="Airplanes Games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airplanes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/airplane-games/manifest.webmanifest">
+<link rel="icon" href="/airplane-games/icons/airplanes-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/airplane-games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/airplane-games/icons/apple-touch-icon.png">
+<script src="/airplane-games/app.js" defer></script>
+<title>✈️ Cargo Count</title>
+<meta property="og:image" content="https://mama.dev/airplane-games/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Airplanes Games">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mama.dev/airplane-games/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Fredoka', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4A90D9 0%, #87CEEB 50%, #B0E0F0 100%);
+    background-attachment: fixed;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow-x: hidden;
+  }
+  .plane-silhouette {
+    position: fixed;
+    bottom: 5%;
+    right: -5%;
+    width: 350px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+  }
+  #hud {
+    position: fixed;
+    top: 12px;
+    left: 70px;
+    right: 12px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .hud-item {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 14px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  #game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 80px 16px 30px;
+    gap: 28px;
+    position: relative;
+    z-index: 1;
+  }
+  #level-banner {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  #cargo-zone {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+    min-height: 120px;
+    padding: 20px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    border: 3px dashed rgba(255,255,255,0.3);
+    max-width: 400px;
+    width: 100%;
+  }
+  .cargo-box {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    border-radius: 10px;
+    animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: bottom center;
+  }
+  @keyframes bounceIn {
+    0% { transform: translateY(-200px) scale(0.5); opacity: 0; }
+    60% { transform: translateY(10px) scale(1.05); opacity: 1; }
+    80% { transform: translateY(-5px) scale(0.98); }
+    100% { transform: translateY(0) scale(1); }
+  }
+  #prompt-text {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+    text-align: center;
+  }
+  .choices-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .choice-btn {
+    width: 72px;
+    height: 72px;
+    border: none;
+    border-radius: 18px;
+    background: #fff;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #333;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+    touch-action: manipulation;
+  }
+  .choice-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  }
+  .choice-btn:active {
+    transform: scale(0.95);
+  }
+  .choice-btn.correct {
+    background: #66BB6A;
+    color: #fff;
+    animation: pop 0.4s ease;
+  }
+  .choice-btn.wrong {
+    background: #EF5350;
+    color: #fff;
+    animation: shake 0.5s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  #feedback {
+    font-size: 24px;
+    font-weight: 600;
+    color: #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    min-height: 36px;
+    text-align: center;
+  }
+  #message-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #message-overlay.show { opacity: 1; }
+  #message-overlay .msg-text {
+    font-size: 64px;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 40;
+  }
+  @media (max-width: 600px) {
+    #cargo-zone { gap: 8px; padding: 14px; }
+    .cargo-box { width: 44px; height: 44px; font-size: 30px; }
+    .choice-btn { width: 62px; height: 62px; font-size: 28px; }
+    #prompt-text { font-size: 24px; }
+    .plane-silhouette { width: 250px; }
+  }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-npN8w62yxyktyIX5ssSBd.js"></script>
+<script>
+ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+ plausible.init()
+</script>
+</head>
+<body>
+
+<img src="assets/plane-5.png" alt="" class="plane-silhouette">
+
+<div id="hud">
+  <div class="hud-item" id="level-display">Level 1: Tiny Cargo</div>
+  <div class="hud-item" id="streak-display">🔥 0</div>
+</div>
+
+<canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+<div id="message-overlay"><div class="msg-text" id="msg-text"></div></div>
+
+<div id="game-area">
+  <div id="level-banner"></div>
+  <div id="cargo-zone"></div>
+  <div id="prompt-text">How many boxes?</div>
+  <div id="feedback"></div>
+  <div class="choices-row" id="choices-row"></div>
+</div>
+
+<script>
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type = 'sine', vol = 0.12) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function playBoxDrop() { playTone(220 + Math.random() * 80, 0.12, 'triangle', 0.08); }
+function playCorrect() {
+  playTone(523, 0.15); setTimeout(() => playTone(659, 0.15), 100);
+  setTimeout(() => playTone(784, 0.25), 200);
+}
+function playWrong() { playTone(200, 0.3, 'square', 0.08); }
+function playCelebrate() {
+  playTone(523, 0.1); setTimeout(() => playTone(659, 0.1), 80);
+  setTimeout(() => playTone(784, 0.1), 160);
+  setTimeout(() => playTone(1047, 0.3), 240);
+}
+
+// State
+let level = 0;
+let streak = 0;
+let correctCount = 0;
+let roundActive = false;
+
+const levelDefs = [
+  { name: 'Tiny Cargo', min: 1, max: 3, choices: 3 },
+  { name: 'Small Load', min: 2, max: 5, choices: 4 },
+  { name: 'Big Haul', min: 3, max: 7, choices: 5 },
+  { name: 'Full Flight', min: 4, max: 10, choices: 5 }
+];
+
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function generateChoices(correct, numChoices) {
+  const choices = new Set([correct]);
+  // Generate wrong answers close to correct
+  while (choices.size < numChoices) {
+    let wrong;
+    // Try nearby numbers first
+    const offset = randInt(1, 3) * (Math.random() > 0.5 ? 1 : -1);
+    wrong = correct + offset;
+    if (wrong < 0) wrong = correct + Math.abs(offset);
+    if (wrong === correct) wrong = correct + 1;
+    if (wrong < 0) wrong = 0;
+    choices.add(wrong);
+  }
+  return [...choices].sort(() => Math.random() - 0.5);
+}
+
+function startRound() {
+  roundActive = false;
+  const def = levelDefs[level];
+  correctCount = randInt(def.min, def.max);
+
+  document.getElementById('level-display').textContent = `Level ${level + 1}: ${def.name}`;
+  document.getElementById('level-banner').textContent = def.name;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('prompt-text').textContent = 'How many boxes?';
+
+  // Animate boxes in one by one
+  const cargoZone = document.getElementById('cargo-zone');
+  cargoZone.innerHTML = '';
+
+  for (let i = 0; i < correctCount; i++) {
+    setTimeout(() => {
+      const box = document.createElement('div');
+      box.className = 'cargo-box';
+      box.textContent = '📦';
+      box.style.animationDelay = '0s';
+      cargoZone.appendChild(box);
+      playBoxDrop();
+    }, i * 400);
+  }
+
+  // Show choices after all boxes land
+  const choicesDelay = correctCount * 400 + 300;
+  setTimeout(() => {
+    const choices = generateChoices(correctCount, def.choices);
+    const choicesRow = document.getElementById('choices-row');
+    choicesRow.innerHTML = '';
+
+    for (const c of choices) {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = c;
+      btn.addEventListener('click', () => handleChoice(c, btn));
+      choicesRow.appendChild(btn);
+    }
+    roundActive = true;
+  }, choicesDelay);
+}
+
+function handleChoice(chosen, btnEl) {
+  if (!roundActive) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  if (chosen === correctCount) {
+    // Correct!
+    roundActive = false;
+    streak++;
+    document.getElementById('streak-display').textContent = `🔥 ${streak}`;
+    playCorrect();
+    btnEl.classList.add('correct');
+
+    const emojis = ['🎉', '⭐', '✨', '🌟', '👏', '💪'];
+    document.getElementById('feedback').textContent = `Yes! ${correctCount}! ${emojis[Math.floor(Math.random() * emojis.length)]}`;
+
+    // Auto-advance level after 3 correct
+    if (streak > 0 && streak % 3 === 0 && level < 3) {
+      setTimeout(() => {
+        level++;
+        playCelebrate();
+        fireConfetti();
+        showMessage(`Level ${level + 1}! 🎉`, 1800);
+        setTimeout(startRound, 2200);
+      }, 1200);
+    } else if (level === 3 && streak % 3 === 0) {
+      setTimeout(() => {
+        playCelebrate();
+        fireConfetti();
+        showMessage('Cargo Champion! 🏆', 2000);
+        setTimeout(startRound, 2500);
+      }, 1200);
+    } else {
+      setTimeout(startRound, 1400);
+    }
+  } else {
+    // Wrong!
+    playWrong();
+    btnEl.classList.add('wrong');
+    document.getElementById('feedback').textContent = 'Try again! 🤔';
+    streak = 0;
+    document.getElementById('streak-display').textContent = '🔥 0';
+    setTimeout(() => btnEl.classList.remove('wrong'), 500);
+  }
+}
+
+// Message overlay
+let msgTimer = null;
+function showMessage(text, dur) {
+  const overlay = document.getElementById('message-overlay');
+  document.getElementById('msg-text').textContent = text;
+  overlay.classList.add('show');
+  clearTimeout(msgTimer);
+  msgTimer = setTimeout(() => overlay.classList.remove('show'), dur);
+}
+
+// Confetti
+const confettiCanvas = document.getElementById('confetti-canvas');
+const cctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfetti);
+resizeConfetti();
+
+function fireConfetti() {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (let i = 0; i < 60; i++) {
+    confettiPieces.push({
+      x: cx, y: cy,
+      vx: (Math.random() - 0.5) * 16,
+      vy: -Math.random() * 12 - 4,
+      size: 5 + Math.random() * 6,
+      color: ['#FFD700','#FF4444','#44FF44','#4444FF','#FF44FF','#44FFFF'][Math.floor(Math.random()*6)],
+      life: 1.5,
+      rot: Math.random() * Math.PI * 2,
+      rotS: (Math.random() - 0.5) * 0.3
+    });
+  }
+}
+
+function updateConfetti() {
+  cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiPieces = confettiPieces.filter(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.vx *= 0.99;
+    p.rot += p.rotS; p.life -= 0.012;
+    if (p.life <= 0) return false;
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot);
+    cctx.globalAlpha = Math.min(1, p.life);
+    cctx.fillStyle = p.color;
+    cctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+    cctx.restore();
+    return true;
+  });
+  cctx.globalAlpha = 1;
+  requestAnimationFrame(updateConfetti);
+}
+requestAnimationFrame(updateConfetti);
+
+// Start
+startRound();
+</script>
+<script src="home-btn.js"></script>
+</body>
+</html>

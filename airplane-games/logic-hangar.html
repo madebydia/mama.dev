@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#87CEEB">
+<meta name="application-name" content="Airplanes Games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airplanes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/airplane-games/manifest.webmanifest">
+<link rel="icon" href="/airplane-games/icons/airplanes-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/airplane-games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/airplane-games/icons/apple-touch-icon.png">
+<script src="/airplane-games/app.js" defer></script>
+<title>✈️ Logic Hangar</title>
+<meta property="og:image" content="https://mama.dev/airplane-games/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Airplanes Games">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mama.dev/airplane-games/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Fredoka', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4A90D9 0%, #87CEEB 40%, #B0E0F0 70%, #C8B07A 85%, #A89060 100%);
+    background-attachment: fixed;
+    user-select: none;
+    -webkit-user-select: none;
+    overflow-x: hidden;
+  }
+  #hud {
+    position: fixed;
+    top: 12px;
+    left: 70px;
+    right: 12px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .hud-item {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 14px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  #game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 80px 16px 30px;
+    gap: 30px;
+  }
+  #level-banner {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+  }
+  .hangars-row {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .hangar {
+    width: 140px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .hangar-sign {
+    background: #fff;
+    border-radius: 14px 14px 0 0;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 100px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  .hangar-sign img {
+    max-width: 80px;
+    max-height: 80px;
+    pointer-events: none;
+  }
+  .hangar-body {
+    width: 140px;
+    height: 110px;
+    background: linear-gradient(180deg, #8D6E63 0%, #6D4C41 100%);
+    border-radius: 0 0 12px 12px;
+    border: 3px solid #5D4037;
+    border-top: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .hangar-body::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 100%;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+  }
+  .hangar-body.drag-over {
+    border-color: #4CAF50;
+    background: linear-gradient(180deg, #66BB6A 0%, #43A047 100%);
+    transform: scale(1.05);
+  }
+  .hangar-body.correct {
+    border-color: #4CAF50;
+    background: linear-gradient(180deg, #66BB6A 0%, #43A047 100%);
+    animation: pop 0.4s ease;
+  }
+  .hangar-body.wrong {
+    animation: shake 0.5s ease;
+  }
+  .hangar-body .parked-plane {
+    position: relative;
+    z-index: 1;
+  }
+  .hangar-body .parked-plane img {
+    max-width: 70px;
+    max-height: 70px;
+    pointer-events: none;
+  }
+  .hangar-label {
+    display: none;
+  }
+  .cards-area {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .plane-card {
+    width: 110px;
+    height: 110px;
+    background: #fff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: grab;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
+    touch-action: none;
+    border: 4px solid transparent;
+  }
+  .plane-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+  .plane-card:active { cursor: grabbing; }
+  .plane-card img {
+    max-width: 80px;
+    max-height: 80px;
+    pointer-events: none;
+  }
+  .plane-card.placed {
+    opacity: 0.2;
+    pointer-events: none;
+    transform: scale(0.9);
+  }
+  .plane-card.shake {
+    animation: shake 0.5s ease;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-12px); }
+    40% { transform: translateX(12px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  #message-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #message-overlay.show { opacity: 1; }
+  #message-overlay .msg-text {
+    font-size: 64px;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  .confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 40;
+  }
+  .drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+  .drag-ghost img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+  /* Color assist borders */
+  .color-red { border-color: #EF5350 !important; }
+  .color-blue { border-color: #42A5F5 !important; }
+  .color-green { border-color: #66BB6A !important; }
+  .color-orange { border-color: #FFA726 !important; }
+  .hangar-sign.color-red { box-shadow: 0 0 0 3px #EF5350, 0 2px 8px rgba(0,0,0,0.1); }
+  .hangar-sign.color-blue { box-shadow: 0 0 0 3px #42A5F5, 0 2px 8px rgba(0,0,0,0.1); }
+  .hangar-sign.color-green { box-shadow: 0 0 0 3px #66BB6A, 0 2px 8px rgba(0,0,0,0.1); }
+  .hangar-sign.color-orange { box-shadow: 0 0 0 3px #FFA726, 0 2px 8px rgba(0,0,0,0.1); }
+  @media (max-width: 600px) {
+    .hangar { width: 110px; }
+    .hangar-sign { width: 100px; height: 80px; padding: 8px; }
+    .hangar-sign img { max-width: 65px; max-height: 65px; }
+    .hangar-body { width: 110px; height: 90px; }
+    .hangar-body .parked-plane img { max-width: 55px; max-height: 55px; }
+    .plane-card { width: 90px; height: 90px; }
+    .plane-card img { max-width: 65px; max-height: 65px; }
+  }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-npN8w62yxyktyIX5ssSBd.js"></script>
+<script>
+ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+ plausible.init()
+</script>
+</head>
+<body>
+
+<div id="hud">
+  <div class="hud-item" id="level-display">Level 1</div>
+  <div class="hud-item" id="progress-display">0 / 3</div>
+</div>
+
+<canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+<div id="message-overlay"><div class="msg-text" id="msg-text"></div></div>
+
+<div id="game-area">
+  <div id="level-banner"></div>
+  <div class="hangars-row" id="hangars-row"></div>
+  <div class="cards-area" id="cards-area"></div>
+</div>
+
+<script>
+const planes = [
+  { id: 1, name: 'Cessna', src: 'assets/plane-1.png' },
+  { id: 2, name: 'Spitfire', src: 'assets/plane-2.png' },
+  { id: 3, name: 'F-16', src: 'assets/plane-3.png' },
+  { id: 4, name: 'Helicopter', src: 'assets/plane-4.png' },
+  { id: 5, name: 'Airbus A380', src: 'assets/plane-5.png' },
+  { id: 6, name: 'Boeing 747', src: 'assets/plane-6.png' },
+  { id: 7, name: 'Concorde', src: 'assets/plane-7.png' },
+  { id: 8, name: 'Antonov (Side)', src: 'assets/plane-8.png' },
+  { id: 9, name: 'Antonov (Bottom)', src: 'assets/plane-9.png' }
+];
+
+const COLORS = ['color-red', 'color-blue', 'color-green', 'color-orange'];
+
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type = 'sine', vol = 0.12) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function playCorrect() {
+  playTone(523, 0.15); setTimeout(() => playTone(659, 0.15), 100);
+  setTimeout(() => playTone(784, 0.25), 200);
+}
+function playWrong() { playTone(200, 0.3, 'square', 0.08); }
+function playCelebrate() {
+  playTone(523, 0.1); setTimeout(() => playTone(659, 0.1), 80);
+  setTimeout(() => playTone(784, 0.1), 160);
+  setTimeout(() => playTone(1047, 0.3), 240);
+}
+function playDrop() { playTone(330, 0.1, 'triangle', 0.1); }
+
+// State
+let level = 0;
+let matched = 0;
+let totalHangars = 0;
+let roundActive = false;
+let hangarData = []; // {planeId, filled}
+
+const levelDefs = [
+  { name: '3 Hangars + Color Help', count: 3, colorAssist: true },
+  { name: '4 Hangars + Color Help', count: 4, colorAssist: true },
+  { name: '3 Hangars — No Help!', count: 3, colorAssist: false },
+  { name: '4 Hangars — No Help!', count: 4, colorAssist: false }
+];
+
+function pickN(n) {
+  const shuffled = [...planes].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+function startRound() {
+  roundActive = false;
+  const def = levelDefs[level];
+  totalHangars = def.count;
+  matched = 0;
+  hangarData = [];
+
+  document.getElementById('level-display').textContent = `Level ${level + 1}`;
+  document.getElementById('level-banner').textContent = def.name;
+  document.getElementById('progress-display').textContent = `0 / ${totalHangars}`;
+
+  const selected = pickN(def.count);
+
+  // Build hangars
+  const hangarsRow = document.getElementById('hangars-row');
+  hangarsRow.innerHTML = '';
+  for (let i = 0; i < def.count; i++) {
+    const p = selected[i];
+    const colorClass = def.colorAssist ? COLORS[i] : '';
+    hangarData.push({ planeId: p.id, filled: false });
+
+    const hangar = document.createElement('div');
+    hangar.className = 'hangar';
+    hangar.innerHTML = `
+      <div class="hangar-sign ${colorClass}">
+        <img src="${p.src}" alt="${p.name}">
+      </div>
+      <div class="hangar-body" data-hangar-idx="${i}"></div>
+      <div class="hangar-label">${p.name}</div>
+    `;
+    hangarsRow.appendChild(hangar);
+  }
+
+  // Build shuffled cards
+  const shuffled = [...selected].sort(() => Math.random() - 0.5);
+  const cardsArea = document.getElementById('cards-area');
+  cardsArea.innerHTML = '';
+  for (let i = 0; i < shuffled.length; i++) {
+    const p = shuffled[i];
+    // Find the color this plane should have (from hangar order)
+    let colorClass = '';
+    if (def.colorAssist) {
+      const hangarIdx = selected.findIndex(s => s.id === p.id);
+      colorClass = COLORS[hangarIdx];
+    }
+    const card = document.createElement('div');
+    card.className = `plane-card ${colorClass}`;
+    card.dataset.planeId = p.id;
+    const img = document.createElement('img');
+    img.src = p.src;
+    img.alt = p.name;
+    card.appendChild(img);
+    cardsArea.appendChild(card);
+  }
+
+  setupDragDrop();
+  roundActive = true;
+}
+
+// Drag & drop
+let dragEl = null;
+let dragGhost = null;
+let dragPlaneId = null;
+
+function setupDragDrop() {
+  const cards = document.querySelectorAll('.plane-card');
+  cards.forEach(card => {
+    card.addEventListener('pointerdown', onDragStart);
+  });
+}
+
+function onDragStart(e) {
+  if (!roundActive) return;
+  e.preventDefault();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  dragEl = e.currentTarget;
+  if (dragEl.classList.contains('placed')) return;
+  dragPlaneId = parseInt(dragEl.dataset.planeId);
+
+  dragGhost = document.createElement('div');
+  dragGhost.className = 'drag-ghost';
+  dragGhost.innerHTML = dragEl.innerHTML;
+  document.body.appendChild(dragGhost);
+  positionGhost(e.clientX, e.clientY);
+
+  dragEl.style.opacity = '0.4';
+
+  document.addEventListener('pointermove', onDragMove);
+  document.addEventListener('pointerup', onDragEnd);
+}
+
+function onDragMove(e) {
+  e.preventDefault();
+  positionGhost(e.clientX, e.clientY);
+
+  // Highlight hangar being hovered
+  document.querySelectorAll('.hangar-body').forEach(hb => {
+    const rect = hb.getBoundingClientRect();
+    const over = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    hb.classList.toggle('drag-over', over);
+  });
+}
+
+function onDragEnd(e) {
+  e.preventDefault();
+  document.removeEventListener('pointermove', onDragMove);
+  document.removeEventListener('pointerup', onDragEnd);
+
+  if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+  document.querySelectorAll('.hangar-body').forEach(hb => hb.classList.remove('drag-over'));
+
+  // Check if dropped on a hangar
+  let droppedOnHangar = false;
+  document.querySelectorAll('.hangar-body').forEach(hb => {
+    const rect = hb.getBoundingClientRect();
+    const over = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    if (over && dragPlaneId !== null) {
+      droppedOnHangar = true;
+      const idx = parseInt(hb.dataset.hangarIdx);
+      checkMatch(idx, dragPlaneId, dragEl, hb);
+    }
+  });
+
+  if (!droppedOnHangar && dragEl) {
+    dragEl.style.opacity = '1';
+  }
+  dragEl = null;
+  dragPlaneId = null;
+}
+
+function positionGhost(x, y) {
+  if (!dragGhost) return;
+  dragGhost.style.left = (x - 40) + 'px';
+  dragGhost.style.top = (y - 40) + 'px';
+}
+
+function checkMatch(hangarIdx, planeId, cardEl, hangarBody) {
+  const hd = hangarData[hangarIdx];
+
+  if (hd.filled) {
+    // Already filled
+    cardEl.style.opacity = '1';
+    return;
+  }
+
+  if (hd.planeId === planeId) {
+    // Correct match!
+    hd.filled = true;
+    matched++;
+    playCorrect();
+    playDrop();
+
+    document.getElementById('progress-display').textContent = `${matched} / ${totalHangars}`;
+
+    // Place plane in hangar
+    const parked = document.createElement('div');
+    parked.className = 'parked-plane';
+    const img = document.createElement('img');
+    const plane = planes.find(p => p.id === planeId);
+    img.src = plane.src;
+    img.alt = plane.name;
+    parked.appendChild(img);
+    hangarBody.appendChild(parked);
+    hangarBody.classList.add('correct');
+
+    cardEl.classList.add('placed');
+
+    if (matched === totalHangars) {
+      // All matched! Level complete
+      roundActive = false;
+      setTimeout(() => {
+        playCelebrate();
+        fireConfetti();
+        if (level < 3) {
+          showMessage('Level Complete! 🎉', 2000);
+          setTimeout(() => {
+            level++;
+            startRound();
+          }, 2500);
+        } else {
+          showMessage('Champion! 🏆', 3000);
+          setTimeout(() => {
+            level = 0;
+            startRound();
+          }, 3500);
+        }
+      }, 500);
+    }
+  } else {
+    // Wrong hangar
+    playWrong();
+    cardEl.style.opacity = '1';
+    cardEl.classList.add('shake');
+    hangarBody.classList.add('wrong');
+    setTimeout(() => {
+      cardEl.classList.remove('shake');
+      hangarBody.classList.remove('wrong');
+    }, 500);
+  }
+}
+
+// Message overlay
+let msgTimer = null;
+function showMessage(text, dur) {
+  const overlay = document.getElementById('message-overlay');
+  document.getElementById('msg-text').textContent = text;
+  overlay.classList.add('show');
+  clearTimeout(msgTimer);
+  msgTimer = setTimeout(() => overlay.classList.remove('show'), dur);
+}
+
+// Confetti
+const confettiCanvas = document.getElementById('confetti-canvas');
+const cctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfetti);
+resizeConfetti();
+
+function fireConfetti() {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (let i = 0; i < 60; i++) {
+    confettiPieces.push({
+      x: cx, y: cy,
+      vx: (Math.random() - 0.5) * 16,
+      vy: -Math.random() * 12 - 4,
+      size: 5 + Math.random() * 6,
+      color: ['#FFD700','#FF4444','#44FF44','#4444FF','#FF44FF','#44FFFF'][Math.floor(Math.random()*6)],
+      life: 1.5,
+      rot: Math.random() * Math.PI * 2,
+      rotS: (Math.random() - 0.5) * 0.3
+    });
+  }
+}
+
+function updateConfetti() {
+  cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiPieces = confettiPieces.filter(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.vx *= 0.99;
+    p.rot += p.rotS; p.life -= 0.012;
+    if (p.life <= 0) return false;
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot);
+    cctx.globalAlpha = Math.min(1, p.life);
+    cctx.fillStyle = p.color;
+    cctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+    cctx.restore();
+    return true;
+  });
+  cctx.globalAlpha = 1;
+  requestAnimationFrame(updateConfetti);
+}
+requestAnimationFrame(updateConfetti);
+
+// Start
+startRound();
+</script>
+<script src="home-btn.js"></script>
+</body>
+</html>

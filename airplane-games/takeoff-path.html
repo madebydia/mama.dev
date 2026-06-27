@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#87CEEB">
+<meta name="application-name" content="Airplanes Games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airplanes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/airplane-games/manifest.webmanifest">
+<link rel="icon" href="/airplane-games/icons/airplanes-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/airplane-games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/airplane-games/icons/apple-touch-icon.png">
+<script src="/airplane-games/app.js" defer></script>
+<title>✈️ Flight Takeoff</title>
+<meta property="og:image" content="https://mama.dev/airplane-games/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Airplanes Games">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mama.dev/airplane-games/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #87CEEB;
+    font-family: 'Fredoka', sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+  canvas { display: block; }
+  #hud {
+    position: fixed;
+    top: 16px;
+    left: 70px;
+    z-index: 10;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+  .hud-item {
+    font-size: 22px;
+    font-weight: bold;
+    color: #FFF;
+    background: rgba(0,0,0,0.6);
+    padding: 8px 16px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  #message {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 52px;
+    font-weight: bold;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 20;
+    text-align: center;
+    line-height: 1.3;
+  }
+  #message.show { opacity: 1; }
+  #intro {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.85);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+  }
+  #intro h1 { font-size: 64px; margin-bottom: 12px; }
+  #intro p { font-size: 28px; color: #CCC; margin-bottom: 8px; }
+  #intro .sub { font-size: 20px; color: #999; margin-bottom: 40px; }
+  #intro .start-btn {
+    font-size: 42px;
+    color: #FFD700;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+  }
+  .hidden { display: none !important; }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-npN8w62yxyktyIX5ssSBd.js"></script>
+<script>
+ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+ plausible.init()
+</script>
+</head>
+<body>
+
+<div id="intro">
+  <h1>🛫</h1>
+  <p>Flight Takeoff!</p>
+  <div class="sub">Trace the path to take off!</div>
+  <div class="start-btn">TAP TO START</div>
+</div>
+
+<div id="hud" class="hidden">
+  <div class="hud-item" id="level">Level 1</div>
+  <div class="hud-item" id="score">⭐ 0</div>
+</div>
+
+<div id="message"></div>
+
+<canvas id="c"></canvas>
+
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let W, H;
+
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type = 'sine', vol = 0.15) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + dur);
+}
+function playSuccess() {
+  playTone(523, 0.15); setTimeout(() => playTone(659, 0.15), 100);
+  setTimeout(() => playTone(784, 0.25), 200);
+}
+function playTakeoff() {
+  playTone(392, 0.2); setTimeout(() => playTone(523, 0.2), 150);
+  setTimeout(() => playTone(784, 0.3), 300); setTimeout(() => playTone(1047, 0.4), 450);
+}
+function playWhoosh() { playTone(200, 0.3, 'sawtooth', 0.05); }
+
+// State
+let started = false;
+let level = 1;
+let score = 0;
+let gameState = 'waiting'; // waiting, tracing, flying, celebrating, nextLevel
+let messageTimer = null;
+
+// Path
+let pathPoints = [];       // the guide path (array of {x,y})
+let tracePoints = [];      // player's traced path
+let pathWidth = 60;        // how close trace needs to be
+let traceProgress = 0;     // how far along the path (0-1)
+let isTracing = false;
+
+// Plane
+let plane = { x: 0, y: 0, angle: 0 };
+let flyProgress = 0;
+let flySpeed = 0;
+
+// Runway
+let runway = { x: 0, y: 0, w: 0, h: 0 };
+
+// Particles
+let particles = [];
+let confetti = [];
+
+// Stars along path (collectibles)
+let pathStars = [];
+
+// Background
+let bgStars = [];
+let clouds = [];
+let mountains = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+  generateBG();
+  if (started && gameState === 'waiting') generateLevel();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function generateBG() {
+  bgStars = []; // not used in daytime
+  clouds = [];
+  for (let i = 0; i < 10; i++) {
+    clouds.push({
+      x: Math.random() * W,
+      y: 30 + Math.random() * H * 0.35,
+      w: 70 + Math.random() * 120,
+      h: 25 + Math.random() * 35
+    });
+  }
+  mountains = [];
+  for (let i = 0; i < 12; i++) {
+    mountains.push({
+      x: i * (W / 8) - 50 + Math.random() * 60,
+      h: 40 + Math.random() * 100,
+      w: 100 + Math.random() * 150,
+      color: `hsl(${120 + Math.random() * 30}, 35%, ${30 + Math.random() * 15}%)`
+    });
+  }
+}
+
+function generateLevel() {
+  gameState = 'waiting';
+  pathPoints = [];
+  tracePoints = [];
+  traceProgress = 0;
+  isTracing = false;
+  flyProgress = 0;
+  flySpeed = 0;
+  particles = [];
+  confetti = [];
+  pathStars = [];
+
+  const groundY = H * 0.78;
+  const margin = 60;
+
+  // Runway on the right side (this is the START for takeoff)
+  runway.w = 120 + Math.min(level * 10, 80);
+  runway.h = 12;
+  runway.x = W - margin - runway.w;
+  runway.y = groundY;
+
+  // Path: start from runway (bottom-right), curve UP to sky (top-left)
+  const startX = runway.x + 10;
+  const startY = runway.y - 8;
+  const endX = margin;
+  const endY = H * 0.15 + Math.random() * H * 0.1;
+
+  // Generate control points for bezier curves
+  const numCurves = Math.min(1 + Math.floor(level / 2), 4);
+  const controlPts = [{ x: startX, y: startY }];
+
+  for (let i = 1; i <= numCurves; i++) {
+    const t = i / (numCurves + 1);
+    const baseX = startX + (endX - startX) * t;
+    const baseY = startY + (endY - startY) * t;
+    // Wobble more with higher levels
+    const wobbleX = (Math.random() - 0.5) * W * 0.2;
+    const wobbleY = (Math.random() - 0.5) * H * 0.25;
+    controlPts.push({
+      x: Math.max(margin, Math.min(W - margin, baseX + wobbleX)),
+      y: Math.max(H * 0.08, Math.min(groundY - 60, baseY + wobbleY))
+    });
+  }
+  controlPts.push({ x: endX, y: endY });
+
+  // Interpolate through control points using Catmull-Rom
+  const resolution = 200;
+  for (let i = 0; i <= resolution; i++) {
+    const t = i / resolution;
+    const pt = catmullRomChain(controlPts, t);
+    pathPoints.push(pt);
+  }
+
+  // Place stars along path (every ~15% of path)
+  const numPathStars = 3 + Math.min(level, 5);
+  for (let i = 1; i <= numPathStars; i++) {
+    const idx = Math.floor((i / (numPathStars + 1)) * pathPoints.length);
+    const pt = pathPoints[idx];
+    pathStars.push({
+      x: pt.x, y: pt.y,
+      collected: false,
+      size: 16,
+      pathIdx: idx
+    });
+  }
+
+  // Plane starts at path beginning (runway)
+  plane.x = pathPoints[0].x;
+  plane.y = pathPoints[0].y;
+  plane.angle = 0;
+
+  // Adjust path width based on level (harder = narrower)
+  pathWidth = Math.max(30, 70 - level * 4);
+
+  document.getElementById('level').textContent = `Level ${level}`;
+}
+
+function catmullRomChain(points, t) {
+  const n = points.length - 1;
+  const segment = Math.min(Math.floor(t * n), n - 1);
+  const localT = (t * n) - segment;
+
+  const p0 = points[Math.max(0, segment - 1)];
+  const p1 = points[segment];
+  const p2 = points[Math.min(n, segment + 1)];
+  const p3 = points[Math.min(n, segment + 2)];
+
+  return {
+    x: catmullRom(p0.x, p1.x, p2.x, p3.x, localT),
+    y: catmullRom(p0.y, p1.y, p2.y, p3.y, localT)
+  };
+}
+
+function catmullRom(p0, p1, p2, p3, t) {
+  const t2 = t * t;
+  const t3 = t2 * t;
+  return 0.5 * (
+    (2 * p1) +
+    (-p0 + p2) * t +
+    (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 +
+    (-p0 + 3 * p1 - 3 * p2 + p3) * t3
+  );
+}
+
+// Message display
+function showMsg(msg, dur = 2000) {
+  const el = document.getElementById('message');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(messageTimer);
+  messageTimer = setTimeout(() => el.classList.remove('show'), dur);
+}
+
+// Touch/pointer handling
+function getPos(e) {
+  if (e.touches) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  return { x: e.clientX, y: e.clientY };
+}
+
+function findClosestPathIndex(px, py) {
+  let minDist = Infinity;
+  let minIdx = 0;
+  for (let i = 0; i < pathPoints.length; i++) {
+    const dx = pathPoints[i].x - px;
+    const dy = pathPoints[i].y - py;
+    const d = dx * dx + dy * dy;
+    if (d < minDist) { minDist = d; minIdx = i; }
+  }
+  return { idx: minIdx, dist: Math.sqrt(minDist) };
+}
+
+function onStart(e) {
+  e.preventDefault();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (gameState !== 'waiting' && gameState !== 'tracing') return;
+
+  const pos = getPos(e);
+
+  // Resume from where we left off if finger was lifted mid-trace
+  if (gameState === 'tracing' && traceProgress > 0) {
+    const { idx, dist } = findClosestPathIndex(pos.x, pos.y);
+    const progressIdx = Math.floor(traceProgress * pathPoints.length);
+    if (dist < pathWidth * 2 && idx >= progressIdx - 10) {
+      isTracing = true;
+      tracePoints.push(pos);
+      return;
+    }
+  }
+
+  // Must start near the beginning of the path (runway area)
+  const { idx, dist } = findClosestPathIndex(pos.x, pos.y);
+  if (idx < pathPoints.length * 0.15 && dist < pathWidth * 1.5) {
+    gameState = 'tracing';
+    isTracing = true;
+    tracePoints = [pos];
+    traceProgress = 0;
+    playWhoosh();
+  }
+}
+
+function onMove(e) {
+  e.preventDefault();
+  if (!isTracing || gameState !== 'tracing') return;
+
+  const pos = getPos(e);
+  tracePoints.push(pos);
+
+  // Check if trace is close to path
+  const { idx, dist } = findClosestPathIndex(pos.x, pos.y);
+
+  if (dist > pathWidth * 1.2) {
+    // Too far off path — stop the plane, show warning
+    particles.push({
+      x: pos.x, y: pos.y,
+      vx: (Math.random() - 0.5) * 3,
+      vy: -Math.random() * 2,
+      size: 4, color: '#FF4444', life: 0.8
+    });
+    return; // Don't advance — finger must stay on the path
+  }
+
+  // Update progress based on how far along the path we are
+  const newProgress = idx / pathPoints.length;
+  if (newProgress > traceProgress) {
+    traceProgress = newProgress;
+
+    // Move plane along path
+    const pathIdx = Math.min(idx, pathPoints.length - 1);
+    plane.x = pathPoints[pathIdx].x;
+    plane.y = pathPoints[pathIdx].y;
+
+    // Calculate angle from path direction
+    if (pathIdx < pathPoints.length - 1) {
+      const next = pathPoints[Math.min(pathIdx + 5, pathPoints.length - 1)];
+      plane.angle = Math.atan2(next.y - plane.y, next.x - plane.x);
+    }
+
+    // Check star collection
+    for (const star of pathStars) {
+      if (star.collected) continue;
+      const dx = plane.x - star.x;
+      const dy = plane.y - star.y;
+      if (Math.sqrt(dx * dx + dy * dy) < star.size + 25) {
+        star.collected = true;
+        score++;
+        document.getElementById('score').textContent = `⭐ ${score}`;
+        playSuccess();
+        spawnParticles(star.x, star.y, '#FFD700', 10);
+      }
+    }
+
+    // Emit trail particles
+    if (Math.random() > 0.5) {
+      particles.push({
+        x: plane.x - Math.cos(plane.angle) * 25,
+        y: plane.y - Math.sin(plane.angle) * 25,
+        vx: -Math.cos(plane.angle) * 1.5 + (Math.random() - 0.5),
+        vy: -Math.sin(plane.angle) * 1.5 + (Math.random() - 0.5),
+        size: 3 + Math.random() * 3,
+        color: 'rgba(255,255,255,0.6)',
+        life: 0.6
+      });
+    }
+  }
+
+  // Check if reached the end
+  if (traceProgress > 0.92) {
+    isTracing = false;
+    gameState = 'flying';
+    flyProgress = traceProgress;
+    flySpeed = 0.008;
+    showMsg("TAKEOFF! 🛫", 1500);
+    playTakeoff();
+  }
+}
+
+function onEnd(e) {
+  e.preventDefault();
+  if (isTracing && gameState === 'tracing') {
+    // Finger lifted before reaching end — let them try again
+    isTracing = false;
+    if (traceProgress < 0.3) {
+      gameState = 'waiting';
+      tracePoints = [];
+      traceProgress = 0;
+      // Reset plane to start
+      plane.x = pathPoints[0].x;
+      plane.y = pathPoints[0].y;
+    }
+    // If past 30%, keep progress and let them continue from where they are
+  }
+}
+
+canvas.addEventListener('mousedown', onStart);
+canvas.addEventListener('mousemove', onMove);
+canvas.addEventListener('mouseup', onEnd);
+canvas.addEventListener('touchstart', onStart, { passive: false });
+canvas.addEventListener('touchmove', onMove, { passive: false });
+canvas.addEventListener('touchend', onEnd, { passive: false });
+
+function spawnParticles(x, y, color, count) {
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 8,
+      vy: -Math.random() * 5 - 1,
+      size: 3 + Math.random() * 5,
+      color,
+      life: 1
+    });
+  }
+}
+
+function spawnConfetti(x, y) {
+  for (let i = 0; i < 50; i++) {
+    confetti.push({
+      x, y,
+      vx: (Math.random() - 0.5) * 12,
+      vy: -Math.random() * 10 - 3,
+      size: 5 + Math.random() * 5,
+      color: ['#FFD700', '#FF4444', '#44FF44', '#4444FF', '#FF44FF', '#44FFFF'][Math.floor(Math.random() * 6)],
+      life: 1.5,
+      rot: Math.random() * Math.PI * 2,
+      rotSpeed: (Math.random() - 0.5) * 0.3
+    });
+  }
+}
+
+// Start game
+document.getElementById('intro').addEventListener('click', () => {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  started = true;
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('hud').classList.remove('hidden');
+  generateLevel();
+});
+
+let gameTime = 0;
+let celebrateTimer = 0;
+
+function update(dt) {
+  if (!started) return;
+  gameTime += dt * 0.016;
+
+  // Fly to sky after trace complete
+  if (gameState === 'flying') {
+    flyProgress += flySpeed * dt;
+    const pathIdx = Math.min(Math.floor(flyProgress * pathPoints.length), pathPoints.length - 1);
+    plane.x = pathPoints[pathIdx].x;
+    plane.y = pathPoints[pathIdx].y;
+
+    if (pathIdx < pathPoints.length - 1) {
+      const next = pathPoints[Math.min(pathIdx + 3, pathPoints.length - 1)];
+      plane.angle = Math.atan2(next.y - plane.y, next.x - plane.x);
+    }
+
+    // Collect remaining stars during auto-fly
+    for (const star of pathStars) {
+      if (star.collected) continue;
+      const dx = plane.x - star.x;
+      const dy = plane.y - star.y;
+      if (Math.sqrt(dx * dx + dy * dy) < star.size + 30) {
+        star.collected = true;
+        score++;
+        document.getElementById('score').textContent = `⭐ ${score}`;
+        spawnParticles(star.x, star.y, '#FFD700', 10);
+      }
+    }
+
+    if (flyProgress >= 1) {
+      gameState = 'celebrating';
+      celebrateTimer = 0;
+      spawnConfetti(plane.x, plane.y);
+      const msgs = [
+        "YAY!",
+        "YES!",
+        "GOOD JOB!",
+        "WOW!"
+      ];
+      showMsg(msgs[Math.floor(Math.random() * msgs.length)], 4000);
+      score += 3; // bonus for takeoff
+      document.getElementById('score').textContent = `⭐ ${score}`;
+    }
+  }
+
+  // Celebrate then next level
+  if (gameState === 'celebrating') {
+    celebrateTimer += dt;
+    if (celebrateTimer > 300) { // ~5 seconds
+      level++;
+      generateLevel();
+    }
+  }
+
+  // Update particles
+  particles = particles.filter(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.08;
+    p.life -= 0.02;
+    return p.life > 0;
+  });
+
+  confetti = confetti.filter(p => {
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.15;
+    p.vx *= 0.99;
+    p.rot += p.rotSpeed;
+    p.life -= 0.01;
+    return p.life > 0;
+  });
+}
+
+// Drawing
+function drawBackground() {
+  const groundY = H * 0.78;
+
+  // Sky gradient (daytime)
+  const grad = ctx.createLinearGradient(0, 0, 0, groundY);
+  grad.addColorStop(0, '#4A90D9');
+  grad.addColorStop(0.5, '#87CEEB');
+  grad.addColorStop(1, '#B0E0F0');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, groundY);
+
+  // Sun
+  ctx.fillStyle = '#FFF176';
+  ctx.beginPath();
+  ctx.arc(W * 0.85, H * 0.12, 35, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = 'rgba(255,241,118,0.15)';
+  ctx.beginPath();
+  ctx.arc(W * 0.85, H * 0.12, 60, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Clouds (fluffy white)
+  for (const c of clouds) {
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.beginPath();
+    ctx.ellipse(c.x, c.y, c.w, c.h, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.beginPath();
+    ctx.ellipse(c.x - c.w * 0.3, c.y + 5, c.w * 0.6, c.h * 0.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.ellipse(c.x + c.w * 0.3, c.y + 3, c.w * 0.5, c.h * 0.7, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Mountains (green)
+  for (const m of mountains) {
+    ctx.fillStyle = m.color;
+    ctx.beginPath();
+    ctx.moveTo(m.x, groundY);
+    ctx.lineTo(m.x + m.w / 2, groundY - m.h);
+    ctx.lineTo(m.x + m.w, groundY);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // Ground (green grass)
+  const gGrad = ctx.createLinearGradient(0, groundY, 0, H);
+  gGrad.addColorStop(0, '#4CAF50');
+  gGrad.addColorStop(1, '#2E7D32');
+  ctx.fillStyle = gGrad;
+  ctx.fillRect(0, groundY, W, H - groundY);
+}
+
+function drawRunway() {
+  const ry = runway.y;
+  // Runway strip
+  ctx.fillStyle = '#444';
+  ctx.fillRect(runway.x - 20, ry - runway.h / 2, runway.w + 40, runway.h);
+
+  // Center dashes
+  ctx.strokeStyle = '#FFD700';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([12, 8]);
+  ctx.beginPath();
+  ctx.moveTo(runway.x - 20, ry);
+  ctx.lineTo(runway.x + runway.w + 20, ry);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Runway lights
+  ctx.fillStyle = '#87CEEB';
+  for (let lx = runway.x - 10; lx <= runway.x + runway.w + 10; lx += 30) {
+    ctx.beginPath();
+    ctx.arc(lx, ry - runway.h / 2 - 4, 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(lx, ry + runway.h / 2 + 4, 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Takeoff lights (blinking) — at the end of runway
+  const blinkOn = Math.sin(gameTime * 4) > 0;
+  if (blinkOn) {
+    ctx.fillStyle = '#44FF44';
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.arc(runway.x + runway.w + 30 + i * 25, ry, 4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+}
+
+function drawPath() {
+  if (pathPoints.length < 2) return;
+
+  // Draw guide path (dashed, glowing)
+  // Untraced portion
+  const tracedIdx = Math.floor(traceProgress * pathPoints.length);
+
+  // Full path as visible guide
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = pathWidth;
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+  for (let i = 1; i < pathPoints.length; i++) {
+    ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+  }
+  ctx.stroke();
+
+  // Path border for extra contrast
+  ctx.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+  ctx.lineWidth = pathWidth + 6;
+  ctx.beginPath();
+  ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+  for (let i = 1; i < pathPoints.length; i++) {
+    ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+  }
+  ctx.stroke();
+
+  // Re-draw white fill on top of border
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+  ctx.lineWidth = pathWidth;
+  ctx.beginPath();
+  ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+  for (let i = 1; i < pathPoints.length; i++) {
+    ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+  }
+  ctx.stroke();
+
+  // Dashed center line (the path to follow)
+  ctx.strokeStyle = 'rgba(255, 140, 0, 0.8)';
+  ctx.lineWidth = 5;
+  ctx.setLineDash([15, 10]);
+  ctx.beginPath();
+  ctx.moveTo(pathPoints[tracedIdx].x, pathPoints[tracedIdx].y);
+  for (let i = tracedIdx + 1; i < pathPoints.length; i++) {
+    ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+  }
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Traced portion (solid, bright)
+  if (tracedIdx > 0) {
+    ctx.strokeStyle = '#FF6F00';
+    ctx.lineWidth = 6;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(pathPoints[0].x, pathPoints[0].y);
+    for (let i = 1; i <= tracedIdx; i++) {
+      ctx.lineTo(pathPoints[i].x, pathPoints[i].y);
+    }
+    ctx.stroke();
+  }
+
+  // Start indicator (pulsing circle) — at runway
+  if (gameState === 'waiting') {
+    const pulseSize = 20 + 5 * Math.sin(gameTime * 3);
+    ctx.strokeStyle = '#4FC3F7';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(pathPoints[0].x, pathPoints[0].y, pulseSize, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // "Start here" arrow
+    ctx.fillStyle = '#4FC3F7';
+    ctx.font = '18px Fredoka';
+    ctx.textAlign = 'center';
+    ctx.fillText('START 🛫', pathPoints[0].x, pathPoints[0].y - 35);
+  }
+}
+
+function drawPathStars() {
+  for (const star of pathStars) {
+    if (star.collected) continue;
+    const bob = Math.sin(gameTime * 2.5 + star.x * 0.01) * 5;
+
+    // Glow
+    ctx.fillStyle = 'rgba(255, 215, 0, 0.2)';
+    ctx.beginPath();
+    ctx.arc(star.x, star.y + bob, star.size * 1.8, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Star
+    ctx.save();
+    ctx.translate(star.x, star.y + bob);
+    ctx.rotate(gameTime * 1.2);
+    ctx.fillStyle = '#FFD700';
+    drawStarShape(0, 0, star.size * 0.4, star.size, 5);
+    ctx.fill();
+    ctx.restore();
+  }
+}
+
+function drawStarShape(cx, cy, inner, outer, points) {
+  ctx.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const angle = (i * Math.PI) / points - Math.PI / 2;
+    ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
+  }
+  ctx.closePath();
+}
+
+function drawPlane() {
+  ctx.save();
+  ctx.translate(plane.x, plane.y);
+  ctx.rotate(plane.angle);
+
+  // Engine glow (bigger for takeoff thrust!)
+  const glowSize = 8 + Math.sin(gameTime * 15) * 4;
+  ctx.fillStyle = `rgba(255, 180, 0, 0.7)`;
+  ctx.beginPath();
+  ctx.ellipse(-32, 2, glowSize + 6, glowSize * 0.6, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = `rgba(255, 100, 0, 0.4)`;
+  ctx.beginPath();
+  ctx.ellipse(-38, 2, glowSize + 2, glowSize * 0.3, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Body (blue livery for takeoff)
+  ctx.fillStyle = '#4A90D9';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 28, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // White belly stripe
+  ctx.fillStyle = '#fff';
+  ctx.beginPath();
+  ctx.ellipse(0, 4, 26, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Nose
+  ctx.fillStyle = '#FFD700';
+  ctx.beginPath();
+  ctx.moveTo(24, -5);
+  ctx.lineTo(36, 0);
+  ctx.lineTo(24, 5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Wings
+  ctx.fillStyle = '#3a7bc8';
+  ctx.beginPath();
+  ctx.moveTo(-3, -7);
+  ctx.lineTo(4, -22);
+  ctx.lineTo(12, -22);
+  ctx.lineTo(8, -7);
+  ctx.closePath();
+  ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(-3, 7);
+  ctx.lineTo(4, 22);
+  ctx.lineTo(12, 22);
+  ctx.lineTo(8, 7);
+  ctx.closePath();
+  ctx.fill();
+
+  // Tail
+  ctx.fillStyle = '#FFD700';
+  ctx.beginPath();
+  ctx.moveTo(-22, -5);
+  ctx.lineTo(-28, -17);
+  ctx.lineTo(-16, -17);
+  ctx.lineTo(-14, -5);
+  ctx.closePath();
+  ctx.fill();
+
+  // Windows
+  ctx.fillStyle = '#B0E0F0';
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.arc(-6 + i * 7, -4, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Cockpit
+  ctx.fillStyle = '#4FC3F7';
+  ctx.beginPath();
+  ctx.ellipse(20, -2, 6, 4, -0.2, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    ctx.globalAlpha = Math.max(0, p.life);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  for (const p of confetti) {
+    ctx.globalAlpha = Math.max(0, Math.min(1, p.life));
+    ctx.save();
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot);
+    ctx.fillStyle = p.color;
+    ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// Main loop
+let lastTime = 0;
+function frame(t) {
+  const dt = Math.min((t - lastTime) / 16.67, 3);
+  lastTime = t;
+
+  update(dt);
+
+  ctx.clearRect(0, 0, W, H);
+  drawBackground();
+  drawRunway();
+  if (started) {
+    drawPath();
+    drawPathStars();
+    drawPlane();
+    drawParticles();
+  }
+
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>
+<script src="home-btn.js"></script>
+</body>
+</html>

@@ -1,14 +1,29 @@
-const CACHE_PREFIX = "mama-games-";
+const CACHE_PREFIX = "mama-airplane-games-";
 const CACHE_NAME = `${CACHE_PREFIX}v1`;
 const CORE_ASSETS = [
-  "/games/",
-  "/games/index.html",
-  "/games/app.js",
-  "/games/manifest.webmanifest",
-  "/games/icons/games-icon.svg",
-  "/games/icons/favicon-32.png",
-  "/games/icons/apple-touch-icon.png",
-  "/assets/mama-home-tab.css"
+  "/airplane-games/",
+  "/airplane-games/index.html",
+  "/airplane-games/landing-path.html",
+  "/airplane-games/takeoff-path.html",
+  "/airplane-games/pattern-lab.html",
+  "/airplane-games/logic-hangar.html",
+  "/airplane-games/flight-path.html",
+  "/airplane-games/cargo-count.html",
+  "/airplane-games/home-btn.js",
+  "/airplane-games/app.js",
+  "/airplane-games/manifest.webmanifest",
+  "/airplane-games/icons/airplanes-icon.svg",
+  "/airplane-games/icons/favicon-32.png",
+  "/airplane-games/icons/apple-touch-icon.png",
+  "/airplane-games/assets/plane-1.png",
+  "/airplane-games/assets/plane-2.png",
+  "/airplane-games/assets/plane-3.png",
+  "/airplane-games/assets/plane-4.png",
+  "/airplane-games/assets/plane-5.png",
+  "/airplane-games/assets/plane-6.png",
+  "/airplane-games/assets/plane-7.png",
+  "/airplane-games/assets/plane-8.png",
+  "/airplane-games/assets/plane-9.png"
 ];
 
 self.addEventListener("install", function (event) {
@@ -38,7 +53,7 @@ self.addEventListener("fetch", function (event) {
   if (event.request.method !== "GET") return;
 
   const url = new URL(event.request.url);
-  if (url.origin !== location.origin || !url.pathname.startsWith("/games/")) return;
+  if (url.origin !== location.origin || !url.pathname.startsWith("/airplane-games/")) return;
 
   if (event.request.mode === "navigate") {
     event.respondWith(
@@ -50,7 +65,7 @@ self.addEventListener("fetch", function (event) {
         return response;
       }).catch(function () {
         return caches.match(event.request).then(function (cached) {
-          return cached || caches.match("/games/");
+          return cached || caches.match("/airplane-games/");
         });
       })
     );

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#87CEEB">
+<meta name="application-name" content="Airplanes Games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Airplanes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/airplane-games/manifest.webmanifest">
+<link rel="icon" href="/airplane-games/icons/airplanes-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/airplane-games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/airplane-games/icons/apple-touch-icon.png">
+<script src="/airplane-games/app.js" defer></script>
+<title>✈️ Pattern Lab</title>
+<meta property="og:image" content="https://mama.dev/airplane-games/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Airplanes Games">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://mama.dev/airplane-games/og-image.png">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Fredoka', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #4A90D9 0%, #87CEEB 50%, #B0E0F0 100%);
+    user-select: none;
+    -webkit-user-select: none;
+    overflow-x: hidden;
+  }
+  #hud {
+    position: fixed;
+    top: 12px;
+    left: 70px;
+    right: 12px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .hud-item {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 6px 14px;
+    border-radius: 12px;
+    white-space: nowrap;
+  }
+  #game-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 70px 10px 20px;
+    gap: 40px;
+  }
+  .pattern-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .pattern-slot {
+    width: min(15vw, 140px);
+    height: min(15vw, 140px);
+    background: rgba(255,255,255,0.3);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid rgba(255,255,255,0.5);
+    position: relative;
+  }
+  .pattern-slot img {
+    max-width: 85%;
+    max-height: 85%;
+    pointer-events: none;
+  }
+  .pattern-slot.mystery {
+    border: 3px dashed #FF9800;
+    background: rgba(255,152,0,0.15);
+    min-width: min(15vw, 140px);
+    min-height: min(15vw, 140px);
+  }
+  .pattern-slot.mystery .q-mark {
+    font-size: 56px;
+    font-weight: 700;
+    color: #FF9800;
+  }
+  .pattern-slot.mystery.drag-over {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.2);
+    transform: scale(1.05);
+  }
+  .pattern-slot.mystery.correct {
+    border-color: #4CAF50;
+    background: rgba(76,175,80,0.2);
+    animation: pop 0.4s ease;
+  }
+  .choices-row {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .choice-card {
+    width: min(18vw, 150px);
+    height: min(18vw, 150px);
+    background: #fff;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    cursor: grab;
+    transition: transform 0.15s, box-shadow 0.15s;
+    touch-action: none;
+  }
+  .choice-card:hover { transform: translateY(-3px); box-shadow: 0 6px 18px rgba(0,0,0,0.15); }
+  .choice-card:active { cursor: grabbing; }
+  .choice-card img {
+    max-width: 85%;
+    max-height: 85%;
+    pointer-events: none;
+  }
+  .choice-card.shake {
+    animation: shake 0.5s ease;
+  }
+  .choice-card.used {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-12px); }
+    40% { transform: translateX(12px); }
+    60% { transform: translateX(-8px); }
+    80% { transform: translateX(8px); }
+  }
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  #message-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #message-overlay.show { opacity: 1; }
+  #message-overlay .msg-text {
+    font-size: 64px;
+    font-weight: 700;
+    color: #FFD700;
+    text-shadow: 3px 3px 0 rgba(0,0,0,0.3);
+    text-align: center;
+  }
+  #level-banner {
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+  }
+  .confetti-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 40;
+  }
+  .drag-ghost {
+    position: fixed;
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.85;
+    transform: scale(1.1);
+  }
+  .drag-ghost img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+  @media (max-width: 600px) {
+    .pattern-slot { width: min(14vw, 85px); height: min(14vw, 85px); }
+    .pattern-slot.mystery { min-width: min(14vw, 85px); min-height: min(14vw, 85px); }
+    .choice-card { width: min(22vw, 110px); height: min(22vw, 110px); }
+    .pattern-slot.mystery .q-mark { font-size: 36px; }
+  }
+</style>
+<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-npN8w62yxyktyIX5ssSBd.js"></script>
+<script>
+ window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+ plausible.init()
+</script>
+</head>
+<body>
+
+<div id="hud">
+  <div class="hud-item" id="level-display">Level 1: Simple</div>
+  <div class="hud-item" id="streak-display">🔥 0</div>
+</div>
+
+<canvas class="confetti-canvas" id="confetti-canvas"></canvas>
+<div id="message-overlay"><div class="msg-text" id="msg-text"></div></div>
+
+<div id="game-area">
+  <div id="level-banner"></div>
+  <div class="pattern-row" id="pattern-row"></div>
+  <div class="choices-row" id="choices-row"></div>
+</div>
+
+<script>
+const planes = [
+  { id: 1, name: 'Cessna', src: 'assets/plane-1.png' },
+  { id: 2, name: 'Spitfire', src: 'assets/plane-2.png' },
+  { id: 3, name: 'F-16', src: 'assets/plane-3.png' },
+  { id: 4, name: 'Helicopter', src: 'assets/plane-4.png' },
+  { id: 5, name: 'Airbus A380', src: 'assets/plane-5.png' },
+  { id: 6, name: 'Boeing 747', src: 'assets/plane-6.png' },
+  { id: 7, name: 'Concorde', src: 'assets/plane-7.png' },
+  { id: 8, name: 'Antonov (Side)', src: 'assets/plane-8.png' },
+  { id: 9, name: 'Antonov (Bottom)', src: 'assets/plane-9.png' }
+];
+
+// Audio
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playTone(freq, dur, type = 'sine', vol = 0.12) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(); osc.stop(audioCtx.currentTime + dur);
+}
+function playCorrect() {
+  playTone(523, 0.15); setTimeout(() => playTone(659, 0.15), 100);
+  setTimeout(() => playTone(784, 0.25), 200);
+}
+function playWrong() { playTone(200, 0.3, 'square', 0.08); }
+function playCelebrate() {
+  playTone(523, 0.1); setTimeout(() => playTone(659, 0.1), 80);
+  setTimeout(() => playTone(784, 0.1), 160);
+  setTimeout(() => playTone(1047, 0.3), 240);
+}
+
+// State
+let level = 0; // 0-3
+let streak = 0;
+let correctAnswer = null;
+let roundActive = false;
+
+const levelDefs = [
+  { name: 'Simple (AB)', gen: () => { const [a, b] = pickN(2); return { seq: [a,b,a,b,a], answer: b }; } },
+  { name: 'Doubles (AABB)', gen: () => { const [a, b] = pickN(2); return { seq: [a,a,b,b,a], answer: a }; } },
+  { name: 'Complex (ABC)', gen: () => { const [a, b, c] = pickN(3); return { seq: [a,b,c,a,b], answer: c }; } },
+  { name: 'Mirror (ABA)', gen: () => { const [a, b] = pickN(2); return { seq: [a,b,a,a,b], answer: a }; } }
+];
+
+function pickN(n) {
+  const shuffled = [...planes].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, n);
+}
+
+function pickDistractors(answer, usedInPattern, count) {
+  const usedIds = new Set(usedInPattern.map(p => p.id));
+  const pool = planes.filter(p => p.id !== answer.id && !usedIds.has(p.id));
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+  // If not enough unused, allow pattern planes (except answer)
+  const extras = planes.filter(p => p.id !== answer.id).sort(() => Math.random() - 0.5);
+  const result = [];
+  for (const p of shuffled) { if (result.length < count) result.push(p); }
+  for (const p of extras) { if (result.length < count && !result.find(r => r.id === p.id)) result.push(p); }
+  return result;
+}
+
+function startRound() {
+  roundActive = false;
+  const def = levelDefs[level];
+  const { seq, answer } = def.gen();
+  correctAnswer = answer;
+
+  document.getElementById('level-display').textContent = `Level ${level + 1}: ${def.name.split(' (')[0]}`;
+  document.getElementById('level-banner').textContent = def.name;
+
+  // Build pattern row
+  const patternRow = document.getElementById('pattern-row');
+  patternRow.innerHTML = '';
+  for (let i = 0; i < seq.length; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'pattern-slot';
+    const img = document.createElement('img');
+    img.src = seq[i].src;
+    img.alt = seq[i].name;
+    slot.appendChild(img);
+    patternRow.appendChild(slot);
+  }
+  // Mystery slot
+  const mystery = document.createElement('div');
+  mystery.className = 'pattern-slot mystery';
+  mystery.id = 'mystery-slot';
+  const q = document.createElement('div');
+  q.className = 'q-mark';
+  q.textContent = '?';
+  mystery.appendChild(q);
+  patternRow.appendChild(mystery);
+
+  // Choices
+  const distractors = pickDistractors(answer, seq, 2);
+  const choices = [answer, ...distractors].sort(() => Math.random() - 0.5);
+
+  const choicesRow = document.getElementById('choices-row');
+  choicesRow.innerHTML = '';
+  for (const c of choices) {
+    const card = document.createElement('div');
+    card.className = 'choice-card';
+    card.dataset.planeId = c.id;
+    const img = document.createElement('img');
+    img.src = c.src;
+    img.alt = c.name;
+    card.appendChild(img);
+    choicesRow.appendChild(card);
+  }
+
+  setupDragDrop();
+  roundActive = true;
+}
+
+// Drag & drop
+let dragEl = null;
+let dragGhost = null;
+let dragPlaneId = null;
+
+function setupDragDrop() {
+  const cards = document.querySelectorAll('.choice-card');
+  const mystery = document.getElementById('mystery-slot');
+
+  cards.forEach(card => {
+    card.addEventListener('pointerdown', onDragStart);
+  });
+
+  function onDragStart(e) {
+    if (!roundActive) return;
+    e.preventDefault();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+
+    dragEl = e.currentTarget;
+    dragPlaneId = parseInt(dragEl.dataset.planeId);
+
+    // Create ghost
+    dragGhost = document.createElement('div');
+    dragGhost.className = 'drag-ghost';
+    dragGhost.innerHTML = dragEl.innerHTML;
+    document.body.appendChild(dragGhost);
+    positionGhost(e.clientX, e.clientY);
+
+    dragEl.style.opacity = '0.4';
+
+    document.addEventListener('pointermove', onDragMove);
+    document.addEventListener('pointerup', onDragEnd);
+  }
+
+  function onDragMove(e) {
+    e.preventDefault();
+    positionGhost(e.clientX, e.clientY);
+
+    const rect = mystery.getBoundingClientRect();
+    const over = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+    mystery.classList.toggle('drag-over', over);
+  }
+
+  function onDragEnd(e) {
+    e.preventDefault();
+    document.removeEventListener('pointermove', onDragMove);
+    document.removeEventListener('pointerup', onDragEnd);
+
+    if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+    mystery.classList.remove('drag-over');
+
+    const rect = mystery.getBoundingClientRect();
+    const over = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+
+    if (over) {
+      checkAnswer(dragPlaneId, dragEl);
+    } else {
+      if (dragEl) dragEl.style.opacity = '1';
+    }
+    dragEl = null;
+    dragPlaneId = null;
+  }
+}
+
+function positionGhost(x, y) {
+  if (!dragGhost) return;
+  dragGhost.style.left = (x - 40) + 'px';
+  dragGhost.style.top = (y - 40) + 'px';
+}
+
+function checkAnswer(planeId, cardEl) {
+  if (!roundActive) return;
+
+  if (planeId === correctAnswer.id) {
+    // Correct!
+    roundActive = false;
+    streak++;
+    document.getElementById('streak-display').textContent = `🔥 ${streak}`;
+    playCorrect();
+
+    // Show plane in mystery slot
+    const mystery = document.getElementById('mystery-slot');
+    mystery.innerHTML = '';
+    mystery.classList.add('correct');
+    const img = document.createElement('img');
+    img.src = correctAnswer.src;
+    img.alt = correctAnswer.name;
+    mystery.appendChild(img);
+
+    cardEl.classList.add('used');
+
+    const emojis = ['🎉', '⭐', '✨', '🌟', '🏆', '💪'];
+    showMessage(emojis[Math.floor(Math.random() * emojis.length)], 1200);
+
+    // Auto-advance level after 3 correct
+    if (streak > 0 && streak % 3 === 0 && level < 3) {
+      setTimeout(() => {
+        level++;
+        playCelebrate();
+        fireConfetti();
+        showMessage(`Level ${level + 1}! 🎉`, 1800);
+        setTimeout(startRound, 2200);
+      }, 1400);
+    } else {
+      if (level === 3 && streak % 3 === 0) {
+        setTimeout(() => {
+          playCelebrate();
+          fireConfetti();
+          showMessage('Champion! 🏆', 2000);
+          setTimeout(startRound, 2500);
+        }, 1400);
+      } else {
+        setTimeout(startRound, 1500);
+      }
+    }
+  } else {
+    // Wrong
+    playWrong();
+    cardEl.style.opacity = '1';
+    cardEl.classList.add('shake');
+    setTimeout(() => cardEl.classList.remove('shake'), 500);
+    streak = 0;
+    document.getElementById('streak-display').textContent = `🔥 0`;
+  }
+}
+
+// Message overlay
+let msgTimer = null;
+function showMessage(text, dur) {
+  const overlay = document.getElementById('message-overlay');
+  document.getElementById('msg-text').textContent = text;
+  overlay.classList.add('show');
+  clearTimeout(msgTimer);
+  msgTimer = setTimeout(() => overlay.classList.remove('show'), dur);
+}
+
+// Confetti
+const confettiCanvas = document.getElementById('confetti-canvas');
+const cctx = confettiCanvas.getContext('2d');
+let confettiPieces = [];
+
+function resizeConfetti() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeConfetti);
+resizeConfetti();
+
+function fireConfetti() {
+  const cx = window.innerWidth / 2;
+  const cy = window.innerHeight / 2;
+  for (let i = 0; i < 60; i++) {
+    confettiPieces.push({
+      x: cx, y: cy,
+      vx: (Math.random() - 0.5) * 16,
+      vy: -Math.random() * 12 - 4,
+      size: 5 + Math.random() * 6,
+      color: ['#FFD700','#FF4444','#44FF44','#4444FF','#FF44FF','#44FFFF'][Math.floor(Math.random()*6)],
+      life: 1.5,
+      rot: Math.random() * Math.PI * 2,
+      rotS: (Math.random() - 0.5) * 0.3
+    });
+  }
+}
+
+function updateConfetti() {
+  cctx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+  confettiPieces = confettiPieces.filter(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.18; p.vx *= 0.99;
+    p.rot += p.rotS; p.life -= 0.012;
+    if (p.life <= 0) return false;
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot);
+    cctx.globalAlpha = Math.min(1, p.life);
+    cctx.fillStyle = p.color;
+    cctx.fillRect(-p.size/2, -p.size/4, p.size, p.size/2);
+    cctx.restore();
+    return true;
+  });
+  cctx.globalAlpha = 1;
+  requestAnimationFrame(updateConfetti);
+}
+requestAnimationFrame(updateConfetti);
+
+// Start
+startRound();
+</script>
+<script src="home-btn.js"></script>
+</body>
+</html>
