@@ -168,64 +168,50 @@
             text-align: center;
         }
 
-        /* ---- Bottom controls ---- */
+        /* ---- Bottom keyboard (letters + controls in two wide rows) ---- */
         .dock {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 10px;
         }
 
-        .letter-grid {
+        .keys {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 9px;
-            max-width: 640px;
+            align-content: flex-end;
+            gap: 6px;
+            max-width: min(1000px, 97vw);
+            margin: 0 auto;
         }
 
-        .letter-btn {
-            width: clamp(52px, 13vw, 72px);
-            height: clamp(52px, 13vw, 72px);
-            font-size: clamp(1.6rem, 5vw, 2.2rem);
-            font-weight: 1000;
-            border: 3px solid var(--ink);
-            border-radius: 16px;
-            cursor: pointer;
-            color: var(--ink);
-            font-family: inherit;
-            box-shadow: 0 5px 0 rgba(39, 32, 20, 0.22);
-            transition: transform 70ms ease, box-shadow 70ms ease;
-        }
-
-        .letter-btn.consonant { background: var(--green); }
-        .letter-btn.vowel { background: var(--orange); }
-
-        .letter-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 1px 0 rgba(39, 32, 20, 0.22);
-        }
-
-        .controls { display: flex; gap: 10px; }
-
+        .letter-btn,
         .ctl-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-width: 60px;
-            height: 54px;
-            padding: 0 16px;
-            font-size: 1.5rem;
+            width: clamp(40px, 6vw, 58px);
+            height: clamp(40px, 6vw, 58px);
+            font-weight: 1000;
             border: 3px solid var(--ink);
-            border-radius: 16px;
-            background: var(--panel);
+            border-radius: 14px;
+            cursor: pointer;
             color: var(--ink);
             font-family: inherit;
-            font-weight: 1000;
-            cursor: pointer;
             box-shadow: 0 5px 0 rgba(39, 32, 20, 0.22);
             transition: transform 70ms ease, box-shadow 70ms ease;
         }
+
+        .letter-btn { font-size: clamp(1.3rem, 4.2vw, 2rem); }
+        .letter-btn.consonant { background: var(--green); }
+        .letter-btn.vowel { background: var(--orange); }
+
+        .ctl-btn {
+            font-size: clamp(1.1rem, 3.4vw, 1.5rem);
+            background: var(--panel);
+        }
+
+        .letter-btn:active,
         .ctl-btn:active {
             transform: translateY(4px);
             box-shadow: 0 1px 0 rgba(39, 32, 20, 0.22);
@@ -326,11 +312,10 @@
         </div>
 
         <div class="dock">
-            <div class="controls">
+            <div class="keys" id="keys"><!-- letter buttons injected before the controls -->
                 <button class="ctl-btn" id="speakBtn" aria-label="Say the word">🔊</button>
                 <button class="ctl-btn" id="backBtn" aria-label="Undo last letter" hidden>⌫</button>
             </div>
-            <div class="letter-grid" id="letters"></div>
         </div>
     </div>
 
@@ -417,7 +402,7 @@
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
     const camTarget = new THREE.Vector3(-1.2, 2, 0);
     const camDir = new THREE.Vector3(0.08, 0.18, 0.98).normalize();
-    // Distance is computed in resize() so the whole train fits in any aspect.
+    // Distance is computed in frameScene() so the whole train fits in any aspect.
 
     // Lights
     scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, 0.95));
@@ -698,7 +683,7 @@
     const STARS_TO_LEVEL = 5;
 
     const els = {
-        letters: document.getElementById('letters'),
+        keys: document.getElementById('keys'),
         prompt: document.getElementById('prompt'),
         stars: document.getElementById('stars'),
         toast: document.getElementById('toast'),
@@ -743,6 +728,7 @@
         sign.visible = signPost.visible = state.mode === 2;
         renderGrid();
         updateControls();
+        frameScene(); // reframe the train above the (mode-dependent) keyboard height
 
         // drive in
         train.position.x = 16;
@@ -791,7 +777,7 @@
        LETTER GRID
        ============================================================ */
     function renderGrid() {
-        els.letters.innerHTML = '';
+        els.keys.querySelectorAll('.letter-btn').forEach(b => b.remove());
         let pool;
         if (state.mode === 1) {
             const fixed = state.target;
@@ -811,7 +797,7 @@
             btn.className = 'letter-btn ' + (VOWELS.includes(L) ? 'vowel' : 'consonant');
             btn.textContent = L;
             btn.addEventListener('click', () => placeLetter(L));
-            els.letters.appendChild(btn);
+            els.keys.insertBefore(btn, els.speakBtn); // keep controls at the end
         }
     }
 
@@ -1026,7 +1012,7 @@
         if (/^[a-z]$/.test(k)) {
             // honor mode-1 limited grid by checking grid contents
             if (state.mode === 1) {
-                const available = [...els.letters.children].some(b => b.textContent === k);
+                const available = [...els.keys.querySelectorAll('.letter-btn')].some(b => b.textContent === k);
                 if (available) placeLetter(k);
             } else {
                 placeLetter(k);
@@ -1042,7 +1028,8 @@
        ============================================================ */
     const clock = new THREE.Clock();
     let elapsed = 0;
-    function resize() {
+    const dockEl = document.querySelector('.dock');
+    function frameScene() {
         const w = window.innerWidth, h = window.innerHeight;
         renderer.setSize(w, h, false);
         const aspect = w / h;
@@ -1051,14 +1038,21 @@
         const hHalf = Math.atan(Math.tan(vHalf) * aspect);
         // Dolly so the whole train (~8 wide, centred on x=-1.2) fits horizontally.
         const dist = Math.min(34, Math.max(9, 4.8 / Math.tan(hHalf)));
-        // Aim above the train so it always sits ~70% down the screen, sky above.
-        camTarget.y = 1.05 + 0.40 * dist * Math.tan(vHalf);
+        // Aim so the train sits just above the letter keyboard (which varies in
+        // height by mode) and is never covered by it.
+        let f = 0.68; // train-centre screen fraction (fallback)
+        if (dockEl) {
+            const dockTopFrac = dockEl.getBoundingClientRect().top / h;
+            f = Math.max(0.40, Math.min(0.68, dockTopFrac - 0.15));
+        }
+        const ndcY = 1 - 2 * f; // desired NDC.y of the car centre (world y ≈ 1.05)
+        camTarget.y = 1.05 - ndcY * dist * Math.tan(vHalf);
         camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
         camera.lookAt(camTarget);
         camera.updateProjectionMatrix();
     }
-    window.addEventListener('resize', resize);
-    resize();
+    window.addEventListener('resize', frameScene);
+    frameScene();
 
     function animate() {
         requestAnimationFrame(animate);

@@ -16,10 +16,12 @@ A browser-based ramp jump game where kids practice number recognition and compar
 - **Adaptive difficulty** — 5 correct in a row levels you up; too many misses brings you back down
 - **Number typing gate** — kids must type both ramp numbers before choosing, reinforcing number recognition
 - **Streak tracking** — visual dot indicators show recent performance
-- **Satisfying physics** — parabolic jump arcs, dust particles, car rotation mid-air
-- **Sound effects** — engine revs, launch whooshes, victory chimes, and crash sounds (all generated with Web Audio API, no files to load)
+- **Real 3D graphics** — a Three.js stunt arena with a chunky car, shadows, and a dusk sky
+- **Real jump physics** — gravity-driven projectile arcs; launch speed and angle come from the ramp, so a bigger number really does throw the car higher and farther, with the car's nose following the arc
+- **Dust + suspension** — dust kicks up on the climb and landing, and the car squashes on impact
+- **Sound effects** — engine revs, launch whooshes, victory chimes, and landing thuds (all generated with Web Audio API, no files to load)
 - **Confetti explosions** on correct answers
-- **Starry night sky** with twinkling stars
+- **Dusk sky** with twinkling stars and a setting sun
 - **Random car colors** each round — because variety matters when you're 3
 - **Level picker** — tap the level badge to jump to any difficulty
 - **Fully responsive** — works on phones, tablets, and desktops
@@ -27,10 +29,10 @@ A browser-based ramp jump game where kids practice number recognition and compar
 ## 🖥️ Tech Stack
 
 - **Single `index.html` file** — the entire game
-- Vanilla JavaScript, HTML5 Canvas
+- Vanilla JavaScript with [Three.js](https://threejs.org/) (loaded from a CDN via import map) for the 3D scene
 - Web Audio API for procedurally generated sound effects
-- CSS animations for UI (confetti, shake effects, transitions)
-- Zero dependencies. Zero build step. Zero frameworks.
+- CSS for the overlay UI (confetti, shake effects, transitions)
+- No build step.
 
 ## 🚀 Run It
 
@@ -44,7 +46,7 @@ Or just download `index.html` and double-click it. That's it. It's one file.
 
 ## 📸 Gameplay
 
-> A car sits on a starry night road between two ramps of different heights, each labeled with a number. After typing both numbers, the player taps a side to send the car racing up that ramp and soaring through the air. Pick the bigger number and the car launches sky-high with confetti raining down. Pick the smaller one and you get a sad little hop.
+> A car sits on a dusk road between two ramps of different heights, each labeled with a number. After typing both numbers, the player taps a side to send the car racing up that ramp and soaring through the air. Pick the bigger number and the car launches sky-high with confetti raining down. Pick the smaller one and you get a sad little hop.
 
 ## 🏗️ More from madebydia
 
