@@ -6,7 +6,8 @@ Built for a 3-year-old who can count past 100 but is still building intuition fo
 
 ## How It Works
 
-- Two cars appear with numbers and visible fuel gauges
+- Two cars line up on a 3D racetrack with numbers and visible fuel gauges
+- Type each car's number to start (sneaky number-recognition practice)
 - Tap the car with the **bigger number** (more fuel)
 - The winner races to the checkered flag 🏁
 - Get 5 in a row to level up!
@@ -25,16 +26,16 @@ Built for a 3-year-old who can count past 100 but is still building intuition fo
 
 ## Features
 
-- 🎨 Colorful cars with randomized colors each round
-- ⛽ Visual fuel gauge — bigger number = more fuel
+- 🏁 Real 3D racetrack built with [Three.js](https://threejs.org/) — checkered finish banner, kerbs, flags, shadows
+- 🏎️ Chunky 3D cars with randomized colors that actually race down the track
+- ⛽ Visual fuel gauge — bigger number = more fuel = wins the race
 - 🎉 Confetti celebration on correct answers
 - 📈 Adaptive difficulty (levels up on streaks, down on mistakes)
 - 📱 Touch-friendly, works on tablets and phones
-- 🌙 Night sky with twinkling stars
 
 ## Play
 
-Open `index.html` in any browser. No dependencies, no build step, no install.
+Open `index.html` in any browser. Three.js loads from a CDN; no build step.
 
 Or visit: [mama.dev/games/bigger-than-race](https://mama.dev/games/bigger-than-race)
 

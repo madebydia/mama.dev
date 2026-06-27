@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#1a1a2e">
+<meta name="theme-color" content="#8fcfe0">
 <meta name="application-name" content="mama.dev games">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="mama.dev games">
@@ -17,503 +17,158 @@
 <title>Race Car Numbers!</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
 
   body {
-    background: #1a1a2e;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: #8fcfe0;
+    font-family: ui-rounded, 'Segoe UI', system-ui, -apple-system, sans-serif;
     overflow: hidden;
-    height: 100vh;
     width: 100vw;
     touch-action: manipulation;
     -webkit-user-select: none;
     user-select: none;
   }
 
-  .sky {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 40%;
-    background: linear-gradient(180deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  }
-
-  .stars { position: absolute; inset: 0; }
-
-  .star {
-    position: absolute;
-    background: #fff;
-    border-radius: 50%;
-    animation: twinkle 2s ease-in-out infinite alternate;
-  }
-
-  @keyframes twinkle { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-
-  .ground {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 60%;
-    background: linear-gradient(180deg, #2d5a27 0%, #1e3d1a 100%);
-  }
-
-  .road {
-    position: absolute;
-    bottom: 5%;
-    left: 0; right: 0;
-    height: 55%;
-    background: #333;
-    overflow: hidden;
-  }
-
-  .lane-divider {
-    position: absolute;
-    left: 0; right: 0;
-    top: 50%;
-    height: 5px;
-    transform: translateY(-50%);
-    background: repeating-linear-gradient(90deg, #fff 0px, #fff 40px, transparent 40px, transparent 80px);
-    opacity: 0.4;
-  }
-
-  .finish-line {
-    position: absolute;
-    right: 40px;
-    top: 0; bottom: 0;
-    width: 24px;
-    background: repeating-conic-gradient(#fff 0% 25%, #111 0% 50%) 0 0 / 12px 12px;
-    opacity: 0.7;
-    z-index: 2;
-  }
-
-  /* Cars */
-  .lane {
-    position: absolute;
-    left: 0; right: 0;
-    height: 50%;
-    display: flex;
-    align-items: center;
-  }
-
-  .lane-top { top: 0; }
-  .lane-bottom { bottom: 0; }
-
-  .car-wrapper {
-    position: absolute;
-    left: 30px;
-    cursor: pointer;
-    transition: left 2s cubic-bezier(0.2, 0.8, 0.3, 1);
-    z-index: 5;
-    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.5));
-  }
-
-  .car-wrapper:active { transform: scale(0.95); }
-  .car-wrapper.winner { transition: left 1.8s cubic-bezier(0.1, 0.7, 0.3, 1); }
-  .car-wrapper.loser { transition: left 2.5s cubic-bezier(0.1, 0.3, 0.5, 1); }
-
-  .car {
-    position: relative;
-    width: 240px;
-    height: 110px;
-  }
-
-  .car-body {
-    position: absolute;
-    bottom: 18px;
-    left: 0;
-    width: 240px;
-    height: 65px;
-    border-radius: 10px 40px 6px 6px;
-    overflow: hidden;
-  }
-
-  .car-top {
-    position: absolute;
-    bottom: 65px;
-    left: 55px;
-    width: 120px;
-    height: 42px;
-    border-radius: 8px 20px 0 0;
-  }
-
-  .car-window {
-    position: absolute;
-    bottom: 70px;
-    left: 78px;
-    width: 38px;
-    height: 30px;
-    background: rgba(135, 206, 250, 0.6);
-    border-radius: 4px 10px 0 0;
-  }
-
-  .car-window-back {
-    position: absolute;
-    bottom: 70px;
-    left: 122px;
-    width: 34px;
-    height: 26px;
-    background: rgba(135, 206, 250, 0.5);
-    border-radius: 4px 6px 0 0;
-  }
-
-  .wheel {
-    position: absolute;
-    bottom: 2px;
-    width: 38px;
-    height: 38px;
-    background: #222;
-    border-radius: 50%;
-    border: 4px solid #555;
-  }
-
-  .wheel::after {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 12px;
-    height: 12px;
-    background: #888;
-    border-radius: 50%;
-  }
-
-  .wheel-front { left: 168px; }
-  .wheel-back { left: 28px; }
-
-  .car-wrapper.winner .wheel,
-  .car-wrapper.loser .wheel {
-    animation: spin 0.3s linear infinite;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Number + fuel inside car body */
-  .car-interior {
-    position: absolute;
+  #scene {
+    position: fixed;
     inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    z-index: 2;
-    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
   }
 
-  .car-number {
-    font-size: 40px;
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
-    line-height: 1;
-  }
+  .overlay { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
 
-  .fuel-gauge {
-    width: 18px;
-    height: 44px;
-    background: rgba(0,0,0,0.35);
-    border-radius: 4px;
-    border: 2px solid rgba(255,255,255,0.25);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .fuel-fill {
+  /* Score (top-right) */
+  .score-bar {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    border-radius: 0 0 2px 2px;
-    transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    top: 12px; right: 16px;
+    z-index: 20;
+    display: flex; gap: 6px; align-items: center;
+  }
+  .trophy { font-size: 28px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+  .score-num {
+    font-size: 32px; font-weight: 900; color: #f0a818;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.25);
   }
 
-  .fuel-fill.low {
-    background: linear-gradient(180deg, #fb923c 0%, #ea580c 100%);
-  }
-
-  .fuel-fill.high {
-    background: linear-gradient(180deg, #4ade80 0%, #16a34a 100%);
-  }
-
-  .fuel-icon {
+  /* Streak — under the score, clear of the home tab */
+  .streak-bar {
     position: absolute;
-    top: -16px;
-    left: 50%;
+    top: 52px; right: 16px;
+    z-index: 20;
+    display: flex; gap: 5px;
+  }
+  .streak-dot {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: rgba(255,255,255,0.55);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.18);
+    transition: background 0.3s, transform 0.3s;
+  }
+  .streak-dot.lit {
+    background: #36c46a; transform: scale(1.2);
+    box-shadow: 0 0 8px rgba(54,196,106,0.6);
+  }
+  .streak-dot.miss { background: #ef5b5b; transform: scale(1.2); }
+
+  .level-badge {
+    position: absolute;
+    bottom: max(10px, env(safe-area-inset-bottom)); left: 50%;
     transform: translateX(-50%);
-    font-size: 11px;
+    z-index: 20;
+    background: rgba(33, 26, 50, 0.5);
+    color: #fff;
+    padding: 6px 18px; border-radius: 20px;
+    font-size: 14px; font-weight: 700; letter-spacing: 1px;
+    cursor: pointer; pointer-events: auto;
+    backdrop-filter: blur(4px);
   }
+  .level-badge:hover { background: rgba(33,26,50,0.7); }
+
+  .level-picker {
+    position: absolute;
+    bottom: 50px; left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
+    background: #2a3340;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px; padding: 8px 0;
+    display: none; min-width: 220px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+    pointer-events: auto;
+  }
+  .level-picker.open { display: block; }
+  .level-option {
+    padding: 10px 16px; color: #fff; font-size: 13px; font-weight: 600;
+    cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  }
+  .level-option:hover { background: rgba(255,255,255,0.1); }
+  .level-option.active { background: rgba(240,168,24,0.18); color: #f6c84a; }
+  .level-range { font-weight: 400; opacity: 0.6; font-size: 12px; }
+
+  /* Number gate */
+  .num-input-overlay {
+    position: absolute;
+    top: max(56px, calc(env(safe-area-inset-top) + 18px));
+    left: 50%; transform: translateX(-50%);
+    z-index: 30;
+    display: flex; gap: 22px; align-items: center;
+    pointer-events: auto;
+    background: rgba(33, 26, 50, 0.34);
+    padding: 12px 20px; border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .num-input-overlay.hidden { display: none; }
+  .num-input-group { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .num-input-label {
+    font-size: 13px; font-weight: 800; color: #fff;
+    letter-spacing: 1px; text-transform: uppercase;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  }
+  .num-input {
+    width: 84px; height: 50px; font-size: 28px; font-weight: 900;
+    text-align: center; border: 3px solid rgba(255,255,255,0.5);
+    border-radius: 12px; background: rgba(0,0,0,0.3); color: #fff;
+    outline: none; -webkit-user-select: auto; user-select: auto; font-family: inherit;
+  }
+  .num-input:focus { border-color: #f6c84a; box-shadow: 0 0 12px rgba(246,200,74,0.4); }
+  .num-input.correct { border-color: #36c46a; background: rgba(54,196,106,0.2); }
+  .num-input.wrong { border-color: #ef5b5b; animation: shake 0.4s ease; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .num-input-between { font-size: 22px; color: rgba(255,255,255,0.7); font-weight: 800; padding-top: 18px; }
 
   /* Prompt */
   .prompt {
     position: absolute;
-    top: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    text-align: center;
-    pointer-events: none;
+    top: max(56px, calc(env(safe-area-inset-top) + 18px));
+    left: 50%; transform: translateX(-50%);
+    z-index: 22; text-align: center; pointer-events: none;
+    background: rgba(255,255,255,0.92);
+    padding: 10px 22px; border-radius: 999px;
+    box-shadow: 0 6px 0 rgba(33,26,50,0.16);
   }
-
   .prompt.hidden { display: none; }
-
-  .prompt-text {
-    font-size: clamp(22px, 5vw, 40px);
-    font-weight: 800;
-    color: #fff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-  }
-
-  .prompt-sub {
-    font-size: clamp(14px, 3vw, 22px);
-    color: #f0c040;
-    margin-top: 4px;
-    font-weight: 600;
-  }
+  .prompt-text { font-size: clamp(18px, 4vw, 30px); font-weight: 900; color: #2a2150; }
+  .prompt-sub { font-size: clamp(13px, 2.6vw, 18px); color: #b86c20; margin-top: 2px; font-weight: 700; }
 
   /* Result */
   .result {
     position: absolute;
-    top: 18%;
-    left: 50%;
+    top: 18%; left: 50%;
     transform: translateX(-50%) scale(0);
-    z-index: 30;
-    text-align: center;
-    pointer-events: none;
+    z-index: 30; text-align: center; pointer-events: none;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-
   .result.show { transform: translateX(-50%) scale(1); }
+  .result-emoji { font-size: clamp(60px, 15vw, 100px); filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3)); }
+  .result-text { font-size: clamp(28px, 6vw, 48px); font-weight: 900; color: #fff; text-shadow: 0 3px 15px rgba(0,0,0,0.4); margin-top: 8px; }
+  .result-explain { font-size: clamp(18px, 4vw, 28px); color: #fff; font-weight: 800; margin-top: 4px; text-shadow: 0 2px 8px rgba(0,0,0,0.4); }
 
-  .result-emoji { font-size: clamp(60px, 15vw, 100px); }
-
-  .result-text {
-    font-size: clamp(28px, 6vw, 48px);
-    font-weight: 900;
-    color: #fff;
-    text-shadow: 0 3px 15px rgba(0,0,0,0.5);
-    margin-top: 8px;
-  }
-
-  .result-explain {
-    font-size: clamp(18px, 4vw, 28px);
-    color: #f0c040;
-    font-weight: 700;
-    margin-top: 4px;
-  }
-
-  /* Score */
-  .score-bar {
-    position: absolute;
-    top: 12px;
-    right: 16px;
-    z-index: 20;
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
-
-  .trophy { font-size: 28px; }
-
-  .score-num {
-    font-size: 32px;
-    font-weight: 900;
-    color: #f0c040;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.4);
-  }
-
-  .streak-bar {
-    position: absolute;
-    top: 14px;
-    left: 16px;
-    z-index: 20;
-    display: flex;
-    gap: 5px;
-  }
-
-  .streak-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.15);
-    transition: background 0.3s, transform 0.3s;
-  }
-
-  .streak-dot.lit {
-    background: #4ade80;
-    transform: scale(1.2);
-    box-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
-  }
-
-  .streak-dot.miss {
-    background: #f87171;
-    transform: scale(1.2);
-  }
-
-  .level-badge {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 20;
-    background: rgba(0,0,0,0.4);
-    color: #fff;
-    padding: 5px 18px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    cursor: pointer;
-  }
-
-  .level-badge:hover { background: rgba(0,0,0,0.6); }
-
-  .level-picker {
-    position: absolute;
-    bottom: 44px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 25;
-    background: #1a1a2e;
-    border: 2px solid rgba(255,255,255,0.2);
-    border-radius: 12px;
-    padding: 8px 0;
-    display: none;
-    min-width: 220px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-  }
-
-  .level-picker.open { display: block; }
-
-  .level-option {
-    padding: 10px 16px;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .level-option:hover { background: rgba(255,255,255,0.1); }
-  .level-option.active { background: rgba(240,192,64,0.15); color: #f0c040; }
-
-  .level-range {
-    font-weight: 400;
-    opacity: 0.6;
-    font-size: 12px;
-  }
-
-  /* Exhaust */
-  .exhaust {
-    position: absolute;
-    left: -8px;
-    bottom: 28px;
-    pointer-events: none;
-    opacity: 0;
-  }
-
-  .car-wrapper.winner .exhaust,
-  .car-wrapper.loser .exhaust { opacity: 1; }
-
-  .puff {
-    position: absolute;
-    width: 14px;
-    height: 14px;
-    background: rgba(200, 200, 200, 0.4);
-    border-radius: 50%;
-    animation: puff 0.6s ease-out infinite;
-  }
-
-  .puff:nth-child(2) { animation-delay: 0.2s; }
-  .puff:nth-child(3) { animation-delay: 0.4s; }
-
-  @keyframes puff {
-    0% { transform: translate(0, 0) scale(1); opacity: 0.5; }
-    100% { transform: translate(-30px, -10px) scale(2.5); opacity: 0; }
-  }
-
-  .confetti-piece {
-    position: fixed;
-    z-index: 50;
-    pointer-events: none;
-  }
-
+  .confetti-piece { position: fixed; z-index: 50; pointer-events: none; }
   @keyframes confetti-fall {
     0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-  }
-
-  .clickable { cursor: pointer; }
-
-  /* Number input gate */
-  .num-input-overlay {
-    position: absolute;
-    top: 2%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 22;
-    display: flex;
-    gap: 30px;
-    align-items: center;
-    pointer-events: auto;
-  }
-
-  .num-input-overlay.hidden { display: none; }
-
-  .num-input-group {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .num-input-label {
-    font-size: 14px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .num-input {
-    width: 90px;
-    height: 50px;
-    font-size: 28px;
-    font-weight: 900;
-    text-align: center;
-    border: 3px solid rgba(255,255,255,0.3);
-    border-radius: 10px;
-    background: rgba(0,0,0,0.4);
-    color: #fff;
-    outline: none;
-    -webkit-user-select: auto;
-    user-select: auto;
-    font-family: inherit;
-  }
-
-  .num-input:focus {
-    border-color: #f0c040;
-    box-shadow: 0 0 12px rgba(240,192,64,0.3);
-  }
-
-  .num-input.correct {
-    border-color: #4ade80;
-    background: rgba(74, 222, 128, 0.15);
-  }
-
-  .num-input.wrong {
-    border-color: #f87171;
-    animation: shake 0.4s ease;
-  }
-
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-6px); }
-    75% { transform: translateX(6px); }
-  }
-
-  .num-input-between {
-    font-size: 24px;
-    color: rgba(255,255,255,0.3);
-    font-weight: 700;
   }
 </style>
     <!-- Privacy-friendly analytics by Plausible -->
@@ -523,448 +178,626 @@
      plausible.init()
     </script>
 <link rel="stylesheet" href="/assets/mama-home-tab.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
 </head>
 <body>
 <a class="mama-home-tab" href="/games/" aria-label="Back to games"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>games</span></a>
 
-<div class="sky">
-  <div class="stars" id="stars"></div>
-</div>
-<div class="ground"></div>
+<canvas id="scene"></canvas>
 
-<div class="road" id="road">
-  <div class="finish-line"></div>
-  <div class="lane-divider"></div>
-
-  <div class="lane lane-top">
-    <div class="car-wrapper clickable" id="car1" onclick="pick(0)">
-      <div class="car">
-        <div class="car-top" id="car1-top"></div>
-        <div class="car-window"></div>
-        <div class="car-window-back"></div>
-        <div class="car-body" id="car1-body">
-          <div class="car-interior">
-            <span class="car-number" id="car1-num"></span>
-            <div class="fuel-gauge"><div class="fuel-icon">⛽</div><div class="fuel-fill" id="car1-fuel"></div></div>
-          </div>
-        </div>
-        <div class="wheel wheel-front"></div>
-        <div class="wheel wheel-back"></div>
-        <div class="exhaust"><div class="puff"></div><div class="puff"></div><div class="puff"></div></div>
-      </div>
+<div class="overlay">
+  <div class="num-input-overlay" id="num-gate">
+    <div class="num-input-group">
+      <div class="num-input-label">Top car</div>
+      <input class="num-input" id="input1" type="number" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="num-input-between">&amp;</div>
+    <div class="num-input-group">
+      <div class="num-input-label">Bottom car</div>
+      <input class="num-input" id="input2" type="number" inputmode="numeric" autocomplete="off">
     </div>
   </div>
 
-  <div class="lane lane-bottom">
-    <div class="car-wrapper clickable" id="car2" onclick="pick(1)">
-      <div class="car">
-        <div class="car-top" id="car2-top"></div>
-        <div class="car-window"></div>
-        <div class="car-window-back"></div>
-        <div class="car-body" id="car2-body">
-          <div class="car-interior">
-            <span class="car-number" id="car2-num"></span>
-            <div class="fuel-gauge"><div class="fuel-icon">⛽</div><div class="fuel-fill" id="car2-fuel"></div></div>
-          </div>
-        </div>
-        <div class="wheel wheel-front"></div>
-        <div class="wheel wheel-back"></div>
-        <div class="exhaust"><div class="puff"></div><div class="puff"></div><div class="puff"></div></div>
-      </div>
-    </div>
+  <div class="prompt hidden" id="prompt">
+    <div class="prompt-text">Which car has MORE fuel?</div>
+    <div class="prompt-sub">Tap the car with the bigger number!</div>
   </div>
-</div>
 
-<div class="num-input-overlay" id="num-gate">
-  <div class="num-input-group">
-    <div class="num-input-label">Top car</div>
-    <input class="num-input" id="input1" type="number" inputmode="numeric" autocomplete="off">
+  <div class="result" id="result">
+    <div class="result-emoji" id="result-emoji"></div>
+    <div class="result-text" id="result-text"></div>
+    <div class="result-explain" id="result-explain"></div>
   </div>
-  <div class="num-input-between">&amp;</div>
-  <div class="num-input-group">
-    <div class="num-input-label">Bottom car</div>
-    <input class="num-input" id="input2" type="number" inputmode="numeric" autocomplete="off">
-  </div>
+
+  <div class="score-bar"><span class="trophy">🏆</span><span class="score-num" id="score">0</span></div>
+  <div class="streak-bar" id="streak-bar"></div>
+  <div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
+  <div class="level-picker" id="level-picker"></div>
 </div>
 
-<div class="prompt hidden" id="prompt">
-  <div class="prompt-text">Which car has MORE fuel?</div>
-  <div class="prompt-sub">Tap the car with the bigger number!</div>
-</div>
+<script type="module">
+import * as THREE from 'three';
 
-<div class="result" id="result">
-  <div class="result-emoji" id="result-emoji"></div>
-  <div class="result-text" id="result-text"></div>
-  <div class="result-explain" id="result-explain"></div>
-</div>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const LEVELS = [
+  { name: 'Easy Peasy',      min: 1,   max: 9,    minGap: 3 },
+  { name: 'Getting Tricky',  min: 1,   max: 20,   minGap: 3 },
+  { name: 'Big Numbers!',    min: 10,  max: 50,   minGap: 5 },
+  { name: 'Super Racer',     min: 10,  max: 100,  minGap: 5 },
+  { name: 'Number Champion', min: 50,  max: 200,  minGap: 10 },
+  { name: 'MEGA BRAIN',      min: 100, max: 500,  minGap: 15 },
+  { name: 'ULTIMATE!',       min: 100, max: 999,  minGap: 20 },
+];
 
-<div class="score-bar">
-  <span class="trophy">🏆</span>
-  <span class="score-num" id="score">0</span>
-</div>
+const CAR_COLORS = ['#e63946','#457b9d','#f77f00','#2a9d8f','#7209b7','#e76f51','#06d6a0','#ef476f'];
 
-<div class="streak-bar" id="streak-bar"></div>
-<div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
-<div class="level-picker" id="level-picker"></div>
+// Lanes: index 0 = "Top car" (far), 1 = "Bottom car" (near)
+const LANE_Z = [-1.9, 1.9];
+const START_X = -7.5;
+const FINISH_X = 9.5;
+const LAG_X = 2.5;     // where the losing car ends up
+const CAR_REST_Y = 0;
 
-<script>
-(function() {
-  const LEVELS = [
-    { name: 'Easy Peasy',      min: 1,   max: 9,    minGap: 3 },
-    { name: 'Getting Tricky',  min: 1,   max: 20,   minGap: 3 },
-    { name: 'Big Numbers!',    min: 10,  max: 50,   minGap: 5 },
-    { name: 'Super Racer',     min: 10,  max: 100,  minGap: 5 },
-    { name: 'Number Champion', min: 50,  max: 200,  minGap: 10 },
-    { name: 'MEGA BRAIN',      min: 100, max: 500,  minGap: 15 },
-    { name: 'ULTIMATE!',       min: 100, max: 999,  minGap: 20 },
-  ];
+/* ============================================================
+   STATE
+   ============================================================ */
+let score = 0, level = 0, streak = 0, roundHistory = [], roundsAtLevel = 0;
+let nums = [0, 0], locked = false, gateOpen = false;
+let phase = 'gate'; // gate, choose, racing, result
+let nextRoundAt = 0;
+const race = { active: false, t0: 0, winner: -1, durW: 1.9, durL: 2.7, done: false };
 
-  const CAR_COLORS = [
-    { body: '#e63946', top: '#c1121f' },
-    { body: '#457b9d', top: '#1d3557' },
-    { body: '#f77f00', top: '#e36414' },
-    { body: '#2a9d8f', top: '#1a7a6e' },
-    { body: '#7209b7', top: '#560bad' },
-    { body: '#e76f51', top: '#c44536' },
-    { body: '#06d6a0', top: '#05a87d' },
-    { body: '#ef476f', top: '#c9184a' },
-  ];
+/* ============================================================
+   DOM
+   ============================================================ */
+const scoreEl = document.getElementById('score');
+const streakBar = document.getElementById('streak-bar');
+const numGate = document.getElementById('num-gate');
+const promptEl = document.getElementById('prompt');
+const resultEl = document.getElementById('result');
+const input1 = document.getElementById('input1');
+const input2 = document.getElementById('input2');
+const levelBadge = document.getElementById('level-badge');
 
-  let score = 0, level = 0, streak = 0, maxStreak = 0, nums = [0,0], locked = false;
-  let roundHistory = [];
-  let roundsAtLevel = 0;
+for (let i = 0; i < 5; i++) {
+  const d = document.createElement('div');
+  d.className = 'streak-dot';
+  streakBar.appendChild(d);
+}
 
-  const car1El = document.getElementById('car1');
-  const car2El = document.getElementById('car2');
-  const promptEl = document.getElementById('prompt');
-  const resultEl = document.getElementById('result');
-  const scoreEl = document.getElementById('score');
-  const streakBar = document.getElementById('streak-bar');
-  const levelBadge = document.getElementById('level-badge');
-  const numGate = document.getElementById('num-gate');
-  const input1 = document.getElementById('input1');
-  const input2 = document.getElementById('input2');
-  let gateOpen = false;
+/* ============================================================
+   AUDIO
+   ============================================================ */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playZoom() {
+  const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.6);
+  osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 1.2);
+  gain.gain.setValueAtTime(0.14, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 0.4);
+  gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+  osc.start(); osc.stop(audioCtx.currentTime + 1.5);
+}
+function playSuccess() {
+  [0, 0.12, 0.24].forEach((delay, i) => {
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.value = [523, 659, 784][i];
+    gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + delay + 0.05);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + 0.4);
+    osc.start(audioCtx.currentTime + delay); osc.stop(audioCtx.currentTime + delay + 0.4);
+  });
+}
+function playWompWomp() {
+  [0, 0.3].forEach((delay, i) => {
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    const f = i === 0 ? 311 : 277;
+    osc.frequency.setValueAtTime(f, audioCtx.currentTime + delay);
+    osc.frequency.exponentialRampToValueAtTime(f * 0.85, audioCtx.currentTime + delay + 0.4);
+    gain.gain.setValueAtTime(0.18, audioCtx.currentTime + delay);
+    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + 0.5);
+    osc.start(audioCtx.currentTime + delay); osc.stop(audioCtx.currentTime + delay + 0.5);
+  });
+}
 
-  // Stars
-  const starsEl = document.getElementById('stars');
-  for (let i = 0; i < 60; i++) {
-    const s = document.createElement('div');
-    s.className = 'star';
-    s.style.left = Math.random() * 100 + '%';
-    s.style.top = Math.random() * 100 + '%';
-    s.style.width = s.style.height = (1 + Math.random() * 2) + 'px';
-    s.style.animationDelay = Math.random() * 2 + 's';
-    starsEl.appendChild(s);
+/* ============================================================
+   THREE.JS SCENE
+   ============================================================ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xbfe6f0, 30, 70);
+
+function skyTexture() {
+  const cv = document.createElement('canvas');
+  cv.width = 16; cv.height = 256;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#5fb8e0');
+  g.addColorStop(0.55, '#9fdcef');
+  g.addColorStop(1, '#d9f3f7');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+scene.background = skyTexture();
+
+const camera = new THREE.PerspectiveCamera(44, 1, 0.1, 200);
+const camTarget = new THREE.Vector3(0.5, 1.2, 0);
+const camDir = new THREE.Vector3(-0.16, 0.34, 0.93).normalize();
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x88a06a, 0.95));
+const sun = new THREE.DirectionalLight(0xfff2d6, 1.3);
+sun.position.set(-8, 14, 9);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -18; sun.shadow.camera.right = 18;
+sun.shadow.camera.top = 12; sun.shadow.camera.bottom = -12;
+sun.shadow.camera.far = 60; sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+// Grass
+const grass = new THREE.Mesh(
+  new THREE.PlaneGeometry(200, 120),
+  new THREE.MeshStandardMaterial({ color: 0x8fcf66, roughness: 1 })
+);
+grass.rotation.x = -Math.PI / 2;
+grass.receiveShadow = true;
+scene.add(grass);
+
+// Road
+const road = new THREE.Mesh(
+  new THREE.PlaneGeometry(200, 6.4),
+  new THREE.MeshStandardMaterial({ color: 0x55525e, roughness: 0.9 })
+);
+road.rotation.x = -Math.PI / 2;
+road.position.y = 0.01;
+road.receiveShadow = true;
+scene.add(road);
+
+// Kerbs (red/white edges)
+function kerb(z) {
+  const cv = document.createElement('canvas');
+  cv.width = 64; cv.height = 8;
+  const ctx = cv.getContext('2d');
+  for (let i = 0; i < 8; i++) { ctx.fillStyle = i % 2 ? '#e23b3b' : '#f5f5f5'; ctx.fillRect(i * 8, 0, 8, 8); }
+  const tex = new THREE.CanvasTexture(cv);
+  tex.wrapS = THREE.RepeatWrapping; tex.repeat.set(60, 1); tex.colorSpace = THREE.SRGBColorSpace;
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(200, 0.4), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8 }));
+  m.rotation.x = -Math.PI / 2; m.position.set(0, 0.02, z);
+  scene.add(m);
+}
+kerb(-3.2); kerb(3.2);
+
+// Center lane dashes
+const dashMat = new THREE.MeshStandardMaterial({ color: 0xf3e9c8, roughness: 0.8 });
+for (let i = -14; i <= 14; i++) {
+  const dash = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 0.16), dashMat);
+  dash.rotation.x = -Math.PI / 2;
+  dash.position.set(i * 2.0, 0.02, 0);
+  scene.add(dash);
+}
+
+// Finish line (checker strip) + banner
+function checkerTexture(repX, repY) {
+  const cv = document.createElement('canvas');
+  cv.width = cv.height = 64;
+  const ctx = cv.getContext('2d');
+  for (let y = 0; y < 2; y++) for (let x = 0; x < 2; x++) {
+    ctx.fillStyle = (x + y) % 2 ? '#1c1c1c' : '#f5f5f5';
+    ctx.fillRect(x * 32, y * 32, 32, 32);
   }
+  const t = new THREE.CanvasTexture(cv);
+  t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(repX, repY); t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+const finishStrip = new THREE.Mesh(
+  new THREE.PlaneGeometry(0.9, 6.4),
+  new THREE.MeshStandardMaterial({ map: checkerTexture(1, 7), roughness: 0.8 })
+);
+finishStrip.rotation.x = -Math.PI / 2;
+finishStrip.position.set(FINISH_X, 0.03, 0);
+scene.add(finishStrip);
 
-  // Streak dots
-  for (let i = 0; i < 5; i++) {
-    const d = document.createElement('div');
-    d.className = 'streak-dot';
-    streakBar.appendChild(d);
+// Finish banner arch
+const bannerMat = new THREE.MeshStandardMaterial({ map: checkerTexture(12, 2), roughness: 0.7, side: THREE.DoubleSide });
+const banner = new THREE.Mesh(new THREE.PlaneGeometry(6.8, 0.9), bannerMat);
+banner.position.set(FINISH_X, 4.6, 0);
+banner.rotation.y = Math.PI;
+scene.add(banner);
+const poleMat = new THREE.MeshStandardMaterial({ color: 0xd23b3b, roughness: 0.6 });
+for (const pz of [-3.4, 3.4]) {
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 5, 12), poleMat);
+  pole.position.set(FINISH_X, 2.5, pz); pole.castShadow = true;
+  scene.add(pole);
+}
+
+// Roadside flags
+const flagColors = [0xf6c84a, 0xe63946, 0x4ab0e0, 0x36c46a];
+for (let i = 0; i < 10; i++) {
+  for (const sz of [-4.2, 4.2]) {
+    const px = -12 + i * 2.6;
+    const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 1.6, 8), new THREE.MeshStandardMaterial({ color: 0xffffff }));
+    pole.position.set(px, 0.8, sz);
+    scene.add(pole);
+    const flag = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.4), new THREE.MeshStandardMaterial({ color: flagColors[i % flagColors.length], side: THREE.DoubleSide }));
+    flag.position.set(px + 0.32, 1.4, sz);
+    scene.add(flag);
   }
+}
 
-  // Sound effects via Web Audio API
-  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+// Hills
+const hillMat = new THREE.MeshStandardMaterial({ color: 0x77bb55, roughness: 1 });
+[[-22, -34, 8, -4], [20, -40, 10, -5], [2, -46, 12, -6]].forEach(([x, z, r, y]) => {
+  const h = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), hillMat);
+  h.position.set(x, y, z); scene.add(h);
+});
 
-  function playZoom() {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.6);
-    osc.frequency.exponentialRampToValueAtTime(900, audioCtx.currentTime + 1.2);
-    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-    gain.gain.linearRampToValueAtTime(0.25, audioCtx.currentTime + 0.4);
-    gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-    osc.start();
-    osc.stop(audioCtx.currentTime + 1.5);
+// Clouds
+const clouds = [];
+function makeCloud(x, y, z, s) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 });
+  [[0,0,1.3],[1.1,-0.1,1],[-1.1,-0.1,1],[0.5,0.5,0.9]].forEach(([dx,dy,r]) => {
+    const p = new THREE.Mesh(new THREE.SphereGeometry(r, 12, 10), mat); p.position.set(dx, dy, 0); g.add(p);
+  });
+  g.position.set(x, y, z); g.scale.setScalar(s); scene.add(g); clouds.push(g);
+}
+makeCloud(-12, 9, -22, 1.2); makeCloud(9, 11, -26, 1.5); makeCloud(0, 13, -30, 1.1);
+
+/* ---- Textures ---- */
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath(); ctx.moveTo(x + r, y);
+  ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+  ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+}
+function numberTexture(n) {
+  const S = 256;
+  const cv = document.createElement('canvas'); cv.width = cv.height = S;
+  const ctx = cv.getContext('2d');
+  ctx.fillStyle = 'rgba(33,26,50,0.85)';
+  roundRect(ctx, 18, 74, S - 36, 108, 24); ctx.fill();
+  ctx.lineWidth = 8; ctx.strokeStyle = '#f6c84a'; ctx.stroke();
+  ctx.fillStyle = '#fff';
+  ctx.font = '900 88px ui-rounded, Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(String(n), S / 2, 130);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
+  return t;
+}
+
+/* ---- Cars ---- */
+function buildCar() {
+  const root = new THREE.Group();
+  const bodyMat = new THREE.MeshStandardMaterial({ color: 0xe63946, roughness: 0.45, metalness: 0.25 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.55, 1.2), bodyMat);
+  body.position.y = 0.55; body.castShadow = true; root.add(body);
+  const nose = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.4, 1.15), bodyMat);
+  nose.position.set(1.3, 0.46, 0); nose.castShadow = true; root.add(nose);
+  const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.5, 1.0), new THREE.MeshStandardMaterial({ color: 0x232634, roughness: 0.4 }));
+  cabin.position.set(-0.2, 1.02, 0); cabin.castShadow = true; root.add(cabin);
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.42, 0.9), new THREE.MeshStandardMaterial({ color: 0x9fd4ff, roughness: 0.1 }));
+  glass.position.set(0.32, 1.02, 0); root.add(glass);
+  const fin = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.4, 1.05), new THREE.MeshStandardMaterial({ color: 0x15171f, roughness: 0.6 }));
+  fin.position.set(-1.15, 0.85, 0); root.add(fin);
+  // wheels
+  const wheels = [];
+  const wgeo = new THREE.CylinderGeometry(0.4, 0.4, 0.28, 18);
+  const wmat = new THREE.MeshStandardMaterial({ color: 0x141414, roughness: 0.7 });
+  const hmat = new THREE.MeshStandardMaterial({ color: 0xdddddd, roughness: 0.4, metalness: 0.6 });
+  for (const wx of [-0.8, 0.85]) for (const wz of [-0.62, 0.62]) {
+    const w = new THREE.Group();
+    const tire = new THREE.Mesh(wgeo, wmat); tire.rotation.x = Math.PI / 2; tire.castShadow = true;
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.3, 8), hmat); hub.rotation.x = Math.PI / 2;
+    w.add(tire); w.add(hub); w.position.set(wx, 0.4, wz);
+    root.add(w); wheels.push(w);
   }
+  // number billboard
+  const numMat = new THREE.MeshBasicMaterial({ map: numberTexture(0), transparent: true });
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 2.0), numMat);
+  plaque.position.set(0, 2.5, 0);
+  root.add(plaque);
+  // fuel gauge billboard (shown early rounds)
+  const fuelGroup = new THREE.Group();
+  const fuelBack = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 1.5), new THREE.MeshBasicMaterial({ color: 0x222233 }));
+  const fuelFill = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 1.4), new THREE.MeshBasicMaterial({ color: 0x36c46a }));
+  fuelFill.position.z = 0.01;
+  fuelGroup.add(fuelBack); fuelGroup.add(fuelFill);
+  fuelGroup.position.set(-1.5, 1.9, 0);
+  root.add(fuelGroup);
 
-  function playSuccess() {
-    [0, 0.12, 0.24].forEach((delay, i) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.type = 'sine';
-      osc.frequency.value = [523, 659, 784][i]; // C5, E5, G5
-      gain.gain.setValueAtTime(0, audioCtx.currentTime + delay);
-      gain.gain.linearRampToValueAtTime(0.2, audioCtx.currentTime + delay + 0.05);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + 0.4);
-      osc.start(audioCtx.currentTime + delay);
-      osc.stop(audioCtx.currentTime + delay + 0.4);
-    });
+  root.userData = { bodyMat, wheels, numMat, plaque, fuelGroup, fuelFill };
+  scene.add(root);
+  return root;
+}
+const cars = [buildCar(), buildCar()];
+
+// Dust pool
+const dust = [];
+const dustGeo = new THREE.SphereGeometry(1, 8, 6);
+function spawnDust(x, y, z, n) {
+  for (let i = 0; i < n; i++) {
+    const m = new THREE.Mesh(dustGeo, new THREE.MeshStandardMaterial({ color: 0x9a9a9a, transparent: true, opacity: 0.5, roughness: 1 }));
+    m.scale.setScalar(0.12 + Math.random() * 0.16);
+    m.position.set(x, y + Math.random() * 0.2, z + (Math.random() - 0.5) * 0.8);
+    scene.add(m);
+    dust.push({ m, vx: -2 - Math.random() * 2, vy: 0.5 + Math.random(), life: 1 });
   }
-
-  function playWompWomp() {
-    [0, 0.3].forEach((delay, i) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.type = 'sine';
-      const startFreq = i === 0 ? 311 : 277; // Eb4, Db4
-      osc.frequency.setValueAtTime(startFreq, audioCtx.currentTime + delay);
-      osc.frequency.exponentialRampToValueAtTime(startFreq * 0.85, audioCtx.currentTime + delay + 0.4);
-      gain.gain.setValueAtTime(0.2, audioCtx.currentTime + delay);
-      gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + delay + 0.5);
-      osc.start(audioCtx.currentTime + delay);
-      osc.stop(audioCtx.currentTime + delay + 0.5);
-    });
+}
+function updateDust(dt) {
+  for (let i = dust.length - 1; i >= 0; i--) {
+    const p = dust[i];
+    p.life -= dt * 1.6;
+    if (p.life <= 0) { scene.remove(p.m); p.m.material.dispose(); dust.splice(i, 1); continue; }
+    p.vy -= dt * 3;
+    p.m.position.x += p.vx * dt; p.m.position.y += p.vy * dt;
+    if (p.m.position.y < 0.05) p.m.position.y = 0.05;
+    p.m.material.opacity = p.life * 0.5;
+    p.m.scale.multiplyScalar(1 + dt);
   }
+}
 
-  function checkGate() {
-    const v1 = parseInt(input1.value);
-    const v2 = parseInt(input2.value);
-    const ok1 = v1 === nums[0];
-    const ok2 = v2 === nums[1];
+/* ============================================================
+   HELPERS / DOM LOGIC
+   ============================================================ */
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function getCeiling(b) {
+  if (b <= 10) return 10; if (b <= 20) return 20; if (b <= 50) return 50;
+  if (b <= 100) return 100; if (b <= 200) return 200; if (b <= 500) return 500; return 1000;
+}
+function generateNumbers() {
+  const lv = LEVELS[level];
+  let a, b;
+  do { a = randInt(lv.min, lv.max); b = randInt(lv.min, lv.max); }
+  while (a === b || Math.abs(a - b) < lv.minGap);
+  return [a, b];
+}
+function hexToInt(h) { return parseInt(h.slice(1), 16); }
+function pickColors() {
+  const s = [...CAR_COLORS].sort(() => Math.random() - 0.5);
+  return [s[0], s[1]];
+}
+function updateStreakBar() {
+  const dots = streakBar.querySelectorAll('.streak-dot');
+  const recent = roundHistory.slice(-5);
+  dots.forEach((d, i) => { d.className = 'streak-dot'; if (i < recent.length) d.classList.add(recent[i] ? 'lit' : 'miss'); });
+}
+function confetti() {
+  const colors = ['#f6c84a','#e63946','#06d6a0','#457b9d','#f77f00','#7209b7','#ef476f'];
+  for (let i = 0; i < 40; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + 'vw'; c.style.top = '-10px';
+    c.style.background = colors[Math.random() * colors.length | 0];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    c.style.width = (6 + Math.random() * 8) + 'px'; c.style.height = (6 + Math.random() * 8) + 'px';
+    c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`;
+    c.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 4000);
+  }
+}
 
-    input1.classList.remove('correct', 'wrong');
-    input2.classList.remove('correct', 'wrong');
+/* ============================================================
+   ROUND FLOW
+   ============================================================ */
+function newRound() {
+  phase = 'gate'; locked = false; gateOpen = false;
+  race.active = false; race.done = false; race.winner = -1;
+  resultEl.classList.remove('show');
 
-    if (input1.value !== '') input1.classList.add(ok1 ? 'correct' : 'wrong');
-    if (input2.value !== '') input2.classList.add(ok2 ? 'correct' : 'wrong');
+  nums = generateNumbers();
+  const colors = pickColors();
+  const ceiling = getCeiling(Math.max(nums[0], nums[1]));
+  const showGauge = roundsAtLevel < 2;
 
-    if (ok1 && ok2) {
-      gateOpen = true;
-      numGate.classList.add('hidden');
-      promptEl.classList.remove('hidden');
-      promptEl.style.opacity = '1';
-      car1El.classList.add('clickable');
-      car2El.classList.add('clickable');
+  cars.forEach((car, i) => {
+    car.position.set(START_X, CAR_REST_Y, LANE_Z[i]);
+    car.rotation.set(0, 0, 0);
+    car.userData.bodyMat.color.set(hexToInt(colors[i]));
+    car.userData.numMat.map.dispose();
+    car.userData.numMat.map = numberTexture(nums[i]);
+    car.userData.numMat.needsUpdate = true;
+    // fuel
+    const pct = Math.max(0.06, nums[i] / ceiling);
+    const fill = car.userData.fuelFill;
+    fill.scale.y = pct;
+    fill.position.y = -0.7 + (pct * 1.4) / 2; // anchor to bottom of the gauge
+    fill.position.z = 0.01;
+    fill.material.color.set(pct < 0.4 ? 0xf08a3c : 0x36c46a);
+    car.userData.fuelGroup.visible = showGauge;
+  });
+  roundsAtLevel++;
+
+  document.getElementById('input1').value = '';
+  document.getElementById('input2').value = '';
+  input1.classList.remove('correct', 'wrong');
+  input2.classList.remove('correct', 'wrong');
+  numGate.classList.remove('hidden');
+  promptEl.classList.add('hidden');
+
+  levelBadge.textContent = LEVELS[level].name;
+  setTimeout(() => input1.focus(), 100);
+}
+
+function checkGate() {
+  const v1 = parseInt(input1.value), v2 = parseInt(input2.value);
+  const ok1 = v1 === nums[0], ok2 = v2 === nums[1];
+  input1.classList.remove('correct', 'wrong');
+  input2.classList.remove('correct', 'wrong');
+  if (input1.value !== '') input1.classList.add(ok1 ? 'correct' : 'wrong');
+  if (input2.value !== '') input2.classList.add(ok2 ? 'correct' : 'wrong');
+  if (ok1 && document.activeElement === input1 && !ok2) input2.focus();
+  if (ok1 && ok2) {
+    gateOpen = true; phase = 'choose';
+    numGate.classList.add('hidden');
+    promptEl.classList.remove('hidden');
+  }
+}
+input1.addEventListener('input', checkGate);
+input2.addEventListener('input', checkGate);
+
+// Tap: top half of screen = Top car (lane 0), bottom half = Bottom car (lane 1)
+canvas.addEventListener('pointerdown', (e) => {
+  if (phase !== 'choose' || locked) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const idx = e.clientY < window.innerHeight / 2 ? 0 : 1;
+  startRace(idx);
+});
+
+function startRace(idx) {
+  locked = true;
+  phase = 'racing';
+  promptEl.classList.add('hidden');
+  cars.forEach(c => c.userData.fuelGroup.visible = false);
+
+  const biggerIdx = nums[0] > nums[1] ? 0 : 1;
+  const correct = idx === biggerIdx;
+  race.active = true; race.done = false;
+  race.winner = biggerIdx; // the bigger number always wins the race
+  race.t0 = performance.now();
+  playZoom();
+
+  // scoring
+  if (correct) {
+    score++; streak++;
+    scoreEl.textContent = score;
+    roundHistory.push(true);
+    if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) { level++; roundsAtLevel = 0; }
+  } else {
+    streak = 0;
+    roundHistory.push(false);
+    if (roundHistory.length >= 3) {
+      const wrongs = roundHistory.slice(-3).filter(x => !x).length;
+      if (wrongs >= 2 && level > 0) { level--; roundsAtLevel = 0; }
     }
   }
+  if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+  updateStreakBar();
+  race.correct = correct;
+}
 
-  input1.addEventListener('input', checkGate);
-  input2.addEventListener('input', checkGate);
-
-  function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
-
-  function pickColors() {
-    const s = [...CAR_COLORS].sort(() => Math.random() - 0.5);
-    return [s[0], s[1]];
+function finishRace() {
+  race.done = true;
+  phase = 'result';
+  const winNum = Math.max(nums[0], nums[1]);
+  const loseNum = Math.min(nums[0], nums[1]);
+  const emoji = document.getElementById('result-emoji');
+  const text = document.getElementById('result-text');
+  const explain = document.getElementById('result-explain');
+  if (race.correct) {
+    emoji.textContent = '🏆'; text.textContent = 'You win!'; text.style.color = '#fff';
+    confetti(); playSuccess();
+  } else {
+    emoji.textContent = '😔'; text.textContent = 'Oops!'; text.style.color = '#fff';
+    playWompWomp();
   }
+  explain.textContent = winNum + ' > ' + loseNum;
+  resultEl.classList.add('show');
+  nextRoundAt = performance.now() + (race.correct ? 3400 : 3000);
+}
 
-  function generateNumbers() {
-    const lv = LEVELS[level];
-    let a, b;
-    do {
-      a = randInt(lv.min, lv.max);
-      b = randInt(lv.min, lv.max);
-    } while (a === b || Math.abs(a - b) < lv.minGap);
-    return [a, b];
-  }
+/* ============================================================
+   RENDER LOOP
+   ============================================================ */
+const clock = new THREE.Clock();
+const easeOut = t => 1 - Math.pow(1 - t, 3);
 
-  function getCeiling(biggest) {
-    if (biggest <= 10) return 10;
-    if (biggest <= 20) return 20;
-    if (biggest <= 50) return 50;
-    if (biggest <= 100) return 100;
-    if (biggest <= 200) return 200;
-    if (biggest <= 500) return 500;
-    return 1000;
-  }
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  const aspect = w / h;
+  camera.aspect = aspect;
+  const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+  const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+  const dist = Math.min(60, Math.max(15, Math.max(13.5 / Math.tan(hHalf), 6.0 / Math.tan(vHalf))));
+  camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+  camera.lookAt(camTarget);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
 
-  function updateStreakBar() {
-    // Show last 5 results as a rolling window — always reset all dots first
-    const dots = streakBar.querySelectorAll('.streak-dot');
-    const recent = roundHistory.slice(-5);
-    dots.forEach((d, i) => {
-      d.className = 'streak-dot';
-      if (i < recent.length) {
-        d.classList.add(recent[i] ? 'lit' : 'miss');
-      }
-    });
-  }
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const now = performance.now();
 
-  function confetti() {
-    const colors = ['#f0c040','#e63946','#06d6a0','#457b9d','#f77f00','#7209b7','#ef476f'];
-    for (let i = 0; i < 40; i++) {
-      const c = document.createElement('div');
-      c.className = 'confetti-piece';
-      c.style.left = Math.random() * 100 + 'vw';
-      c.style.top = '-10px';
-      c.style.background = colors[Math.random() * colors.length | 0];
-      c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-      c.style.width = (6 + Math.random() * 8) + 'px';
-      c.style.height = (6 + Math.random() * 8) + 'px';
-      c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`;
-      c.style.animationDelay = Math.random() * 0.5 + 's';
-      document.body.appendChild(c);
-      setTimeout(() => c.remove(), 4000);
+  if (race.active && !race.done) {
+    const el = (now - race.t0) / 1000;
+    for (let i = 0; i < 2; i++) {
+      const isWinner = i === race.winner;
+      const dur = isWinner ? race.durW : race.durL;
+      const target = isWinner ? FINISH_X : LAG_X;
+      const p = Math.min(1, el / dur);
+      cars[i].position.x = START_X + (target - START_X) * easeOut(p);
+      const spin = (1 - p) * 0.9 + 0.1;
+      cars[i].userData.wheels.forEach(w => w.rotation.z -= dt * 26 * spin);
+      // bob
+      cars[i].position.y = CAR_REST_Y + Math.abs(Math.sin(el * 18 + i)) * 0.04 * (1 - p);
+      if (p < 0.85 && Math.random() < dt * 30) spawnDust(cars[i].position.x - 1.3, 0.2, LANE_Z[i], 1);
     }
+    if (el >= race.durW + 0.25) finishRace();
   }
 
-  function newRound() {
-    locked = false;
-    resultEl.classList.remove('show');
-    promptEl.style.opacity = '1';
-
-    car1El.style.transition = 'none';
-    car2El.style.transition = 'none';
-    car1El.style.left = '30px';
-    car2El.style.left = '30px';
-    car1El.className = 'car-wrapper';
-    car2El.className = 'car-wrapper';
-
-    // Reset gate
-    gateOpen = false;
-    input1.value = '';
-    input2.value = '';
-    input1.classList.remove('correct', 'wrong');
-    input2.classList.remove('correct', 'wrong');
-    numGate.classList.remove('hidden');
-    promptEl.classList.add('hidden');
-
-    const [c1, c2] = pickColors();
-    document.getElementById('car1-body').style.background = c1.body;
-    document.getElementById('car1-top').style.background = c1.top;
-    document.getElementById('car2-body').style.background = c2.body;
-    document.getElementById('car2-top').style.background = c2.top;
-
-    nums = generateNumbers();
-    document.getElementById('car1-num').textContent = nums[0];
-    document.getElementById('car2-num').textContent = nums[1];
-
-    // Fuel gauge
-    const ceiling = getCeiling(Math.max(nums[0], nums[1]));
-    const gaugeH = 40; // px inner height
-    const pct1 = nums[0] / ceiling;
-    const pct2 = nums[1] / ceiling;
-
-    const fuel1 = document.getElementById('car1-fuel');
-    const fuel2 = document.getElementById('car2-fuel');
-    fuel1.style.height = Math.max(3, pct1 * gaugeH) + 'px';
-    fuel2.style.height = Math.max(3, pct2 * gaugeH) + 'px';
-    fuel1.className = 'fuel-fill ' + (pct1 < 0.4 ? 'low' : 'high');
-    fuel2.className = 'fuel-fill ' + (pct2 < 0.4 ? 'low' : 'high');
-
-    // Show fuel gauges only for first 2 rounds at each level
-    const showGauge = roundsAtLevel < 2;
-    document.querySelectorAll('.fuel-gauge').forEach(g => g.style.display = showGauge ? '' : 'none');
-    roundsAtLevel++;
-
-    levelBadge.textContent = LEVELS[level].name;
-
-    // Focus first input
-    setTimeout(() => input1.focus(), 100);
-  }
-
-  function showResult(correct, winnerNum, loserNum) {
-    const emoji = document.getElementById('result-emoji');
-    const text = document.getElementById('result-text');
-    const explain = document.getElementById('result-explain');
-
-    if (correct) {
-      emoji.textContent = '🏆';
-      text.textContent = '';
-      text.style.color = '#4ade80';
-    } else {
-      emoji.textContent = '😔';
-      text.textContent = '';
-      text.style.color = '#f87171';
-    }
-    explain.textContent = winnerNum + ' > ' + loserNum;
-    resultEl.classList.add('show');
-  }
-
-  window.pick = function(idx) {
-    if (locked || !gateOpen) return;
-    locked = true;
-    promptEl.style.opacity = '0';
-    car1El.classList.remove('clickable');
-    car2El.classList.remove('clickable');
-
-    const biggerIdx = nums[0] > nums[1] ? 0 : 1;
-    const correct = idx === biggerIdx;
-    const winnerEl = biggerIdx === 0 ? car1El : car2El;
-    const loserEl = biggerIdx === 0 ? car2El : car1El;
-
-    const road = document.getElementById('road');
-    const roadWidth = road.offsetWidth;
-
-    // Resume audio context on user interaction (mobile requirement)
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    playZoom();
-
-    requestAnimationFrame(() => {
-      winnerEl.style.transition = 'left 1.8s cubic-bezier(0.2, 0.8, 0.3, 1)';
-      loserEl.style.transition = 'left 2.5s cubic-bezier(0.1, 0.3, 0.5, 1)';
-      winnerEl.classList.add('winner');
-      loserEl.classList.add('loser');
-      winnerEl.style.left = (roadWidth - 140) + 'px';
-      loserEl.style.left = (roadWidth * 0.4) + 'px';
-    });
-
-    if (correct) {
-      score++; streak++;
-      if (streak > maxStreak) maxStreak = streak;
-      scoreEl.textContent = score;
-      roundHistory.push(true);
-      if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) { level++; roundsAtLevel = 0; }
-    } else {
-      streak = 0;
-      roundHistory.push(false);
-      if (roundHistory.length >= 3) {
-        const wrongs = roundHistory.slice(-3).filter(x => !x).length;
-        if (wrongs >= 2 && level > 0) { level--; roundsAtLevel = 0; }
-      }
-    }
-
-    // Reset the 5-dot display every 5 rounds so it cycles fresh
-    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
-    updateStreakBar();
-
-    const winNum = nums[biggerIdx], loseNum = nums[1 - biggerIdx];
-    setTimeout(() => {
-      showResult(correct, winNum, loseNum);
-      if (correct) { confetti(); playSuccess(); }
-      else { playWompWomp(); }
-    }, 1200);
-    setTimeout(newRound, correct ? 3500 : 3000);
-  };
-
-  // Level picker
-  const pickerEl = document.getElementById('level-picker');
-
-  function buildLevelPicker() {
-    pickerEl.innerHTML = '';
-    LEVELS.forEach((lv, i) => {
-      const opt = document.createElement('div');
-      opt.className = 'level-option' + (i === level ? ' active' : '');
-      opt.innerHTML = '<span>' + lv.name + '</span><span class="level-range">' + lv.min + '–' + lv.max + '</span>';
-      opt.onclick = function(e) {
-        e.stopPropagation();
-        level = i;
-        streak = 0;
-        roundHistory = [];
-        roundsAtLevel = 0;
-        updateStreakBar();
-        pickerEl.classList.remove('open');
-        newRound();
-      };
-      pickerEl.appendChild(opt);
-    });
-  }
-
-  window.toggleLevelPicker = function() {
-    buildLevelPicker();
-    pickerEl.classList.toggle('open');
-  };
-
-  // Close picker when clicking elsewhere
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) {
-      pickerEl.classList.remove('open');
-    }
+  // idle wheel shimmer + number billboards face camera
+  cars.forEach(c => {
+    c.userData.plaque.lookAt(camera.position.x, c.userData.plaque.getWorldPosition(new THREE.Vector3()).y, camera.position.z);
+    c.userData.fuelGroup.lookAt(camera.position.x, c.userData.fuelGroup.getWorldPosition(new THREE.Vector3()).y, camera.position.z);
   });
 
-  newRound();
-})();
+  for (const cl of clouds) { cl.position.x += dt * 0.3; if (cl.position.x > 24) cl.position.x = -24; }
+  updateDust(dt);
+
+  if (phase === 'result' && now >= nextRoundAt) newRound();
+
+  renderer.render(scene, camera);
+}
+
+/* ============================================================
+   LEVEL PICKER
+   ============================================================ */
+window.toggleLevelPicker = function () {
+  const pickerEl = document.getElementById('level-picker');
+  if (pickerEl.classList.contains('open')) { pickerEl.classList.remove('open'); return; }
+  pickerEl.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const opt = document.createElement('div');
+    opt.className = 'level-option' + (i === level ? ' active' : '');
+    opt.innerHTML = '<span>' + lv.name + '</span><span class="level-range">' + lv.min + '–' + lv.max + '</span>';
+    opt.onclick = function (e) {
+      e.stopPropagation();
+      level = i; streak = 0; roundHistory = []; roundsAtLevel = 0;
+      updateStreakBar(); pickerEl.classList.remove('open'); newRound();
+    };
+    pickerEl.appendChild(opt);
+  });
+  pickerEl.classList.add('open');
+};
+document.addEventListener('click', function (e) {
+  if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) {
+    document.getElementById('level-picker').classList.remove('open');
+  }
+});
+
+// Start
+newRound();
+animate();
 </script>
 </body>
 </html>

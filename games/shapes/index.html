@@ -1,911 +1,403 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-        <meta name="theme-color" content="#c1d7b8">
-        <meta name="application-name" content="mama.dev games">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-title" content="mama.dev games">
-        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-        <meta name="mobile-web-app-capable" content="yes">
-        <link rel="manifest" href="/games/manifest.webmanifest">
-        <link rel="icon" href="/games/icons/games-icon.svg" type="image/svg+xml">
-        <link rel="icon" href="/games/icons/favicon-32.png" sizes="32x32" type="image/png">
-        <link rel="apple-touch-icon" href="/games/icons/apple-touch-icon.png">
-        <script src="/games/app.js" defer></script>
-        <title>Fun with Shapes | 2D Shapes</title>
-        <style>
-            :root {
-                --primary: #b86c53;
-                --secondary: #689e95;
-                --accent: #d19c4c;
-                --dark: #4a3a35;
-                --light: #e6f0e1;
-                --bg-bottom: #c1d7b8;
-                --hill-wash: rgba(143, 169, 132, 0.46);
-                --surface: #fdfcf8;
-                --surface-shadow: #e0dacb;
-                --purple: #8e74a8;
-                --orange: #d19c4c;
-                --teal: #689e95;
-                --green: #8fa984;
-                --pink: #d98abb;
-                --blue: #83b6c8;
-                --card-bg: var(--surface);
-                --muted: #725f55;
-                --soft-shadow: rgba(74, 58, 53, 0.12);
-            }
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#bde9ff">
+<meta name="application-name" content="mama.dev games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="mama.dev games">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/games/manifest.webmanifest">
+<link rel="icon" href="/games/icons/games-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/games/icons/apple-touch-icon.png">
+<script src="/games/app.js" defer></script>
+<title>Fun with Shapes</title>
+<style>
+  :root {
+    --ink: #4a3a35;
+    --muted: #6e5b40;
+    --panel: #fffdf4;
+    --panel-strong: #ffe9bd;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
+    background: linear-gradient(#bde9ff 0 56%, #93d870 56% 100%);
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none; user-select: none;
+  }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
 
-            @media (prefers-color-scheme: dark) {
-                :root {
-                    --primary: #c78b66;
-                    --secondary: #8fb1a3;
-                    --accent: #e0b866;
-                    --dark: #f6ead6;
-                    --light: #161d16;
-                    --bg-bottom: #24311f;
-                    --hill-wash: rgba(53, 74, 44, 0.55);
-                    --surface: #24311f;
-                    --surface-shadow: #4d563f;
-                    --purple: #b8a0cc;
-                    --orange: #e0b866;
-                    --teal: #8fb1a3;
-                    --green: #a8c69d;
-                    --pink: #d99abd;
-                    --blue: #9cc6d1;
-                    --card-bg: #f4ead6;
-                    --muted: #ead6b6;
-                    --soft-shadow: rgba(0, 0, 0, 0.34);
-                }
-            }
+  .ui {
+    position: fixed; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none;
+    padding: max(46px, calc(env(safe-area-inset-top) + 8px)) max(14px, env(safe-area-inset-right)) max(20px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .ui > * { pointer-events: auto; }
 
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                font-family: 'Arial Rounded MT Bold', 'Helvetica Rounded', Arial, sans-serif;
-            }
+  .topbar { display: flex; justify-content: center; }
+  .title-pill {
+    padding: 8px 22px;
+    background: rgba(255, 253, 244, 0.9);
+    border: 3px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(74, 58, 53, 0.18);
+    font-size: clamp(1.1rem, 3.6vw, 1.5rem);
+    font-weight: 1000;
+  }
 
-            body {
-                background:
-                    radial-gradient(circle at 50% 110%, var(--hill-wash) 0 34%, transparent 35%),
-                    linear-gradient(to bottom, var(--light), var(--bg-bottom));
-                color: var(--dark);
-                min-height: 100vh;
-                display: flex;
-                flex-direction: column;
-                transition: background-color 0.3s, color 0.3s;
-            }
+  .dock {
+    display: flex; flex-direction: column; align-items: center; gap: 14px;
+  }
 
-            header {
-                background-color: var(--surface);
-                color: var(--dark);
-                padding: 1.5rem;
-                text-align: center;
-                box-shadow: 0 10px 0 var(--surface-shadow), 0 18px 34px var(--soft-shadow);
-                transition: background-color 0.3s;
-            }
+  .name-plate {
+    display: flex; align-items: center; gap: 12px;
+    min-height: 64px;
+    padding: 10px 26px;
+    background: var(--panel-strong);
+    border: 4px solid var(--ink);
+    border-radius: 999px;
+    box-shadow: 0 7px 0 rgba(74, 58, 53, 0.2);
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    font-weight: 1000;
+  }
+  .name-plate .speaker { font-size: 1.5rem; line-height: 1; }
 
-            nav {
-                background-color: var(--secondary);
-                display: flex;
-                justify-content: center;
-                transition: background-color 0.3s;
-            }
+  .nav-row { display: flex; align-items: center; gap: 18px; }
 
-            nav a {
-                color: var(--surface);
-                text-decoration: none;
-                padding: 1rem 2rem;
-                font-weight: bold;
-                transition: all 0.3s;
-            }
+  .nav-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: clamp(60px, 15vw, 78px);
+    height: clamp(60px, 15vw, 78px);
+    border: 4px solid var(--ink);
+    border-radius: 50%;
+    background: var(--panel);
+    color: var(--ink);
+    font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 6px 0 rgba(74, 58, 53, 0.2);
+    transition: transform 70ms ease, box-shadow 70ms ease;
+  }
+  .nav-btn:active { transform: translateY(5px); box-shadow: 0 1px 0 rgba(74, 58, 53, 0.2); }
+  .nav-btn svg { width: 46%; height: 46%; stroke: var(--ink); stroke-width: 3.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 
-            nav a.active {
-                background-color: var(--accent);
-                color: var(--dark);
-            }
+  .dots { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; max-width: 280px; }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: rgba(74, 58, 53, 0.25); }
+  .dot.on { background: var(--ink); transform: scale(1.25); }
 
-            nav a:hover {
-                background-color: var(--accent);
-                color: var(--dark);
-                transform: translateY(-3px);
-            }
+  .sparkle { position: fixed; z-index: 4; font-size: 1.8rem; pointer-events: none; animation: sparkleFloat 1.1s ease-out forwards; }
+  @keyframes sparkleFloat {
+    0% { opacity: 0.95; transform: translate(-50%, 0) scale(0.5) rotate(0deg); }
+    100% { opacity: 0; transform: translate(-50%, -120px) scale(1.1) rotate(120deg); }
+  }
 
-            main {
-                flex: 1;
-                padding: 2rem;
-                max-width: 1200px;
-                margin: 0 auto;
-            }
+  footer {
+    position: fixed; bottom: 4px; right: 10px; z-index: 3;
+    font-size: 0.72rem; color: var(--muted); opacity: 0.8;
+  }
+  footer a { color: inherit; }
 
-            h1,
-            h2 {
-                margin-bottom: 1rem;
-                text-align: center;
-            }
-
-            p {
-                text-align: center;
-                margin-bottom: 2rem;
-            }
-
-            .shapes-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 2rem;
-            }
-
-            .shape-container {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                cursor: pointer;
-                transition: all 0.3s;
-                padding: 1.5rem;
-                background-color: var(--card-bg);
-                border: 3px solid rgba(74, 58, 53, 0.12);
-                border-radius: 28px;
-                box-shadow: 0 12px 0 var(--surface-shadow), 0 22px 36px var(--soft-shadow);
-                height: 250px;
-            }
-
-            @media (prefers-color-scheme: dark) {
-                .shape-container {
-                    border-color: rgba(48, 36, 27, 0.18);
-                    color: #30241b;
-                }
-            }
-
-            .shape-container:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 6px 0 var(--surface-shadow), 0 14px 26px var(--soft-shadow);
-            }
-
-            @media (prefers-color-scheme: dark) {
-                .shape-container:hover {
-                    box-shadow: 0 6px 0 var(--surface-shadow), 0 14px 26px var(--soft-shadow);
-                }
-            }
-
-            .shape {
-                width: 120px;
-                height: 120px;
-                margin-bottom: 1.5rem;
-                transition: all 0.3s;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-            }
-
-            .shape-name {
-                font-weight: bold;
-                font-size: 1.2rem;
-                min-height: 1.5rem;
-                text-align: center;
-                color: #4a3a35;
-            }
-
-            /* 2D Shapes with improved colors and gradients */
-            .circle {
-                background: radial-gradient(circle at 30% 30%, #d98abb, var(--primary));
-                border-radius: 50%;
-            }
-
-            .square {
-                background: linear-gradient(135deg, var(--purple), #b8a0cc);
-            }
-
-            .rectangle {
-                background: linear-gradient(135deg, var(--blue), #d7ecea);
-                width: 140px;
-                height: 80px;
-            }
-
-            .triangle {
-                width: 120px;
-                height: 120px;
-                background: linear-gradient(to top, var(--teal), #d7ecea);
-                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            }
-
-            .pentagon {
-                width: 120px;
-                height: 120px;
-                background: linear-gradient(135deg, var(--orange), #f3d689);
-                clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-            }
-
-            .hexagon {
-                width: 120px;
-                height: 104px;
-                background: linear-gradient(135deg, var(--green), #c1d7b8);
-                clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-            }
-
-            .star {
-                width: 120px;
-                height: 120px;
-                background: linear-gradient(135deg, var(--pink), #efbfd9);
-                clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-            }
-
-            .oval {
-                width: 140px;
-                height: 80px;
-                background: linear-gradient(135deg, var(--accent), #f3d689);
-                border-radius: 50%;
-            }
-
-            .trapezoid {
-                width: 120px;
-                height: 80px;
-                background: linear-gradient(135deg, var(--blue), #d7ecea);
-                clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-            }
-
-            .parallelogram {
-                width: 120px;
-                height: 80px;
-                background: linear-gradient(135deg, var(--purple), #b8a0cc);
-                transform: skew(-20deg);
-            }
-
-            .diamond {
-                width: 80px;
-                height: 120px;
-                background: linear-gradient(135deg, var(--primary), #d98abb);
-                transform: rotate(45deg);
-            }
-
-            .heart {
-                width: 120px;
-                height: 110px;
-                background: transparent;
-                position: relative;
-                margin-top: 10px;
-            }
-
-            .heart::after,
-            .heart::before {
-                content: "";
-                position: absolute;
-                top: 0;
-                width: 60px;
-                height: 90px;
-                background: linear-gradient(135deg, var(--pink), #efbfd9);
-                border-radius: 60px 60px 0 0;
-            }
-
-            .heart::before {
-                left: 60px;
-                transform: rotate(-45deg);
-                transform-origin: 0 100%;
-            }
-
-            .heart::after {
-                left: 0;
-                transform: rotate(45deg);
-                transform-origin: 100% 100%;
-            }
-
-            @keyframes pop {
-                0% {
-                    transform: scale(1);
-                }
-                50% {
-                    transform: scale(1.2);
-                }
-                100% {
-                    transform: scale(1);
-                }
-            }
-
-            @keyframes glow {
-                0% {
-                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-                }
-                50% {
-                    box-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px var(--accent);
-                }
-                100% {
-                    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
-                }
-            }
-
-            @media (prefers-color-scheme: dark) {
-                @keyframes glow {
-                    0% {
-                        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-                    }
-                    50% {
-                        box-shadow: 0 0 20px var(--accent), 0 0 30px var(--primary);
-                    }
-                    100% {
-                        box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-                    }
-                }
-            }
-
-            .pop {
-                animation: pop 0.3s ease;
-            }
-
-            .glow {
-                animation: glow 1.5s ease infinite;
-            }
-
-            @media (max-width: 768px) {
-                .shapes-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                    gap: 1.5rem;
-                }
-
-                .shape-container {
-                    padding: 1rem;
-                    height: 200px;
-                }
-
-                .shape {
-                    width: 80px;
-                    height: 80px;
-                }
-
-                .rectangle {
-                    width: 100px;
-                    height: 60px;
-                }
-
-                .oval {
-                    width: 100px;
-                    height: 60px;
-                }
-
-                .heart::after,
-                .heart::before {
-                    width: 40px;
-                    height: 60px;
-                }
-
-                .heart::before {
-                    left: 40px;
-                }
-            }
-        </style>
-        <!-- Privacy-friendly analytics by Plausible -->
+  @media (prefers-reduced-motion: reduce) { .sparkle { animation-duration: 0.01ms; } }
+</style>
+    <!-- Privacy-friendly analytics by Plausible -->
     <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
     <script>
      window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
      plausible.init()
     </script>
 <link rel="stylesheet" href="/assets/mama-home-tab.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
 </head>
-    <body>
+<body>
 <a class="mama-home-tab" href="/games/" aria-label="Back to games"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>games</span></a>
-        <header>
-            <h1>Fun with Shapes</h1>
-        </header>
 
-        <nav>
-            <a href="index.html" class="active">2D Shapes</a>
-            <a href="3d-shapes.html">3D Shapes</a>
-        </nav>
-
-        <main>
-            <h2>2D Shapes Gallery</h2>
-            <p>Click on any shape to see its name! Have fun exploring these two-dimensional wonders.</p>
-
-            <div class="shapes-grid">
-                <div class="shape-container" onclick="showShapeName(this, 'Circle')">
-                    <div class="shape circle"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Square')">
-                    <div class="shape square"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Rectangle')">
-                    <div class="shape rectangle"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Triangle')">
-                    <div class="shape triangle"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Pentagon')">
-                    <div class="shape pentagon"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Hexagon')">
-                    <div class="shape hexagon"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Star')">
-                    <div class="shape star"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Oval')">
-                    <div class="shape oval"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Trapezoid')">
-                    <div class="shape trapezoid"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Parallelogram')">
-                    <div class="shape parallelogram"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Diamond')">
-                    <div class="shape diamond"></div>
-                    <div class="shape-name"></div>
-                </div>
-
-                <div class="shape-container" onclick="showShapeName(this, 'Heart')">
-                    <div class="shape heart"></div>
-                    <div class="shape-name"></div>
-                </div>
-            </div>
-        </main>
-
-        <script>
-            function showShapeName(container, name) {
-                const shapeElement = container.querySelector('.shape');
-                const nameElement = container.querySelector('.shape-name');
-
-                // Add pop animation
-                shapeElement
-                    .classList
-                    .remove('pop');
-                void shapeElement.offsetWidth; // Trigger reflow
-                shapeElement
-                    .classList
-                    .add('pop');
-
-                // Toggle glow effect
-                shapeElement
-                    .classList
-                    .toggle('glow');
-
-                // Display the name
-                nameElement.textContent = name;
-            }
-        </script>
-        <!-- Add this script at the end of both HTML files, just before the closing </body> tag -->
-        <script>
-            // Konami Code Easter Egg - Shape Party Mode
-            (function () {
-                // Konami Code sequence
-                const konamiCode = [
-                    'ArrowUp',
-                    'ArrowUp',
-                    'ArrowDown',
-                    'ArrowDown',
-                    'ArrowLeft',
-                    'ArrowRight',
-                    'ArrowLeft',
-                    'ArrowRight',
-                    'b',
-                    'a'
-                ];
-                let konamiIndex = 0;
-
-                // Audio element for optional gentle music
-                const partyMusic = new Audio();
-                partyMusic.src = 'https://soundbible.com/mp3/toy-music-box-happy-birthday-to-you-165723.mp3'; // Placeholder URL
-                partyMusic.volume = 0.3; // Quieter volume by default
-
-                // Track if party mode is active
-                let partyModeActive = false;
-
-                // Store original shape properties
-                const originalShapeProperties = new Map();
-
-                // Listen for keydown events to detect Konami code
-                document.addEventListener('keydown', function (e) {
-                    // Get the key that was pressed
-                    const key = e
-                        .key
-                        .toLowerCase();
-
-                    // Check if the key matches the expected key in the sequence
-                    const expectedKey = konamiCode[konamiIndex].toLowerCase();
-
-                    if (key === expectedKey) {
-                        // Move to the next key in the sequence
-                        konamiIndex++;
-
-                        // If the entire sequence has been entered correctly
-                        if (konamiIndex === konamiCode.length) {
-                            // Reset the index
-                            konamiIndex = 0;
-
-                            // Start the party if not already active
-                            if (!partyModeActive) {
-                                startShapeParty();
-                            }
-                        }
-                    } else {
-                        // Reset if the wrong key is pressed
-                        konamiIndex = 0;
-                    }
-                });
-
-                // Function to start the shape party
-                function startShapeParty() {
-                    if (partyModeActive) 
-                        return;
-                    partyModeActive = true;
-
-                    // Store original body background color
-                    const originalBodyBackground = document.body.style.backgroundColor || getComputedStyle(document.body).backgroundColor;
-                    originalShapeProperties.set('body', {backgroundColor: originalBodyBackground});
-
-                    // Create and show the party banner
-                    const banner = document.createElement('div');
-                    banner.innerHTML = `
-        <div style="position: fixed; top: 10px; left: 0; right: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center;">
-          <div style="background-color: rgba(255, 255, 255, 0.9); padding: 10px 20px; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-            <h3 style="margin: 0; color: #4b4b4b; font-size: 1.5rem;">Shape Dance Party!</h3>
-          </div>
-          <button id="end-party-button" style="margin-top: 10px; padding: 8px 16px; background-color: #ff6b6b; color: white; border: none; border-radius: 20px; cursor: pointer; font-size: 1rem; font-weight: bold;">End Party</button>
-          <div id="party-countdown" style="width: 50px; height: 50px; margin-top: 10px; position: relative;">
-            <svg width="50" height="50" viewBox="0 0 50 50">
-              <circle cx="25" cy="25" r="20" fill="none" stroke="#dddddd" stroke-width="5"></circle>
-              <circle id="countdown-circle" cx="25" cy="25" r="20" fill="none" stroke="#ff6b6b" stroke-width="5" stroke-dasharray="125.6" stroke-dashoffset="0" transform="rotate(-90, 25, 25)"></circle>
-            </svg>
-            <span id="countdown-number" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.2rem; color: #4b4b4b;">15</span>
-          </div>
-          <button id="mute-button" style="margin-top: 10px; padding: 5px 10px; background-color: #689e95; color: #fdfcf8; border: none; border-radius: 10px; cursor: pointer; font-size: 0.8rem;">Mute Music</button>
-        </div>
-      `;
-                    document
-                        .body
-                        .appendChild(banner);
-
-                    // Change background color gently
-                    document.body.style.transition = 'background-color 2s ease';
-                    document.body.style.backgroundColor = '#e6f7ff'; // Soft light blue
-
-                    // Play gentle music
-                    partyMusic.play();
-
-                    // Set up mute button
-                    const muteButton = document.getElementById('mute-button');
-                    muteButton.addEventListener('click', function (e) {
-                        e.stopPropagation(); // Prevent this click from ending the party
-
-                        if (partyMusic.muted) {
-                            partyMusic.muted = false;
-                            muteButton.textContent = 'Mute Music';
-                        } else {
-                            partyMusic.muted = true;
-                            muteButton.textContent = 'Unmute Music';
-                        }
-                    });
-
-                    // Set up end party button
-                    const endButton = document.getElementById('end-party-button');
-                    endButton.addEventListener('click', function (e) {
-                        e.stopPropagation(); // Prevent this click from ending the party twice
-                        endShapeParty();
-                    });
-
-                    // Animate 2D shapes if they exist
-                    document
-                        .querySelectorAll('.shape')
-                        .forEach((shape, index) => {
-                            // Store original styles to restore later
-                            const computedStyle = getComputedStyle(shape);
-                            originalShapeProperties.set(index, {
-                                transition: shape.style.transition || computedStyle.transition,
-                                transform: shape.style.transform || computedStyle.transform,
-                                background: shape.style.background || computedStyle.background,
-                                backgroundColor: shape.style.backgroundColor || computedStyle.backgroundColor,
-                                backgroundImage: shape.style.backgroundImage || computedStyle.backgroundImage
-                            });
-
-                            // Apply gentle animation based on shape class
-                            shape.style.transition = 'all 1.5s ease-in-out';
-
-                            if (shape.classList.contains('circle')) {
-                                // Breathing animation for circles
-                                shape.animate([
-                                    {
-                                        transform: 'scale(1)'
-                                    }, {
-                                        transform: 'scale(1.15)'
-                                    }, {
-                                        transform: 'scale(1)'
-                                    }
-                                ], {
-                                    duration: 3000,
-                                    iterations: 5
-                                });
-                                // Soft color transition
-                                animateGradientColor(shape, 'radial-gradient', index);
-                            } else if (shape.classList.contains('square')) {
-                                // Gentle rotation for squares
-                                shape.animate([
-                                    {
-                                        transform: 'rotate(0deg)'
-                                    }, {
-                                        transform: 'rotate(45deg)'
-                                    }, {
-                                        transform: 'rotate(0deg)'
-                                    }, {
-                                        transform: 'rotate(-45deg)'
-                                    }, {
-                                        transform: 'rotate(0deg)'
-                                    }
-                                ], {
-                                    duration: 4000,
-                                    iterations: 4
-                                });
-                                animateGradientColor(shape, 'linear-gradient', index);
-                            } else if (shape.classList.contains('rectangle')) {
-                                // Gentle swaying for rectangles
-                                shape.animate([
-                                    {
-                                        transform: 'rotate(0deg)'
-                                    }, {
-                                        transform: 'rotate(15deg)'
-                                    }, {
-                                        transform: 'rotate(0deg)'
-                                    }, {
-                                        transform: 'rotate(-15deg)'
-                                    }, {
-                                        transform: 'rotate(0deg)'
-                                    }
-                                ], {
-                                    duration: 4000,
-                                    iterations: 4
-                                });
-                                animateGradientColor(shape, 'linear-gradient', index);
-                            } else if (shape.classList.contains('triangle')) {
-                                // Bobbing animation for triangles
-                                shape.animate([
-                                    {
-                                        transform: 'translateY(0)'
-                                    }, {
-                                        transform: 'translateY(-10px)'
-                                    }, {
-                                        transform: 'translateY(0)'
-                                    }
-                                ], {
-                                    duration: 2000,
-                                    iterations: 7
-                                });
-                                animateGradientColor(shape, 'linear-gradient', index);
-                            } else {
-                                // Generic animation for other shapes
-                                shape.animate([
-                                    {
-                                        transform: 'scale(1)'
-                                    }, {
-                                        transform: 'scale(1.1) rotate(5deg)'
-                                    }, {
-                                        transform: 'scale(1) rotate(0deg)'
-                                    }
-                                ], {
-                                    duration: 3000,
-                                    iterations: 5
-                                });
-                                animateGradientColor(shape, 'linear-gradient', index);
-                            }
-                        });
-
-                    // Animate 3D shapes if they exist - for the 3D shapes page
-                    if (typeof THREE !== 'undefined' && Object.keys(scenes).length > 0) {
-                        Object
-                            .keys(scenes)
-                            .forEach(shapeName => {
-                                // Start the animation for this shape
-                                animations[shapeName] = true;
-
-                                // Enhance the rotation to be more noticeable but still gentle
-                                const axes = rotationAxes[shapeName];
-
-                                // Store the original values to restore later
-                                originalShapeProperties.set(shapeName + '_3d', {
-                                    x: axes.x,
-                                    y: axes.y,
-                                    z: axes.z || 0
-                                });
-
-                                // Temporarily increase rotation speed
-                                axes.x *= 1.5;
-                                axes.y *= 1.5;
-                                axes.z = axes.z || 0.01; // Ensure there's some z rotation for interest
-                            });
-                    }
-
-                    // Set up countdown
-                    const countdownNumber = document.getElementById('countdown-number');
-                    const countdownCircle = document.getElementById('countdown-circle');
-                    const circlePath = 2 * Math.PI * 20; // 2πr where r=20
-                    countdownCircle.style.strokeDasharray = circlePath;
-
-                    let secondsLeft = 15;
-                    const countdownInterval = setInterval(() => {
-                        secondsLeft--;
-                        countdownNumber.textContent = secondsLeft;
-
-                        // Update the circle progress
-                        const remainingFraction = secondsLeft / 15;
-                        countdownCircle.style.strokeDashoffset = circlePath * (1 - remainingFraction);
-
-                        if (secondsLeft <= 0) {
-                            clearInterval(countdownInterval);
-                            endShapeParty();
-                        }
-                    }, 1000);
-
-                    // Allow clicking anywhere to end
-                    document.addEventListener('click', documentClickHandler);
-
-                    // Helper function to animate gradient colors
-                    function animateGradientColor(element, gradientType, index) {
-                        // Pastel color sets for animation
-                        const pastelColors = [
-                            {
-                                start: '#FFD3E8',
-                                end: '#FFA8C5'
-                            }, { // Soft pink
-                                start: '#D3F8FF',
-                                end: '#A8E6FF'
-                            }, { // Soft blue
-                                start: '#DDFFD3',
-                                end: '#C2FFA8'
-                            }, { // Soft green
-                                start: '#FFE8D3',
-                                end: '#FFCCA8'
-                            }, { // Soft orange
-                                start: '#F0D3FF',
-                                end: '#E2A8FF'
-                            } // Soft purple
-                        ];
-
-                        let colorIndex = 0;
-
-                        // Animate through colors
-                        const colorInterval = setInterval(() => {
-                            const color = pastelColors[colorIndex];
-
-                            if (gradientType === 'radial-gradient') {
-                                element.style.background = `radial-gradient(circle at 30% 30%, ${color.start}, ${color.end})`;
-                            } else {
-                                element.style.background = `linear-gradient(135deg, ${color.start}, ${color.end})`;
-                            }
-
-                            colorIndex = (colorIndex + 1) % pastelColors.length;
-                        }, 3000);
-
-                        // Store the interval ID with the element to clear it later
-                        element.setAttribute('data-color-interval', colorInterval);
-                    }
-                }
-
-                // Handler for clicking document to end party
-                function documentClickHandler(e) {
-                    // Ignore clicks on the mute button or end party button (they have their own handlers)
-                    if (e.target.id === 'mute-button' || e.target.id === 'end-party-button') {
-                        return;
-                    }
-
-                    endShapeParty();
-                }
-
-                // Function to end the party
-                function endShapeParty() {
-                    // Remove event listener
-                    document.removeEventListener('click', documentClickHandler);
-
-                    // Stop music
-                    partyMusic.pause();
-                    partyMusic.currentTime = 0;
-
-                    // Remove banner
-                    const banner = document.querySelector('body > div:last-child');
-                    if (banner) {
-                        document
-                            .body
-                            .removeChild(banner);
-                    }
-
-                    // Reset background color of body
-                    const bodyProps = originalShapeProperties.get('body');
-                    if (bodyProps) {
-                        document.body.style.backgroundColor = bodyProps.backgroundColor;
-                    }
-
-                    // Reset 2D shape animations and restore original styles
-                    document
-                        .querySelectorAll('.shape')
-                        .forEach((shape, index) => {
-                            // Stop any running animations
-                            const animations = shape.getAnimations();
-                            animations.forEach(animation => animation.cancel());
-
-                            // Clear color interval
-                            const colorInterval = shape.getAttribute('data-color-interval');
-                            if (colorInterval) {
-                                clearInterval(parseInt(colorInterval));
-                                shape.removeAttribute('data-color-interval');
-                            }
-
-                            // Restore original styles
-                            const originalProps = originalShapeProperties.get(index);
-                            if (originalProps) {
-                                shape.style.transition = originalProps.transition;
-                                shape.style.transform = originalProps.transform;
-
-                                // Check which background property was originally set and restore it
-                                if (originalProps.background && originalProps.background !== 'none') {
-                                    shape.style.background = originalProps.background;
-                                } else if (originalProps.backgroundColor && originalProps.backgroundColor !== 'rgba(0, 0, 0, 0)') {
-                                    shape.style.backgroundColor = originalProps.backgroundColor;
-                                } else if (originalProps.backgroundImage && originalProps.backgroundImage !== 'none') {
-                                    shape.style.backgroundImage = originalProps.backgroundImage;
-                                } else {
-                                    // As a fallback, clear the background
-                                    shape.style.background = '';
-                                    shape.style.backgroundColor = '';
-                                    shape.style.backgroundImage = '';
-                                }
-                            }
-                        });
-
-                    // Reset 3D shape animations if they exist
-                    if (typeof THREE !== 'undefined' && Object.keys(scenes).length > 0) {
-                        Object
-                            .keys(scenes)
-                            .forEach(shapeName => {
-                                // Restore original rotation speeds
-                                const originalProps = originalShapeProperties.get(shapeName + '_3d');
-                                if (originalProps) {
-                                    rotationAxes[shapeName].x = originalProps.x;
-                                    rotationAxes[shapeName].y = originalProps.y;
-                                    rotationAxes[shapeName].z = originalProps.z;
-                                }
-                            });
-                    }
-
-                    // Clear the originalShapeProperties map
-                    originalShapeProperties.clear();
-
-                    // Show completion message
-                    const completionMsg = document.createElement('div');
-                    completionMsg.innerHTML = `
-        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); z-index: 1000; text-align: center;">
-          <h3 style="margin-top: 0; color: #4b4b4b;">Thank you for dancing with the shapes!</h3>
-          <p style="margin-bottom: 0; color: #4b4b4b;">They had fun!</p>
-        </div>
-      `;
-                    document
-                        .body
-                        .appendChild(completionMsg);
-
-                    // Remove completion message after 3 seconds
-                    setTimeout(() => {
-                        document
-                            .body
-                            .removeChild(completionMsg);
-                        partyModeActive = false;
-                    }, 3000);
-                }
-            })();
-        </script>
-    </body>
+<canvas id="scene"></canvas>
+
+<div class="ui">
+  <div class="topbar"><div class="title-pill">Fun with Shapes</div></div>
+  <div class="dock">
+    <div class="name-plate"><span id="shape-name">Circle</span><span class="speaker" id="speakBtn" role="button" aria-label="Say the name">🔊</span></div>
+    <div class="dots" id="dots"></div>
+    <div class="nav-row">
+      <button class="nav-btn" id="prevBtn" aria-label="Previous shape"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button class="nav-btn" id="nextBtn" aria-label="Next shape"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<footer>Made with care by <a href="https://x.com/madebydia" target="_blank" rel="noopener">@madebydia</a></footer>
+
+<script type="module">
+import * as THREE from 'three';
+
+const PALETTE = ['#cf7b5e', '#e0ad5a', '#6faea3', '#9b81b5', '#e09ac6', '#83b6c8', '#9bbf7e', '#e07a64'];
+
+/* ============================================================
+   SHAPE GEOMETRY BUILDERS
+   ============================================================ */
+function polygonShape(n, r, rot = -Math.PI / 2) {
+  const s = new THREE.Shape();
+  for (let i = 0; i <= n; i++) {
+    const a = rot + (i / n) * Math.PI * 2;
+    const x = Math.cos(a) * r, y = Math.sin(a) * r;
+    if (i === 0) s.moveTo(x, y); else s.lineTo(x, y);
+  }
+  return s;
+}
+function starShape(points, outer, inner) {
+  const s = new THREE.Shape();
+  for (let i = 0; i <= points * 2; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = -Math.PI / 2 + (i / (points * 2)) * Math.PI * 2;
+    const x = Math.cos(a) * r, y = Math.sin(a) * r;
+    if (i === 0) s.moveTo(x, y); else s.lineTo(x, y);
+  }
+  return s;
+}
+function heartShape() {
+  const s = new THREE.Shape();
+  const x = 0, y = 0;
+  s.moveTo(x, y + 0.5);
+  s.bezierCurveTo(x, y + 0.8, x - 0.6, y + 1.2, x - 0.95, y + 0.6);
+  s.bezierCurveTo(x - 1.4, y - 0.1, x - 0.5, y - 0.7, x, y - 1.1);
+  s.bezierCurveTo(x + 0.5, y - 0.7, x + 1.4, y - 0.1, x + 0.95, y + 0.6);
+  s.bezierCurveTo(x + 0.6, y + 1.2, x, y + 0.8, x, y + 0.5);
+  return s;
+}
+function ovalShape(rx, ry) {
+  const s = new THREE.Shape();
+  s.absellipse(0, 0, rx, ry, 0, Math.PI * 2, false, 0);
+  return s;
+}
+function rectShape(w, h, r) {
+  const s = new THREE.Shape();
+  const x = -w / 2, y = -h / 2;
+  s.moveTo(x + r, y);
+  s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y);
+  return s;
+}
+function trapezoidShape() {
+  const s = new THREE.Shape();
+  s.moveTo(-0.6, -0.7); s.lineTo(0.6, -0.7); s.lineTo(1.0, 0.7); s.lineTo(-1.0, 0.7); s.closePath();
+  return s;
+}
+function extrude(shape, depth = 0.45) {
+  const g = new THREE.ExtrudeGeometry(shape, { depth, bevelEnabled: true, bevelThickness: 0.08, bevelSize: 0.08, bevelSegments: 2, steps: 1 });
+  g.center();
+  return g;
+}
+
+// Each entry: { name, geo(), color }
+const SHAPES = [
+  { name: 'Circle',    geo: () => extrude(ovalShape(1.2, 1.2)) },
+  { name: 'Square',    geo: () => extrude(rectShape(2, 2, 0.12)) },
+  { name: 'Triangle',  geo: () => extrude(polygonShape(3, 1.4)) },
+  { name: 'Rectangle', geo: () => extrude(rectShape(2.6, 1.5, 0.12)) },
+  { name: 'Star',      geo: () => extrude(starShape(5, 1.4, 0.62)) },
+  { name: 'Heart',     geo: () => extrude(heartShape().clone(), 0.5) },
+  { name: 'Diamond',   geo: () => extrude(polygonShape(4, 1.3)) },
+  { name: 'Pentagon',  geo: () => extrude(polygonShape(5, 1.3)) },
+  { name: 'Hexagon',   geo: () => extrude(polygonShape(6, 1.3)) },
+  { name: 'Oval',      geo: () => extrude(ovalShape(1.45, 1.0)) },
+  { name: 'Trapezoid', geo: () => extrude(trapezoidShape()) },
+  { name: 'Cube',      geo: () => new THREE.BoxGeometry(1.9, 1.9, 1.9) },
+  { name: 'Sphere',    geo: () => new THREE.SphereGeometry(1.3, 40, 28) },
+  { name: 'Cylinder',  geo: () => new THREE.CylinderGeometry(1.1, 1.1, 2.2, 40) },
+  { name: 'Cone',      geo: () => new THREE.ConeGeometry(1.3, 2.4, 40) },
+  { name: 'Pyramid',   geo: () => new THREE.ConeGeometry(1.5, 2.2, 4) },
+  { name: 'Donut',     geo: () => new THREE.TorusGeometry(1.05, 0.46, 20, 40) },
+];
+
+/* ============================================================
+   THREE.JS SCENE
+   ============================================================ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xbde9ff, 26, 60);
+
+function skyTexture() {
+  const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
+  const ctx = cv.getContext('2d');
+  const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#9fd8f5'); g.addColorStop(0.55, '#bde9ff'); g.addColorStop(1, '#e3f6ff');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = skyTexture();
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+const camTarget = new THREE.Vector3(0, 1.7, 0);
+const camDir = new THREE.Vector3(0.05, 0.2, 1).normalize();
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, 0.9));
+const sun = new THREE.DirectionalLight(0xfff4d6, 1.25);
+sun.position.set(-6, 11, 7);
+sun.castShadow = true;
+sun.shadow.mapSize.set(1024, 1024);
+sun.shadow.camera.left = -8; sun.shadow.camera.right = 8;
+sun.shadow.camera.top = 8; sun.shadow.camera.bottom = -8;
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(120, 80), new THREE.MeshStandardMaterial({ color: 0x8fd56a, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+// Pedestal
+const pedestal = new THREE.Group();
+const top = new THREE.Mesh(new THREE.CylinderGeometry(1.9, 1.9, 0.4, 40), new THREE.MeshStandardMaterial({ color: 0xf3ead2, roughness: 0.9 }));
+top.position.y = 0.2; top.castShadow = true; top.receiveShadow = true; pedestal.add(top);
+const column = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.7, 1.0, 40), new THREE.MeshStandardMaterial({ color: 0xe6d8ba, roughness: 1 }));
+column.position.y = -0.3; column.castShadow = true; pedestal.add(column);
+scene.add(pedestal);
+
+// Hills + clouds + sun disc
+const hillMat = new THREE.MeshStandardMaterial({ color: 0x7cc257, roughness: 1 });
+[[-13, -22, 5, -3], [14, -26, 6, -3.5], [2, -30, 7, -4]].forEach(([x, z, r, y]) => {
+  const h = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), hillMat); h.position.set(x, y, z); scene.add(h);
+});
+const sunDisc = new THREE.Mesh(new THREE.CircleGeometry(2.4, 40), new THREE.MeshBasicMaterial({ color: 0xfff0a8, fog: false }));
+sunDisc.position.set(-11, 9, -28); scene.add(sunDisc);
+const clouds = [];
+function makeCloud(x, y, z, s) {
+  const g = new THREE.Group(); const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 });
+  [[0,0,1.3],[1.1,-0.1,1],[-1.1,-0.1,1],[0.5,0.5,0.9]].forEach(([dx,dy,r]) => { const p = new THREE.Mesh(new THREE.SphereGeometry(r, 12, 10), mat); p.position.set(dx, dy, 0); g.add(p); });
+  g.position.set(x, y, z); g.scale.setScalar(s); scene.add(g); clouds.push(g);
+}
+makeCloud(-10, 8, -18, 1.1); makeCloud(9, 10, -22, 1.3); makeCloud(0, 12, -26, 1.0);
+
+// The shape mesh (rebuilt on change)
+let shapeMesh = null;
+let current = 0;
+let spinY = 0, popUntil = 0;
+
+function buildShape(i) {
+  if (shapeMesh) { scene.remove(shapeMesh); shapeMesh.geometry.dispose(); shapeMesh.material.dispose(); }
+  const def = SHAPES[i];
+  const geo = def.geo();
+  // normalize size to ~2.6 across
+  geo.computeBoundingSphere();
+  const scale = 1.55 / geo.boundingSphere.radius;
+  const mat = new THREE.MeshStandardMaterial({ color: PALETTE[i % PALETTE.length], roughness: 0.5, metalness: 0.05 });
+  shapeMesh = new THREE.Mesh(geo, mat);
+  shapeMesh.scale.setScalar(scale);
+  shapeMesh.position.y = 2.3;
+  shapeMesh.castShadow = true;
+  scene.add(shapeMesh);
+  spinY = 0;
+}
+
+/* ============================================================
+   UI
+   ============================================================ */
+const nameEl = document.getElementById('shape-name');
+const dotsEl = document.getElementById('dots');
+SHAPES.forEach((_, i) => { const d = document.createElement('div'); d.className = 'dot'; dotsEl.appendChild(d); });
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.85; u.pitch = 1.15; speechSynthesis.speak(u); } catch (e) {}
+}
+function sparkleBurst() {
+  const emojis = ['✨', '⭐', '💫', '🌟'];
+  const cx = window.innerWidth / 2, cy = window.innerHeight * 0.42;
+  for (let i = 0; i < 10; i++) {
+    const s = document.createElement('div'); s.className = 'sparkle';
+    s.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    s.style.left = (cx + (Math.random() - 0.5) * 300) + 'px';
+    s.style.top = (cy + (Math.random() - 0.5) * 120) + 'px';
+    s.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1300);
+  }
+}
+
+function show(i, doSpeak = true) {
+  current = (i + SHAPES.length) % SHAPES.length;
+  buildShape(current);
+  nameEl.textContent = SHAPES[current].name;
+  [...dotsEl.children].forEach((d, k) => d.classList.toggle('on', k === current));
+  if (doSpeak) speak(SHAPES[current].name);
+}
+
+function pop() {
+  popUntil = clock.getElapsedTime() + 0.4;
+  sparkleBurst();
+  speak(SHAPES[current].name);
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => show(current + 1));
+document.getElementById('prevBtn').addEventListener('click', () => show(current - 1));
+document.getElementById('speakBtn').addEventListener('click', () => speak(SHAPES[current].name));
+
+// tap the 3D shape → pop + say its name
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+canvas.addEventListener('pointerdown', (e) => {
+  pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  if (shapeMesh && raycaster.intersectObject(shapeMesh, true).length) pop();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') show(current + 1);
+  else if (e.key === 'ArrowLeft') show(current - 1);
+  else if (e.key === ' ' || e.key === 'Enter') pop();
+});
+
+/* ============================================================
+   RENDER LOOP
+   ============================================================ */
+const clock = new THREE.Clock();
+function resize() {
+  const w = window.innerWidth, h = window.innerHeight;
+  renderer.setSize(w, h, false);
+  const aspect = w / h;
+  camera.aspect = aspect;
+  const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+  const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+  const dist = Math.min(24, Math.max(8, Math.max(4.4 / Math.tan(hHalf), 4.2 / Math.tan(vHalf))));
+  camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+  camera.lookAt(camTarget);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.getElapsedTime();
+  if (shapeMesh) {
+    spinY += dt * 0.7;
+    shapeMesh.rotation.y = spinY;
+    shapeMesh.position.y = 2.3 + Math.sin(t * 1.5) * 0.12;
+    const popScaleBase = 1.55 / shapeMesh.geometry.boundingSphere.radius;
+    let s = popScaleBase;
+    if (t < popUntil) s = popScaleBase * (1 + Math.sin((popUntil - t) * 12) * 0.12);
+    shapeMesh.scale.setScalar(s);
+  }
+  for (const c of clouds) { c.position.x += dt * 0.3; if (c.position.x > 20) c.position.x = -20; }
+  renderer.render(scene, camera);
+}
+
+show(0, false);
+animate();
+</script>
+</body>
 </html>
