@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="mama.dev games">
+  <rect width="512" height="512" rx="112" fill="#c1d7b8"/>
+  <path d="M0 360c86-56 171-64 255-24 73 35 159 32 257-10v186H0z" fill="#8fa984"/>
+  <path d="M84 358h344" fill="none" stroke="#4a3a35" stroke-width="26" stroke-linecap="round" opacity=".22"/>
+  <path d="M92 292c17-52 55-86 116-102l55-58c13-14 30-21 51-21h46c20 0 37 14 41 34l22 106c4 20-11 41-32 41z" fill="#fdfcf8" stroke="#4a3a35" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M142 282h271c18 0 33 15 33 33v37c0 18-15 33-33 33H101c-19 0-34-15-34-33v-22c0-27 25-48 75-48z" fill="#b86c53" stroke="#4a3a35" stroke-width="18" stroke-linejoin="round"/>
+  <path d="M246 156l-42 55h70v-78h-3c-10 0-18 4-25 23z" fill="#d7ecea" stroke="#4a3a35" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M297 133v78h82l-15-62c-3-10-11-16-22-16z" fill="#d7ecea" stroke="#4a3a35" stroke-width="14" stroke-linejoin="round"/>
+  <path d="M99 312h48" stroke="#ffe7a7" stroke-width="16" stroke-linecap="round"/>
+  <circle cx="154" cy="382" r="48" fill="#4a3a35"/>
+  <circle cx="154" cy="382" r="19" fill="#fdfcf8"/>
+  <circle cx="354" cy="382" r="48" fill="#4a3a35"/>
+  <circle cx="354" cy="382" r="19" fill="#fdfcf8"/>
+  <path d="M404 262l32 8" stroke="#ffe7a7" stroke-width="14" stroke-linecap="round"/>
+</svg>

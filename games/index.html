@@ -4,16 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#c1d7b8">
+<meta name="application-name" content="mama.dev games">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="mama.dev games">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
 <title>Games | mama.dev</title>
 <meta name="description" content="A kid-friendly launcher for the games on mama.dev.">
 <link rel="canonical" href="https://mama.dev/games/">
+<link rel="manifest" href="/games/manifest.webmanifest">
+<link rel="icon" href="/games/icons/games-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/games/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/mama-home-tab.css">
+<script src="/games/app.js" defer></script>
 <style>
   :root {
     --bg-sky-top: #e6f0e1;
@@ -176,13 +183,13 @@
 
   .games-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
-    gap: clamp(20px, 3.2vw, 34px);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 286px), 1fr));
+    gap: clamp(18px, 2.8vw, 30px);
     align-items: stretch;
   }
 
   .game-card {
-    min-height: clamp(368px, 42vw, 462px);
+    min-height: clamp(328px, 36vw, 430px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -214,7 +221,7 @@
   .card-window {
     position: relative;
     width: 100%;
-    height: clamp(190px, 24vw, 248px);
+    height: clamp(170px, 21vw, 230px);
     margin-bottom: clamp(16px, 2.4vw, 22px);
     overflow: hidden;
     border-radius: clamp(24px, 4vw, 34px);
@@ -238,15 +245,15 @@
   .card-title {
     margin: 0 auto auto;
     color: var(--ink);
-    font-size: clamp(2rem, 4.5vw, 2.8rem);
+    font-size: clamp(1.85rem, 4vw, 2.65rem);
     font-weight: 700;
     line-height: 0.98;
     text-align: center;
   }
 
   .play-btn {
-    width: clamp(66px, 8vw, 76px);
-    height: clamp(66px, 8vw, 76px);
+    width: clamp(58px, 7vw, 72px);
+    height: clamp(58px, 7vw, 72px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -387,6 +394,65 @@
       height: 190px;
     }
 
+  }
+
+  @media (orientation: landscape) and (max-height: 900px) {
+    .page {
+      width: min(1180px, 100%);
+      padding-top: max(44px, calc(env(safe-area-inset-top) + 28px));
+      padding-bottom: max(24px, env(safe-area-inset-bottom));
+    }
+
+    .hero {
+      margin-bottom: clamp(12px, 2.2vh, 18px);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 12vh, 5.4rem);
+    }
+
+    .subtitle {
+      margin-bottom: 5px;
+      font-size: clamp(0.9rem, 2.1vh, 1.05rem);
+    }
+
+    .games-grid {
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 238px), 1fr));
+      gap: clamp(14px, 2vw, 22px);
+    }
+
+    .game-card {
+      min-height: clamp(254px, 52vh, 318px);
+      padding: clamp(12px, 1.6vw, 16px);
+      border-radius: clamp(24px, 4vw, 34px);
+      box-shadow:
+        0 18px 34px var(--soft-shadow),
+        0 12px 0 var(--card-thickness);
+    }
+
+    .game-card:active {
+      transform: translateY(12px);
+    }
+
+    .card-window {
+      height: clamp(128px, 26vh, 164px);
+      margin-bottom: clamp(10px, 1.8vh, 14px);
+      border-radius: clamp(18px, 3vw, 26px);
+    }
+
+    .card-title {
+      font-size: clamp(1.45rem, 4.9vh, 2rem);
+    }
+
+    .play-btn {
+      width: clamp(48px, 8vh, 58px);
+      height: clamp(48px, 8vh, 58px);
+      margin-top: clamp(8px, 1.6vh, 12px);
+    }
+
+    .play-icon {
+      border-width: 11px 0 11px 18px;
+    }
   }
 
   @media (max-width: 390px) {
