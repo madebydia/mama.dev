@@ -1,0 +1,37 @@
+{
+  "name": "Add-Up Train",
+  "short_name": "Add Train",
+  "description": "A train game for early addition practice.",
+  "id": "/games/add-up-train/",
+  "start_url": "/games/add-up-train/",
+  "scope": "/games/add-up-train/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f0a878",
+  "theme_color": "#f0a878",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/add-up-train/icons/add-up-train-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/add-up-train/icons/add-up-train-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/add-up-train/icons/add-up-train-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

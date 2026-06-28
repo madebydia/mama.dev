@@ -328,6 +328,34 @@
     transform: translateY(7px);
   }
 
+  .theme-orchard .window-bg {
+    background: #a9ba87;
+  }
+
+  .theme-orchard .play-btn {
+    background: var(--teal);
+    box-shadow: 0 7px 0 var(--teal-shadow);
+  }
+
+  .theme-orchard:active .play-btn {
+    box-shadow: 0 0 0 var(--teal-shadow);
+    transform: translateY(7px);
+  }
+
+  .theme-addtrain .window-bg {
+    background: #cdd9ce;
+  }
+
+  .theme-addtrain .play-btn {
+    background: var(--terracotta);
+    box-shadow: 0 7px 0 var(--terracotta-shadow);
+  }
+
+  .theme-addtrain:active .play-btn {
+    box-shadow: 0 0 0 var(--terracotta-shadow);
+    transform: translateY(7px);
+  }
+
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
@@ -607,6 +635,67 @@
           </svg>
         </div>
         <div class="card-title">Shapes</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-orchard" href="/games/counting-orchard/" aria-label="Play Counting Orchard">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <!-- corner fruit trees -->
+            <g class="anim-float">
+              <circle cx="16" cy="20" r="40" fill="#3f5a30"></circle>
+              <circle cx="44" cy="36" r="9" fill="#e8cf52"></circle>
+              <circle cx="30" cy="54" r="8" fill="#e8cf52"></circle>
+              <circle cx="184" cy="20" r="40" fill="#3f5a30"></circle>
+              <circle cx="156" cy="36" r="9" fill="#e8cf52"></circle>
+              <circle cx="170" cy="54" r="8" fill="#e8cf52"></circle>
+            </g>
+            <!-- table -->
+            <rect x="10" y="120" width="180" height="22" fill="#d6c193"></rect>
+            <rect x="10" y="142" width="180" height="16" fill="#9a7444"></rect>
+            <!-- fruit resting on the table -->
+            <ellipse cx="68" cy="120" rx="17" ry="5" fill="rgba(40,30,20,0.18)"></ellipse>
+            <ellipse cx="100" cy="120" rx="17" ry="5" fill="rgba(40,30,20,0.18)"></ellipse>
+            <ellipse cx="132" cy="120" rx="17" ry="5" fill="rgba(40,30,20,0.18)"></ellipse>
+            <circle cx="68" cy="104" r="16" fill="#8e5470"></circle>
+            <circle cx="100" cy="104" r="16" fill="#e0892e"></circle>
+            <circle cx="132" cy="104" r="16" fill="#c0473a"></circle>
+            <rect x="64" y="86" width="4" height="7" rx="2" fill="#5a3d24"></rect>
+            <rect x="96" y="86" width="4" height="7" rx="2" fill="#5a3d24"></rect>
+            <rect x="128" y="86" width="4" height="7" rx="2" fill="#5a3d24"></rect>
+          </svg>
+        </div>
+        <div class="card-title">Counting<br>Orchard</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-addtrain" href="/games/add-up-train/" aria-label="Play Add-Up Train">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="14" y="152" width="172" height="7" rx="3" fill="#9c7a52"></rect>
+            <g class="anim-drive-slow">
+              <rect x="24" y="98" width="52" height="34" rx="9" fill="#33514a"></rect>
+              <rect x="56" y="80" width="22" height="24" rx="6" fill="#b5623f"></rect>
+              <rect x="52" y="74" width="30" height="8" rx="4" fill="#b5623f"></rect>
+              <rect x="30" y="70" width="11" height="30" rx="4" fill="#263a35"></rect>
+              <ellipse cx="46" cy="96" rx="6" ry="5" fill="#c69a3a"></ellipse>
+              <path d="M92 110 h54 v24 h-54 z" fill="#9c6a3c"></path>
+              <rect x="89" y="103" width="6" height="32" rx="2" fill="#7a5230"></rect>
+              <rect x="145" y="103" width="6" height="32" rx="2" fill="#7a5230"></rect>
+              <circle cx="106" cy="106" r="8" fill="#cf4a3e"></circle>
+              <circle cx="121" cy="104" r="8" fill="#cf4a3e"></circle>
+              <circle cx="136" cy="106" r="8" fill="#cf4a3e"></circle>
+              <circle cx="38" cy="135" r="10" fill="#21302b"></circle>
+              <circle cx="62" cy="135" r="10" fill="#21302b"></circle>
+              <circle cx="105" cy="139" r="9" fill="#21302b"></circle>
+              <circle cx="135" cy="139" r="9" fill="#21302b"></circle>
+            </g>
+            <g fill="#b9562a"><rect x="156" y="78" width="30" height="10" rx="3"></rect><rect x="166" y="68" width="10" height="30" rx="3"></rect></g>
+          </svg>
+        </div>
+        <div class="card-title">Add-Up<br>Train</div>
         <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
       </a>
 

@@ -1,0 +1,37 @@
+{
+  "name": "Bigger Ramp Jump",
+  "short_name": "Ramp Jump",
+  "description": "A number comparison ramp jump game.",
+  "id": "/games/bigger-ramp-jump/",
+  "start_url": "/games/bigger-ramp-jump/",
+  "scope": "/games/bigger-ramp-jump/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#2a2150",
+  "theme_color": "#2a2150",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

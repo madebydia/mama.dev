@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#f0a878">
+<meta name="application-name" content="Add-Up Train">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Add Train">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/games/add-up-train/manifest.webmanifest">
+<link rel="icon" href="/games/add-up-train/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/games/add-up-train/icons/apple-touch-icon.png">
+<script src="/games/add-up-train/app.js" defer></script>
+<title>Add-Up Train!</title>
+<style>
+  :root { --ink: #3a2a25; --muted: #6e5044; --panel: #fff7ec; --panel-strong: #ffd9a8; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
+    background: linear-gradient(#a9c2bd 0 56%, #d6c096 56% 100%);
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none;
+  }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+  .ui {
+    position: fixed; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none;
+    padding: max(46px, calc(env(safe-area-inset-top) + 8px)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .ui > * { pointer-events: auto; }
+
+  .top { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .toprow { width: 100%; display: flex; align-items: flex-start; justify-content: flex-end; }
+  .score-bar { display: flex; gap: 6px; align-items: center; }
+  .trophy { font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
+  .score-num { font-size: 30px; font-weight: 1000; color: #fff; text-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .streak-bar { display: flex; gap: 5px; margin-top: 6px; justify-content: flex-end; }
+  .streak-dot { width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: background .3s, transform .3s; }
+  .streak-dot.lit { background: #5fd07a; transform: scale(1.2); box-shadow: 0 0 8px rgba(95,208,122,0.6); }
+  .streak-dot.miss { background: #ef6b6b; transform: scale(1.2); }
+
+  .prompt {
+    align-self: center; display: flex; align-items: center; gap: 12px;
+    padding: 9px 24px;
+    background: #f4ead0;
+    border: 3px solid #5a3f28; border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(58,42,37,0.28);
+    font-size: clamp(1.05rem, 3.6vw, 1.5rem); font-weight: 1000; text-align: center;
+  }
+  .prompt .eq { color: #b9562a; }
+
+  .dock { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .choices { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+  .choice {
+    width: clamp(62px, 16vw, 88px); height: clamp(62px, 16vw, 88px);
+    font-size: clamp(2rem, 7vw, 3rem); font-weight: 1000;
+    border: 4px solid #5a3f28; border-radius: 16px; cursor: pointer;
+    color: #f3e7c6; font-family: inherit; background: #3f5a4c;
+    box-shadow: 0 6px 0 #2c2016;
+    transition: transform 70ms ease, box-shadow 70ms ease, background 120ms;
+  }
+  .choice:active { transform: translateY(5px); box-shadow: 0 1px 0 #2c2016; }
+  .choice.wrong { animation: shake 0.4s ease; background: #9c5048; }
+  .choice.right { background: #6f9a55; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+  .level-badge {
+    align-self: center;
+    background: rgba(58,42,37,0.42); color: #fff;
+    padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px;
+    cursor: pointer; backdrop-filter: blur(4px);
+  }
+  .level-picker {
+    position: fixed; bottom: 64px; left: 50%; transform: translateX(-50%); z-index: 25;
+    background: #3a2a22; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 8px 0;
+    display: none; min-width: 230px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); pointer-events: auto;
+  }
+  .level-picker.open { display: block; }
+  .level-option { padding: 10px 16px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+  .level-option:hover { background: rgba(255,255,255,0.1); }
+  .level-option.active { background: rgba(245,176,106,0.25); color: #ffcf8a; }
+  .level-range { font-weight: 400; opacity: 0.6; }
+
+  .sparkle { position: fixed; z-index: 4; font-size: 1.7rem; pointer-events: none; animation: sparkleFloat 1.1s ease-out forwards; }
+  @keyframes sparkleFloat { 0%{opacity:.95;transform:translate(-50%,0) scale(.5) rotate(0)} 100%{opacity:0;transform:translate(-50%,-120px) scale(1.1) rotate(120deg)} }
+  .confetti-piece { position: fixed; z-index: 50; pointer-events: none; }
+  @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  footer { position: fixed; bottom: 4px; right: 10px; z-index: 3; font-size: 0.72rem; color: var(--muted); opacity: 0.85; }
+  footer a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) { .sparkle { animation-duration: 0.01ms; } }
+</style>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
+    <script>
+     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+     plausible.init()
+    </script>
+<link rel="stylesheet" href="/assets/mama-home-tab.css">
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<a class="mama-home-tab" href="/games/" aria-label="Back to games"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>games</span></a>
+
+<canvas id="scene"></canvas>
+
+<div class="ui">
+  <div class="top">
+    <div class="toprow">
+      <div>
+        <div class="score-bar"><span class="trophy">🏆</span><span class="score-num" id="score">0</span></div>
+        <div class="streak-bar" id="streak-bar"></div>
+      </div>
+    </div>
+    <div class="prompt" id="prompt"><span id="expr">2 + 3</span><span class="eq">= ?</span></div>
+  </div>
+  <div class="dock">
+    <div class="choices" id="choices"></div>
+    <div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
+  </div>
+</div>
+<div class="level-picker" id="level-picker"></div>
+
+<footer>Made with care by <a href="https://x.com/madebydia" target="_blank" rel="noopener">@madebydia</a></footer>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const LEVELS = [
+  { name: 'First Sums', maxAddend: 3,  maxSum: 6 },
+  { name: 'Adding Up',  maxAddend: 5,  maxSum: 10 },
+  { name: 'Big Adder',  maxAddend: 8,  maxSum: 14 },
+  { name: 'Math Star',  maxAddend: 10, maxSum: 20 },
+];
+
+let score = 0, level = 0, streak = 0, roundHistory = [];
+let a = 0, b = 0, target = 0, locked = false, busy = false;
+
+const scoreEl = document.getElementById('score');
+const streakBar = document.getElementById('streak-bar');
+const exprEl = document.getElementById('expr');
+const choicesEl = document.getElementById('choices');
+const levelBadge = document.getElementById('level-badge');
+for (let i = 0; i < 5; i++) { const d = document.createElement('div'); d.className = 'streak-dot'; streakBar.appendChild(d); }
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function tone(freq, dur, type = 'sine', vol = 0.2) {
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination); o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  o.start(); o.stop(audioCtx.currentTime + dur);
+}
+function choo() { tone(523, 0.18, 'triangle', 0.28); setTimeout(() => tone(659, 0.18, 'triangle', 0.28), 130); setTimeout(() => tone(784, 0.3, 'triangle', 0.28), 270); }
+function successSound() { [523, 659, 784].forEach((f, i) => setTimeout(() => tone(f, 0.35, 'sine', 0.22), i * 110)); }
+function boop() { tone(190, 0.18, 'sine', 0.2); }
+function speak(text) { if (!('speechSynthesis' in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.9; u.pitch = 1.1; speechSynthesis.speak(u); } catch (e) {} }
+
+/* ============================================================
+   THREE.JS SCENE  (storybook seaside steam train)
+   ============================================================ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xc6d6cd, 34, 78);
+function skyTexture() {
+  const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
+  const ctx = cv.getContext('2d'); const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#9fb9b6'); g.addColorStop(0.55, '#bdd0c8'); g.addColorStop(1, '#d6dfce');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = skyTexture();
+
+const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 120);
+const camTarget = new THREE.Vector3(0, 1.3, 0);
+const camDir = new THREE.Vector3(0.08, 0.32, 0.94).normalize(); // gentle side-on 3/4
+
+// Soft, flat storybook lighting (low contrast, light shadows)
+scene.add(new THREE.HemisphereLight(0xeaf2ee, 0x9c8a66, 1.1));
+const sun = new THREE.DirectionalLight(0xfff4e4, 0.7);
+sun.position.set(-7, 13, 9); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -14; sun.shadow.camera.right = 14; sun.shadow.camera.top = 10; sun.shadow.camera.bottom = -8;
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+// Sea (sage) far back, then sandy beach in front
+const sea = new THREE.Mesh(new THREE.PlaneGeometry(320, 110), new THREE.MeshStandardMaterial({ color: 0x6f9489, roughness: 1 }));
+sea.rotation.x = -Math.PI / 2; sea.position.set(0, 0.0, -55); scene.add(sea);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(220, 70), new THREE.MeshStandardMaterial({ color: 0xd8c197, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.position.set(0, 0.02, 5); ground.receiveShadow = true; scene.add(ground);
+
+// Soft trees on the far shore
+const treeMat = new THREE.MeshStandardMaterial({ color: 0x83996b, roughness: 1 });
+[[-15, -32, 3], [-9.5, -33, 2.4], [12, -34, 3.2], [17, -33, 2.1], [3, -35, 2.7]].forEach(([x, z, r]) => {
+  const t = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 12), treeMat); t.position.set(x, r * 0.5, z); t.scale.y = 0.8; scene.add(t);
+});
+
+// Platform posts framing the sides (like the reference)
+const postMat = new THREE.MeshStandardMaterial({ color: 0x8a6a44, roughness: 1 });
+const postTopMat = new THREE.MeshStandardMaterial({ color: 0xb5623f, roughness: 0.85 });
+[-9.5, 9.5].forEach(px => {
+  const post = new THREE.Mesh(new THREE.BoxGeometry(0.5, 3, 0.5), postMat); post.position.set(px, 1.5, -1.6); post.castShadow = true; scene.add(post);
+  const top = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.5, 1.1), postTopMat); top.position.set(px, 3.0, -1.6); top.castShadow = true; scene.add(top);
+});
+
+// Rails + ties
+const railMat = new THREE.MeshStandardMaterial({ color: 0x7d6a52, roughness: 0.6 });
+for (const z of [-0.62, 0.62]) { const rail = new THREE.Mesh(new THREE.BoxGeometry(140, 0.12, 0.12), railMat); rail.position.set(0, 0.18, z); scene.add(rail); }
+const tieMat = new THREE.MeshStandardMaterial({ color: 0x6b4a32, roughness: 1 });
+for (let i = -30; i <= 30; i++) { const tie = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.12, 1.7), tieMat); tie.position.set(i * 1.1, 0.1, 0); tie.receiveShadow = true; scene.add(tie); }
+
+/* ---- Number medallion + sign textures ---- */
+function numberTexture(n) {
+  const S = 256; const cv = document.createElement('canvas'); cv.width = cv.height = S; const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, S, S);
+  ctx.fillStyle = '#6e4628'; ctx.beginPath(); ctx.arc(S / 2, S / 2, 112, 0, Math.PI * 2); ctx.fill();
+  ctx.lineWidth = 14; ctx.strokeStyle = '#4f3018'; ctx.stroke();
+  ctx.fillStyle = '#8a5d39'; ctx.beginPath(); ctx.arc(S / 2, S / 2, 90, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = '#f3e7c6'; ctx.font = '900 122px ui-rounded, Arial, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(String(n), S / 2, S / 2 + 8);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+function signTexture(ch) {
+  const S = 128; const cv = document.createElement('canvas'); cv.width = cv.height = S; const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#f3e7c6'; ctx.font = '900 112px ui-rounded, Arial, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.strokeStyle = '#5a3a20'; ctx.lineWidth = 12; ctx.strokeText(ch, S / 2, S / 2 + 6); ctx.fillText(ch, S / 2, S / 2 + 6);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+
+/* ---- Train (dark-teal steam engine + brown apple wagons) ---- */
+const train = new THREE.Group();
+scene.add(train);
+const spinWheels = [];
+function makeWheel(x, y, z, r = 0.34) {
+  const w = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.18, 18), new THREE.MeshStandardMaterial({ color: 0x21302b, roughness: 0.7 }));
+  w.rotation.x = Math.PI / 2; w.position.set(x, y, z); w.castShadow = true; spinWheels.push(w); return w;
+}
+
+// Engine — faces -x (leading), cab toward the wagons (+x)
+const engine = new THREE.Group();
+const tealMat = new THREE.MeshStandardMaterial({ color: 0x33514a, roughness: 0.75 });
+const terraMat = new THREE.MeshStandardMaterial({ color: 0xb5623f, roughness: 0.75 });
+const darkMat = new THREE.MeshStandardMaterial({ color: 0x263a35, roughness: 0.75 });
+const brassMat = new THREE.MeshStandardMaterial({ color: 0xc69a3a, roughness: 0.5, metalness: 0.35 });
+const base = new THREE.Mesh(new THREE.BoxGeometry(3.1, 0.4, 1.6), darkMat); base.position.set(-0.2, 0.55, 0); base.castShadow = true; engine.add(base);
+const boiler = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 2.3, 22), tealMat);
+boiler.rotation.z = Math.PI / 2; boiler.position.set(-0.45, 1.1, 0); boiler.castShadow = true; engine.add(boiler);
+const smokebox = new THREE.Mesh(new THREE.CylinderGeometry(0.73, 0.73, 0.3, 22), darkMat);
+smokebox.rotation.z = Math.PI / 2; smokebox.position.set(-1.6, 1.1, 0); engine.add(smokebox);
+const cab = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.35, 1.55), terraMat); cab.position.set(1.0, 1.5, 0); cab.castShadow = true; engine.add(cab);
+const cabWin = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.55, 0.78), new THREE.MeshStandardMaterial({ color: 0x6d9089, roughness: 0.4 })); cabWin.position.set(0.5, 1.62, 0); engine.add(cabWin);
+const roof = new THREE.Mesh(new THREE.BoxGeometry(1.35, 0.2, 1.75), terraMat); roof.position.set(1.0, 2.28, 0); roof.castShadow = true; engine.add(roof);
+const funnel = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.3, 1.05, 16), darkMat); funnel.position.set(-1.25, 2.05, 0); funnel.castShadow = true; engine.add(funnel);
+const funnelTop = new THREE.Mesh(new THREE.CylinderGeometry(0.37, 0.27, 0.24, 16), darkMat); funnelTop.position.set(-1.25, 2.6, 0); engine.add(funnelTop);
+const dome1 = new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2), brassMat); dome1.position.set(-0.5, 1.75, 0); engine.add(dome1);
+const dome2 = new THREE.Mesh(new THREE.SphereGeometry(0.26, 16, 12, 0, Math.PI * 2, 0, Math.PI / 2), brassMat); dome2.position.set(0.15, 1.78, 0); engine.add(dome2);
+const cow = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.7, 1.4), terraMat); cow.position.set(-1.8, 0.55, 0); cow.rotation.z = 0.32; engine.add(cow);
+engine.add(makeWheel(-1.0, 0.5, 0.84, 0.36)); engine.add(makeWheel(-1.0, 0.5, -0.84, 0.36));
+engine.add(makeWheel(0.4, 0.52, 0.84, 0.42)); engine.add(makeWheel(0.4, 0.52, -0.84, 0.42));
+engine.add(makeWheel(1.2, 0.52, 0.84, 0.42)); engine.add(makeWheel(1.2, 0.52, -0.84, 0.42));
+engine.position.x = -4.6;
+train.add(engine);
+
+// Smoke puffs above the funnel
+const smokePuffs = [];
+for (let i = 0; i < 3; i++) {
+  const puff = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color: 0xb6ad9c, roughness: 1, transparent: true, opacity: 0.82 - i * 0.16 });
+  [[0, 0, 0.5], [0.42, 0.12, 0.4], [-0.42, 0.12, 0.4], [0.1, 0.4, 0.36]].forEach(([dx, dy, r]) => { const s = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), mat); s.position.set(dx, dy, 0); puff.add(s); });
+  const baseY = 3.05 + i * 0.78; puff.position.set(-1.25 - i * 0.18, baseY, 0); puff.scale.setScalar(0.7 + i * 0.18);
+  puff.userData = { baseY, phase: i * 1.3 };
+  engine.add(puff); smokePuffs.push(puff);
+}
+
+// Open wagons (brown, carrying apples) with a round number medallion
+const appleMat = new THREE.MeshStandardMaterial({ color: 0xcf4a3e, roughness: 0.5 });
+const leafMat = new THREE.MeshStandardMaterial({ color: 0x6f9457, roughness: 0.8 });
+function makeWagon(x, color) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.7 });
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(2.2, 0.25, 1.7), mat); floor.position.y = 0.75; floor.castShadow = true; g.add(floor);
+  for (const [dx, dz, w, d] of [[-1.05, 0, 0.18, 1.7], [1.05, 0, 0.18, 1.7], [0, -0.82, 2.2, 0.18], [0, 0.82, 2.2, 0.18]]) {
+    const wall = new THREE.Mesh(new THREE.BoxGeometry(w, 0.7, d), mat); wall.position.set(dx, 1.1, dz); wall.castShadow = true; g.add(wall);
+  }
+  g.add(makeWheel(-0.7, 0.45, 0.84)); g.add(makeWheel(-0.7, 0.45, -0.84));
+  g.add(makeWheel(0.7, 0.45, 0.84)); g.add(makeWheel(0.7, 0.45, -0.84));
+  // round number medallion floating above
+  const numMat = new THREE.MeshBasicMaterial({ map: numberTexture(0), transparent: true });
+  const plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6), numMat); plaque.position.set(0, 2.7, 0);
+  g.add(plaque);
+  const apples = new THREE.Group(); apples.position.y = 1.2; g.add(apples);
+  g.position.set(x, 0, 0);
+  g.userData = { numMat, plaque, apples };
+  train.add(g);
+  return g;
+}
+const wagons = [makeWagon(-1.3, 0x9c6a3c), makeWagon(1.7, 0x88592f)];
+
+function fillApples(wagon, n) {
+  wagon.userData.apples.clear();
+  const slots = [[-0.55, -0.45], [0.55, -0.45], [-0.55, 0.45], [0.55, 0.45], [0, 0], [-0.55, 0], [0.55, 0], [0, -0.45], [0, 0.45], [-0.3, -0.2], [0.3, -0.2], [-0.3, 0.2], [0.3, 0.2], [0, 0.55], [0, -0.55], [0.45, 0.2], [-0.45, 0.2], [0.45, -0.2], [-0.45, -0.2], [0, 0.25]];
+  for (let i = 0; i < n; i++) {
+    const ap = new THREE.Group();
+    const body = new THREE.Mesh(new THREE.SphereGeometry(0.27, 14, 12), appleMat); body.scale.y = 0.92; body.castShadow = true; ap.add(body);
+    const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.09, 6, 6), leafMat); leaf.scale.set(1.4, 0.25, 0.7); leaf.position.set(0.09, 0.28, 0); ap.add(leaf);
+    const [sx, sz] = slots[i % slots.length];
+    const tier = Math.floor(i / slots.length);
+    ap.position.set(sx, tier * 0.5, sz);
+    wagon.userData.apples.add(ap);
+  }
+}
+
+// "+" sign between wagons
+const plusMat = new THREE.MeshBasicMaterial({ map: signTexture('+'), transparent: true });
+const plusSign = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1.1), plusMat);
+plusSign.position.set(0.2, 1.6, 0); train.add(plusSign);
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function randInt(lo, hi) { return Math.floor(Math.random() * (hi - lo + 1)) + lo; }
+function shuffle(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
+function updateStreakBar() { const dots = streakBar.querySelectorAll('.streak-dot'); const recent = roundHistory.slice(-5); dots.forEach((d, i) => { d.className = 'streak-dot'; if (i < recent.length) d.classList.add(recent[i] ? 'lit' : 'miss'); }); }
+function confetti() {
+  const colors = ['#ffcf8a','#e23b34','#5fa84a','#4a86c0','#e0902c','#c47ba0'];
+  for (let i = 0; i < 40; i++) { const c = document.createElement('div'); c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + 'vw'; c.style.top = '-10px'; c.style.background = colors[Math.random() * colors.length | 0];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px'; c.style.width = (6 + Math.random() * 8) + 'px'; c.style.height = (6 + Math.random() * 8) + 'px';
+    c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`; c.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 4000);
+  }
+}
+function sparkleBurst() {
+  const e = ['✨', '⭐', '💫', '🌟']; const cx = innerWidth / 2, cy = innerHeight * 0.4;
+  for (let i = 0; i < 10; i++) { const s = document.createElement('div'); s.className = 'sparkle'; s.textContent = e[Math.floor(Math.random() * e.length)];
+    s.style.left = (cx + (Math.random() - 0.5) * 320) + 'px'; s.style.top = (cy + (Math.random() - 0.5) * 120) + 'px'; s.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1300);
+  }
+}
+
+/* ============================================================
+   ROUND FLOW
+   ============================================================ */
+let tween = null;
+function driveTween(toX, dur, done) { tween = { from: train.position.x, to: toX, t: 0, dur, done }; }
+
+function makeChoices() {
+  const set = new Set([target]);
+  while (set.size < 4) { let d = target + (Math.random() < 0.5 ? -1 : 1) * randInt(1, 3); if (d >= 0 && d <= 20) set.add(d); }
+  return shuffle([...set]);
+}
+function renderChoices() {
+  choicesEl.innerHTML = '';
+  makeChoices().forEach(n => { const btn = document.createElement('button'); btn.className = 'choice'; btn.textContent = n; btn.addEventListener('click', () => answer(n, btn)); choicesEl.appendChild(btn); });
+}
+
+function newRound() {
+  locked = false; busy = true;
+  const lv = LEVELS[level];
+  do { a = randInt(1, lv.maxAddend); b = randInt(1, lv.maxAddend); } while (a + b > lv.maxSum);
+  target = a + b;
+  fillApples(wagons[0], a); fillApples(wagons[1], b);
+  wagons[0].userData.numMat.map.dispose(); wagons[0].userData.numMat.map = numberTexture(a); wagons[0].userData.numMat.needsUpdate = true;
+  wagons[1].userData.numMat.map.dispose(); wagons[1].userData.numMat.map = numberTexture(b); wagons[1].userData.numMat.needsUpdate = true;
+  exprEl.textContent = a + ' + ' + b;
+  document.querySelector('.prompt .eq').textContent = '= ?';
+  renderChoices();
+  levelBadge.textContent = lv.name;
+  frameScene();
+  // drive in
+  train.position.x = 18;
+  driveTween(0, 1100, () => { busy = false; });
+}
+
+function answer(n, btn) {
+  if (locked || busy) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (n === target) {
+    locked = true; busy = true;
+    btn.classList.add('right');
+    score++; streak++; scoreEl.textContent = score;
+    roundHistory.push(true);
+    if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) level++;
+    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+    updateStreakBar();
+    document.querySelector('.prompt .eq').textContent = '= ' + target + '!';
+    speak(a + ' plus ' + b + ' equals ' + target);
+    successSound(); confetti(); sparkleBurst();
+    setTimeout(() => { choo(); driveTween(-22, 1300, newRound); }, 900);
+  } else {
+    btn.classList.add('wrong'); boop();
+    streak = 0; roundHistory.push(false);
+    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+    updateStreakBar();
+    setTimeout(() => btn.classList.remove('wrong'), 450);
+  }
+}
+
+/* ============================================================
+   RENDER LOOP
+   ============================================================ */
+const clock = new THREE.Clock();
+let elapsed = 0;
+function frameScene() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  const aspect = w / h; camera.aspect = aspect;
+  const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+  const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+  const dist = Math.min(34, Math.max(9, Math.max(5.6 / Math.tan(hHalf), 3.4 / Math.tan(vHalf))));
+  camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+  camera.lookAt(camTarget);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', frameScene);
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  elapsed += dt;
+  let moving = false;
+  if (tween) {
+    tween.t += dt * 1000; const p = Math.min(1, tween.t / tween.dur);
+    const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+    train.position.x = tween.from + (tween.to - tween.from) * e;
+    moving = p < 1;
+    if (p >= 1) { const d = tween.done; tween = null; d && d(); }
+  }
+  if (moving) for (const w of spinWheels) w.rotation.z -= dt * 6;
+  // drifting smoke
+  for (const p of smokePuffs) { p.position.y = p.userData.baseY + Math.sin(elapsed * 1.1 + p.userData.phase) * 0.18; p.position.x = -1.25 + Math.sin(elapsed * 0.6 + p.userData.phase) * 0.12 - (p.userData.baseY - 3.05) * 0.22; }
+  // plaques + plus face camera
+  wagons.forEach(wg => wg.userData.plaque.lookAt(camera.position.x, wg.userData.plaque.getWorldPosition(new THREE.Vector3()).y, camera.position.z));
+  plusSign.lookAt(camera.position.x, plusSign.getWorldPosition(new THREE.Vector3()).y, camera.position.z);
+  renderer.render(scene, camera);
+}
+
+/* ============================================================
+   LEVEL PICKER
+   ============================================================ */
+window.toggleLevelPicker = function () {
+  const p = document.getElementById('level-picker');
+  if (p.classList.contains('open')) { p.classList.remove('open'); return; }
+  p.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const o = document.createElement('div'); o.className = 'level-option' + (i === level ? ' active' : '');
+    o.innerHTML = '<span>' + lv.name + '</span><span class="level-range">to ' + lv.maxSum + '</span>';
+    o.onclick = (e) => { e.stopPropagation(); level = i; streak = 0; roundHistory = []; updateStreakBar(); p.classList.remove('open'); newRound(); };
+    p.appendChild(o);
+  });
+  p.classList.add('open');
+};
+document.addEventListener('click', (e) => { if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) document.getElementById('level-picker').classList.remove('open'); });
+
+// Start
+frameScene();
+newRound();
+animate();
+</script>
+</body>
+</html>

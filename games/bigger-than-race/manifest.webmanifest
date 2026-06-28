@@ -1,0 +1,37 @@
+{
+  "name": "Bigger Than Race",
+  "short_name": "Race",
+  "description": "A number comparison racing game.",
+  "id": "/games/bigger-than-race/",
+  "start_url": "/games/bigger-than-race/",
+  "scope": "/games/bigger-than-race/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#8fcfe0",
+  "theme_color": "#8fcfe0",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/bigger-than-race/icons/bigger-than-race-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/bigger-than-race/icons/bigger-than-race-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/bigger-than-race/icons/bigger-than-race-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

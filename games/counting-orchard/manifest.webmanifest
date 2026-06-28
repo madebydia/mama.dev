@@ -1,0 +1,37 @@
+{
+  "name": "Counting Orchard",
+  "short_name": "Orchard",
+  "description": "A counting game for early number sense.",
+  "id": "/games/counting-orchard/",
+  "start_url": "/games/counting-orchard/",
+  "scope": "/games/counting-orchard/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#bde9ff",
+  "theme_color": "#bde9ff",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/counting-orchard/icons/counting-orchard-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/counting-orchard/icons/counting-orchard-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/counting-orchard/icons/counting-orchard-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
