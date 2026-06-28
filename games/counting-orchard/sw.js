@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-counting-orchard-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/counting-orchard/",
   "/games/counting-orchard/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/counting-orchard/icons/apple-touch-icon.png",
   "/games/counting-orchard/icons/counting-orchard-icon-192.png",
   "/games/counting-orchard/icons/counting-orchard-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {

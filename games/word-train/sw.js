@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-word-train-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/word-train/",
   "/games/word-train/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/word-train/icons/apple-touch-icon.png",
   "/games/word-train/icons/word-train-icon-192.png",
   "/games/word-train/icons/word-train-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {

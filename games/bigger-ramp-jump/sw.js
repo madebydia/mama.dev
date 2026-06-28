@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-bigger-ramp-jump-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/bigger-ramp-jump/",
   "/games/bigger-ramp-jump/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/bigger-ramp-jump/icons/apple-touch-icon.png",
   "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-192.png",
   "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {

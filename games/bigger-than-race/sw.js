@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-bigger-than-race-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/bigger-than-race/",
   "/games/bigger-than-race/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/bigger-than-race/icons/apple-touch-icon.png",
   "/games/bigger-than-race/icons/bigger-than-race-icon-192.png",
   "/games/bigger-than-race/icons/bigger-than-race-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {

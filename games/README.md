@@ -68,14 +68,9 @@ Performance defaults:
 
 ## Shared Page Chrome
 
-Individual games should include the home tab back to the games launcher:
+Individual games should not include a persistent back-to-games tab. These pages are meant to work as standalone PWAs on a kid's iPad, and adults can use the browser back button when they enter from the launcher.
 
-```html
-<link rel="stylesheet" href="/assets/mama-home-tab.css">
-<a class="mama-home-tab" href="/games/" aria-label="Back to games">...</a>
-```
-
-The tab should stay small and out of the play area. Do not use the heavier mama.dev index styling inside games; the games should keep their own visual worlds.
+Do not use the heavier mama.dev index styling inside games; the games should keep their own visual worlds.
 
 ## PWA Requirements
 
@@ -166,7 +161,7 @@ The game `app.js` should only register that game's service worker:
 The service worker should:
 
 - Use a unique cache prefix, such as `mama-<slug>-`.
-- Cache the game URL, `index.html`, `app.js`, `manifest.webmanifest`, favicon, Apple touch icon, 192 and 512 icons, and `/assets/mama-home-tab.css`.
+- Cache the game URL, `index.html`, `app.js`, `manifest.webmanifest`, favicon, Apple touch icon, and 192 and 512 icons.
 - Only handle same-origin requests whose path starts with `/games/<slug>/`.
 - Return the cached game shell for failed navigation requests.
 - Delete old caches that share the same prefix.
@@ -227,7 +222,7 @@ For each changed game, verify:
 - `/games/<slug>/` loads without console errors.
 - The canvas is visible and framed in portrait and landscape.
 - Buttons and 3D taps work with touch input.
-- The mama.dev games tab is visible but not intrusive.
+- No persistent back/home tab overlaps the game.
 - `/games/<slug>/manifest.webmanifest` returns 200.
 - `/games/<slug>/app.js` returns 200.
 - `/games/<slug>/sw.js` returns 200.

@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-add-up-train-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/add-up-train/",
   "/games/add-up-train/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/add-up-train/icons/apple-touch-icon.png",
   "/games/add-up-train/icons/add-up-train-icon-192.png",
   "/games/add-up-train/icons/add-up-train-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {

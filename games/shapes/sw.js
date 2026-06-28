@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-shapes-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/shapes/",
   "/games/shapes/index.html",
@@ -9,7 +9,6 @@ const CORE_ASSETS = [
   "/games/shapes/icons/apple-touch-icon.png",
   "/games/shapes/icons/shapes-icon-192.png",
   "/games/shapes/icons/shapes-icon-512.png",
-  "/assets/mama-home-tab.css"
 ];
 
 self.addEventListener("install", function (event) {
