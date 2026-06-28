@@ -65,7 +65,7 @@
 
         body {
             font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
-            background: linear-gradient(#bde9ff 0 56%, #90d86f 56% 100%);
+            background: linear-gradient(#bcd2d6 0 56%, #7e9c5e 56% 100%);
             color: var(--ink);
             -webkit-tap-highlight-color: transparent;
             -webkit-user-select: none;
@@ -390,11 +390,13 @@
        PALETTE
        ============================================================ */
     const COL = {
-        ink: '#272014', orange: '#ff9f45', yellow: '#f8d86f', green: '#96d65f',
-        blue: '#79c7ed', pink: '#f0a8d8', cream: '#fffdf4',
-        sky: '#bde9ff', grass: '#8fd56a'
+        ink: '#2b2620', cream: '#f3e7c6',
+        sky: '#bcd2d6', grass: '#7e9c5e', sand: '#cdb78d',
+        rock: '#9aa0a0', snow: '#eef2f2', pine: '#46603e', hill: '#6f8b54',
+        boiler: '#41584a', black: '#1f1f1f', brass: '#c69a3a', wood: '#9a6f44', woodDark: '#6e4f30'
     };
-    const CAR_COLORS = [COL.orange, COL.pink, COL.green, COL.yellow];
+    // muted wooden boxcar colours (letters sit on a cream tile, so they stay readable)
+    const CAR_COLORS = ['#6f8f82', '#9a6f44', '#7e9358', '#b89a66'];
 
     /* ============================================================
        THREE.JS SCENE
@@ -406,43 +408,91 @@
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.Fog(COL.sky, 38, 85);
+    scene.fog = new THREE.Fog(0xc4d4d2, 40, 90);
+    function skyTexture() {
+        const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
+        const ctx = cv.getContext('2d'); const g = ctx.createLinearGradient(0, 0, 0, 256);
+        g.addColorStop(0, '#aac4c8'); g.addColorStop(0.6, '#c4d6d6'); g.addColorStop(1, '#d6e0da');
+        ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+        const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+    }
+    scene.background = skyTexture();
 
     const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
     const camTarget = new THREE.Vector3(-1.2, 2, 0);
     const camDir = new THREE.Vector3(0.08, 0.18, 0.98).normalize();
     // Distance is computed in frameScene() so the whole train fits in any aspect.
 
-    // Lights
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x88aa66, 0.95));
-    const sun = new THREE.DirectionalLight(0xfff4d6, 1.15);
+    // Soft painterly lighting
+    scene.add(new THREE.HemisphereLight(0xeef0ea, 0x7a8a5e, 1.0));
+    const sun = new THREE.DirectionalLight(0xfff4dc, 0.85);
     sun.position.set(-6, 12, 8);
     sun.castShadow = true;
     sun.shadow.mapSize.set(1024, 1024);
     sun.shadow.camera.left = -14; sun.shadow.camera.right = 14;
     sun.shadow.camera.top = 14; sun.shadow.camera.bottom = -14;
+    sun.shadow.bias = -0.0004;
     scene.add(sun);
 
-    // Ground
+    // Ground (grass) with a sandy track bed
     const ground = new THREE.Mesh(
-        new THREE.PlaneGeometry(120, 80),
+        new THREE.PlaneGeometry(160, 100),
         new THREE.MeshStandardMaterial({ color: COL.grass, roughness: 1 })
     );
-    ground.rotation.x = -Math.PI / 2;
-    ground.position.y = 0;
-    ground.receiveShadow = true;
+    ground.rotation.x = -Math.PI / 2; ground.position.y = 0; ground.receiveShadow = true;
     scene.add(ground);
+    const ballast = new THREE.Mesh(
+        new THREE.PlaneGeometry(160, 3.4),
+        new THREE.MeshStandardMaterial({ color: COL.sand, roughness: 1 })
+    );
+    ballast.rotation.x = -Math.PI / 2; ballast.position.set(0, 0.02, 0); ballast.receiveShadow = true;
+    scene.add(ballast);
+
+    // Snow-capped mountains
+    function makeMountain(x, z, h, s) {
+        const g = new THREE.Group();
+        const rock = new THREE.Mesh(new THREE.ConeGeometry(h * 0.85, h, 6), new THREE.MeshStandardMaterial({ color: COL.rock, roughness: 1 }));
+        rock.position.y = h / 2; g.add(rock);
+        const cap = new THREE.Mesh(new THREE.ConeGeometry(h * 0.85 * 0.34, h * 0.32, 6), new THREE.MeshStandardMaterial({ color: COL.snow, roughness: 1 }));
+        cap.position.y = h * 0.84; g.add(cap);
+        g.position.set(x, -1.5, z); g.scale.setScalar(s); g.rotation.y = Math.random();
+        scene.add(g);
+    }
+    makeMountain(-16, -44, 13, 1); makeMountain(-2, -50, 16, 1); makeMountain(13, -46, 12, 1); makeMountain(24, -48, 14, 0.9);
+
+    // Pine-covered hills + scattered firs
+    const hillMat = new THREE.MeshStandardMaterial({ color: COL.hill, roughness: 1 });
+    [[-14, -30, 6, -4], [16, -32, 7, -4.5], [3, -36, 8, -5]].forEach(([x, z, r, y]) => {
+        const hill = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), hillMat); hill.position.set(x, y, z); scene.add(hill);
+    });
+    const pineMat = new THREE.MeshStandardMaterial({ color: COL.pine, roughness: 1 });
+    const pineTrunk = new THREE.MeshStandardMaterial({ color: COL.woodDark, roughness: 1 });
+    function makePine(x, z, s) {
+        const g = new THREE.Group();
+        const tr = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.16, 0.7, 6), pineTrunk); tr.position.y = 0.35; g.add(tr);
+        [[1.4, 0.75, 1.1], [1.9, 0.55, 0.85], [2.4, 0.4, 0.62]].forEach(([y, r, hh]) => { const c = new THREE.Mesh(new THREE.ConeGeometry(r, hh, 8), pineMat); c.position.y = y; g.add(c); });
+        g.position.set(x, 0, z); g.scale.setScalar(s); scene.add(g);
+    }
+    for (let i = 0; i < 14; i++) { const side = Math.random() < 0.5 ? -1 : 1; makePine(side * (7 + Math.random() * 12), -14 - Math.random() * 14, 0.8 + Math.random() * 0.9); }
+
+    // Foreground bushes
+    const bushMat = new THREE.MeshStandardMaterial({ color: 0x5f7a44, roughness: 1 });
+    [[-7, 4.5, 1.1], [8.5, 4.2, 1.3], [-2, 5.5, 0.9]].forEach(([x, z, s]) => {
+        const b = new THREE.Group();
+        [[0,0,1],[0.8,0.1,0.7],[-0.8,0.1,0.7]].forEach(([dx,dy,r]) => { const m = new THREE.Mesh(new THREE.SphereGeometry(r, 12, 10), bushMat); m.position.set(dx, dy, 0); b.add(m); });
+        b.position.set(x, 0.2, z); b.scale.setScalar(s); scene.add(b);
+    });
 
     // Rails + ties
     const rails = new THREE.Group();
-    const railMat = new THREE.MeshStandardMaterial({ color: '#9aa0a6', roughness: 0.5, metalness: 0.3 });
+    const railMat = new THREE.MeshStandardMaterial({ color: '#8c9296', roughness: 0.5, metalness: 0.3 });
     for (const z of [-0.55, 0.55]) {
-        const rail = new THREE.Mesh(new THREE.BoxGeometry(120, 0.12, 0.12), railMat);
+        const rail = new THREE.Mesh(new THREE.BoxGeometry(160, 0.12, 0.12), railMat);
         rail.position.set(0, 0.18, z);
         rails.add(rail);
     }
-    const tieMat = new THREE.MeshStandardMaterial({ color: '#7a5a3a', roughness: 1 });
-    for (let i = -28; i <= 28; i++) {
+    const tieMat = new THREE.MeshStandardMaterial({ color: COL.woodDark, roughness: 1 });
+    for (let i = -36; i <= 36; i++) {
         const tie = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.1, 1.5), tieMat);
         tie.position.set(i * 1.1, 0.1, 0);
         tie.receiveShadow = true;
@@ -450,40 +500,7 @@
     }
     scene.add(rails);
 
-    // Sun disc + clouds
-    const sunDisc = new THREE.Mesh(
-        new THREE.CircleGeometry(2.6, 40),
-        new THREE.MeshBasicMaterial({ color: '#fff0a8' })
-    );
-    sunDisc.position.set(-15, 15, -34);
-    scene.add(sunDisc);
-
-    const clouds = [];
-    function makeCloud(x, y, z, s) {
-        const g = new THREE.Group();
-        const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1 });
-        [[0, 0, 1.3], [1.1, -0.1, 1], [-1.1, -0.1, 1], [0.5, 0.5, 0.9]].forEach(([dx, dy, r]) => {
-            const puff = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 12), mat);
-            puff.position.set(dx, dy, 0);
-            g.add(puff);
-        });
-        g.position.set(x, y, z);
-        g.scale.setScalar(s);
-        scene.add(g);
-        clouds.push(g);
-    }
-    makeCloud(-12, 11, -26, 1.1);
-    makeCloud(8, 13, -30, 1.4);
-    makeCloud(16, 10, -24, 0.9);
-    makeCloud(0, 15, -34, 1.2);
-
-    // Hills
-    const hillMat = new THREE.MeshStandardMaterial({ color: '#7cc257', roughness: 1 });
-    [[-15, -34, 4.5, -3], [16, -40, 5.5, -3.5], [2, -46, 6, -4]].forEach(([x, z, r, y]) => {
-        const hill = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 16), hillMat);
-        hill.position.set(x, y, z);
-        scene.add(hill);
-    });
+    const clouds = []; // (no clouds in the mountain scene; kept for the animate loop)
 
     /* ============================================================
        TEXTURES
@@ -560,10 +577,10 @@
 
     const spinWheels = [];
 
-    function makeWheel(x, y, z) {
+    function makeWheel(x, y, z, r = 0.34) {
         const w = new THREE.Mesh(
-            new THREE.CylinderGeometry(0.34, 0.34, 0.18, 18),
-            new THREE.MeshStandardMaterial({ color: COL.ink, roughness: 0.6 })
+            new THREE.CylinderGeometry(r, r, 0.18, 18),
+            new THREE.MeshStandardMaterial({ color: COL.black, roughness: 0.6 })
         );
         w.rotation.x = Math.PI / 2;
         w.position.set(x, y, z);
@@ -572,46 +589,70 @@
         return w;
     }
 
-    // Engine (leads to the left)
-    const engine = new THREE.Group();
-    const engineBody = new THREE.Mesh(
-        new THREE.BoxGeometry(2.1, 1.3, 1.5),
-        new THREE.MeshStandardMaterial({ color: COL.blue, roughness: 0.7 })
-    );
-    engineBody.position.y = 1.05;
-    engineBody.castShadow = true;
-    engine.add(engineBody);
-    const cabin = new THREE.Mesh(
-        new THREE.BoxGeometry(0.95, 0.95, 1.45),
-        new THREE.MeshStandardMaterial({ color: '#5fb6e0', roughness: 0.7 })
-    );
-    cabin.position.set(0.5, 2.0, 0);
-    cabin.castShadow = true;
-    engine.add(cabin);
-    const chimney = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.26, 0.32, 0.8, 16),
-        new THREE.MeshStandardMaterial({ color: COL.ink, roughness: 0.7 })
-    );
-    chimney.position.set(-0.7, 2.0, 0);
-    chimney.castShadow = true;
-    engine.add(chimney);
-    // cute eyes on the front (-x face)
-    const eyeMat = new THREE.MeshStandardMaterial({ color: '#ffffff' });
-    const pupilMat = new THREE.MeshStandardMaterial({ color: COL.ink });
-    for (const dz of [-0.4, 0.4]) {
-        const eye = new THREE.Mesh(new THREE.SphereGeometry(0.22, 14, 12), eyeMat);
-        eye.position.set(-1.06, 1.2, dz);
-        engine.add(eye);
-        const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 10), pupilMat);
-        pupil.position.set(-1.22, 1.2, dz);
-        engine.add(pupil);
+    // Big spoked driving wheel (faces the camera, spins about z)
+    const blackMat = new THREE.MeshStandardMaterial({ color: COL.black, roughness: 0.6 });
+    const rimMat = new THREE.MeshStandardMaterial({ color: '#cfcabf', roughness: 0.5, metalness: 0.2 });
+    const spokeMat = new THREE.MeshStandardMaterial({ color: '#39393a', roughness: 0.6 });
+    function makeDriveWheel(x, y, z, r) {
+        const g = new THREE.Group();
+        const disc = new THREE.Mesh(new THREE.CylinderGeometry(r * 0.92, r * 0.92, 0.16, 24), blackMat);
+        disc.rotation.x = Math.PI / 2; disc.castShadow = true; g.add(disc);
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(r, 0.07, 8, 28), rimMat); g.add(rim);
+        for (let i = 0; i < 4; i++) { const s = new THREE.Mesh(new THREE.BoxGeometry(r * 1.85, 0.08, 0.05), spokeMat); s.rotation.z = i * Math.PI / 4; s.position.z = 0.02; g.add(s); }
+        const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 0.22, 12), rimMat); hub.rotation.x = Math.PI / 2; g.add(hub);
+        g.position.set(x, y, z); spinWheels.push(g); return g;
     }
-    engine.add(makeWheel(-0.6, 0.45, 0.78));
-    engine.add(makeWheel(-0.6, 0.45, -0.78));
-    engine.add(makeWheel(0.6, 0.45, 0.78));
-    engine.add(makeWheel(0.6, 0.45, -0.78));
-    engine.position.x = -4.0;
+
+    // Engine — classic Old-West steam locomotive (leads to the left, -x)
+    const engine = new THREE.Group();
+    const boilerMat = new THREE.MeshStandardMaterial({ color: COL.boiler, roughness: 0.55, metalness: 0.1 });
+    const woodMat = new THREE.MeshStandardMaterial({ color: COL.wood, roughness: 0.85 });
+    const brassMat = new THREE.MeshStandardMaterial({ color: COL.brass, roughness: 0.45, metalness: 0.4 });
+    const darkMat = new THREE.MeshStandardMaterial({ color: COL.black, roughness: 0.6 });
+
+    const footplate = new THREE.Mesh(new THREE.BoxGeometry(3.6, 0.32, 1.5), darkMat); footplate.position.set(-0.2, 0.62, 0); footplate.castShadow = true; engine.add(footplate);
+    const boiler = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 2.4, 22), boilerMat); boiler.rotation.z = Math.PI / 2; boiler.position.set(-0.55, 1.25, 0); boiler.castShadow = true; engine.add(boiler);
+    // smokebox (front, -x) — round dark face with a ring of bolts
+    const smokebox = new THREE.Mesh(new THREE.CylinderGeometry(0.72, 0.72, 0.55, 24), darkMat); smokebox.rotation.z = Math.PI / 2; smokebox.position.set(-1.78, 1.25, 0); smokebox.castShadow = true; engine.add(smokebox);
+    for (let i = 0; i < 16; i++) { const a = i / 16 * Math.PI * 2; const bolt = new THREE.Mesh(new THREE.SphereGeometry(0.045, 6, 6), brassMat); bolt.position.set(-2.06, 1.25 + Math.sin(a) * 0.6, Math.cos(a) * 0.6); engine.add(bolt); }
+    const smokeHub = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.08, 16), new THREE.MeshStandardMaterial({ color: '#3a3a3a' })); smokeHub.rotation.z = Math.PI / 2; smokeHub.position.set(-2.07, 1.25, 0); engine.add(smokeHub);
+    // brass headlight on top of the smokebox
+    const lampBox = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.42, 0.42), brassMat); lampBox.position.set(-1.86, 1.95, 0); engine.add(lampBox);
+    const lampLens = new THREE.Mesh(new THREE.CircleGeometry(0.16, 16), new THREE.MeshBasicMaterial({ color: 0xffe39a })); lampLens.rotation.y = -Math.PI / 2; lampLens.position.set(-2.04, 1.95, 0); engine.add(lampLens);
+    // flared diamond smokestack
+    const stack = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.18, 0.9, 18), darkMat); stack.position.set(-1.2, 2.25, 0); stack.castShadow = true; engine.add(stack);
+    const stackCap = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.4, 0.13, 18), darkMat); stackCap.position.set(-1.2, 2.74, 0); engine.add(stackCap);
+    // two brass domes
+    [[-0.45, 0.32], [0.2, 0.27]].forEach(([dx, r]) => {
+        const baseD = new THREE.Mesh(new THREE.CylinderGeometry(r, r + 0.03, 0.22, 16), brassMat); baseD.position.set(dx, 1.84, 0); engine.add(baseD);
+        const topD = new THREE.Mesh(new THREE.SphereGeometry(r, 14, 12, 0, Math.PI * 2, 0, Math.PI / 2), brassMat); topD.position.set(dx, 1.95, 0); engine.add(topD);
+    });
+    // wooden cab with windows + overhanging roof
+    const cab = new THREE.Mesh(new THREE.BoxGeometry(1.05, 1.2, 1.5), woodMat); cab.position.set(0.95, 1.65, 0); cab.castShadow = true; engine.add(cab);
+    const winMat = new THREE.MeshStandardMaterial({ color: '#33403a', roughness: 0.4 });
+    for (const dz of [0.76, -0.76]) { const win = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.5, 0.06), winMat); win.position.set(0.95, 1.85, dz); engine.add(win); }
+    const cabFrontWin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.5, 0.6), winMat); cabFrontWin.position.set(0.42, 1.85, 0); engine.add(cabFrontWin);
+    const cabRoof = new THREE.Mesh(new THREE.BoxGeometry(1.25, 0.16, 1.66), new THREE.MeshStandardMaterial({ color: COL.woodDark, roughness: 0.85 })); cabRoof.position.set(0.95, 2.33, 0); cabRoof.castShadow = true; engine.add(cabRoof);
+    // wooden cowcatcher (wedge) at the front
+    const cowShape = new THREE.Shape(); cowShape.moveTo(0, 0.85); cowShape.lineTo(-1.15, 0.05); cowShape.lineTo(0, 0.05); cowShape.closePath();
+    const cowGeo = new THREE.ExtrudeGeometry(cowShape, { depth: 1.3, bevelEnabled: false }); cowGeo.translate(0, 0, -0.65);
+    const cowcatcher = new THREE.Mesh(cowGeo, woodMat); cowcatcher.position.set(-1.95, 0.18, 0); cowcatcher.castShadow = true; engine.add(cowcatcher);
+    // wheels: small pilot truck + three big spoked drivers
+    engine.add(makeWheel(-1.55, 0.34, 0.78, 0.3)); engine.add(makeWheel(-1.55, 0.34, -0.78, 0.3));
+    [-0.7, 0.1, 0.9].forEach(wx => { engine.add(makeDriveWheel(wx, 0.55, 0.79, 0.55)); engine.add(makeDriveWheel(wx, 0.55, -0.79, 0.55)); });
+    engine.position.x = -4.2;
     train.add(engine);
+
+    // Billowing smoke from the stack
+    const smokePuffs = [];
+    const smokeBaseY = 3.0;
+    for (let i = 0; i < 5; i++) {
+        const mat = new THREE.MeshStandardMaterial({ color: 0xb9b6ac, roughness: 1, transparent: true, opacity: 0.75 });
+        const puff = new THREE.Group();
+        [[0, 0, 0.42], [0.34, 0.1, 0.34], [-0.32, 0.12, 0.32], [0.08, 0.36, 0.3]].forEach(([dx, dy, r]) => { const s = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), mat); s.position.set(dx, dy, 0); puff.add(s); });
+        puff.userData = { mat, off: i * 0.9 };
+        engine.add(puff); smokePuffs.push(puff);
+    }
 
     // Cars — recreated per round to match word length
     let cars = [];
@@ -1081,6 +1122,15 @@
         }
         if (moving) {
             for (const w of spinWheels) w.rotation.z -= dt * 6;
+        }
+
+        // billowing smoke from the stack
+        for (const p of smokePuffs) {
+            const tt = (t * 0.55 + p.userData.off) % 4.6;
+            p.position.set(-1.2 + tt * 0.28 + Math.sin(tt * 1.3) * 0.12, smokeBaseY + tt * 0.82, 0);
+            const k = tt / 4.6;
+            p.scale.setScalar(0.4 + k * 1.25);
+            p.userData.mat.opacity = 0.72 * (1 - k);
         }
 
         // car effects

@@ -413,15 +413,15 @@ finishStrip.rotation.x = -Math.PI / 2;
 finishStrip.position.set(FINISH_X, 0.03, 0);
 scene.add(finishStrip);
 
-// Finish banner arch
+// Finish banner gantry — spans ACROSS the road (z), held up by a pole at each side
 const bannerMat = new THREE.MeshStandardMaterial({ map: checkerTexture(12, 2), roughness: 0.7, side: THREE.DoubleSide });
-const banner = new THREE.Mesh(new THREE.PlaneGeometry(6.8, 0.9), bannerMat);
-banner.position.set(FINISH_X, 4.6, 0);
-banner.rotation.y = Math.PI;
+const banner = new THREE.Mesh(new THREE.PlaneGeometry(7.0, 0.9), bannerMat);
+banner.position.set(FINISH_X, 4.55, 0);
+banner.rotation.y = Math.PI / 2; // width now runs along z, between the poles
 scene.add(banner);
-const poleMat = new THREE.MeshStandardMaterial({ color: 0xd23b3b, roughness: 0.6 });
+const poleMat = new THREE.MeshStandardMaterial({ color: 0xc14a44, roughness: 0.6 });
 for (const pz of [-3.4, 3.4]) {
-  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 5, 12), poleMat);
+  const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.13, 5, 12), poleMat);
   pole.position.set(FINISH_X, 2.5, pz); pole.castShadow = true;
   scene.add(pole);
 }
