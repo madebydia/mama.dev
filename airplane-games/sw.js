@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-airplane-games-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/airplane-games/",
   "/airplane-games/index.html",
@@ -12,9 +12,10 @@ const CORE_ASSETS = [
   "/airplane-games/home-btn.js",
   "/airplane-games/app.js",
   "/airplane-games/manifest.webmanifest",
-  "/airplane-games/icons/airplanes-icon.svg",
-  "/airplane-games/icons/favicon-32.png",
-  "/airplane-games/icons/apple-touch-icon.png",
+  "/airplane-games/icons/favicon-32-v2.png",
+  "/airplane-games/icons/apple-touch-icon-v2.png",
+  "/airplane-games/icons/airplanes-icon-192-v2.png",
+  "/airplane-games/icons/airplanes-icon-512-v2.png",
   "/airplane-games/assets/plane-1.png",
   "/airplane-games/assets/plane-2.png",
   "/airplane-games/assets/plane-3.png",

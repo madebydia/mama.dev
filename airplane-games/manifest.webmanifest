@@ -7,24 +7,24 @@
   "scope": "/airplane-games/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#87CEEB",
-  "theme_color": "#87CEEB",
+  "background_color": "#7ea59d",
+  "theme_color": "#7ea59d",
   "categories": ["education", "games", "kids"],
   "icons": [
     {
-      "src": "/airplane-games/icons/airplanes-icon-192.png",
+      "src": "/airplane-games/icons/airplanes-icon-192-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/airplane-games/icons/airplanes-icon-512.png",
+      "src": "/airplane-games/icons/airplanes-icon-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/airplane-games/icons/airplanes-icon-maskable-512.png",
+      "src": "/airplane-games/icons/airplanes-icon-maskable-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
