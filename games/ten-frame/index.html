@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#a7bdae">
+<meta name="application-name" content="mama.dev games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="mama.dev games">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/games/manifest.webmanifest">
+<link rel="icon" href="/games/icons/games-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/games/icons/apple-touch-icon.png">
+<script src="/games/app.js" defer></script>
+<title>Carrot Ten-Frame!</title>
+<style>
+  :root { --ink: #3a2e22; --muted: #6e5b40; --panel: #fbf3e2; --panel-strong: #f4e3b8; --frame: #5d7355; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
+    background: linear-gradient(#a7bdae 0 50%, #7a5236 50% 100%);
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none;
+  }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+  .ui {
+    position: fixed; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none;
+    padding: max(46px, calc(env(safe-area-inset-top) + 8px)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .ui > * { pointer-events: auto; }
+
+  .top { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .toprow { width: 100%; display: flex; align-items: flex-start; justify-content: flex-end; }
+  .score-bar { display: flex; gap: 6px; align-items: center; }
+  .trophy { font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
+  .score-num { font-size: 30px; font-weight: 1000; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+  .streak-bar { display: flex; gap: 5px; margin-top: 6px; justify-content: flex-end; }
+  .streak-dot { width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: background .3s, transform .3s; }
+  .streak-dot.lit { background: #ffb02e; transform: scale(1.2); box-shadow: 0 0 8px rgba(255,176,46,0.6); }
+  .streak-dot.miss { background: #d98a6a; transform: scale(1.2); }
+
+  .prompt {
+    align-self: center;
+    padding: 9px 24px;
+    background: rgba(251,243,226,0.95);
+    border: 3px solid var(--ink); border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(58,46,34,0.22);
+    font-size: clamp(1.05rem, 3.8vw, 1.5rem); font-weight: 1000; text-align: center;
+  }
+  .prompt b { color: #c4561f; }
+
+  .dock { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .level-badge {
+    align-self: center;
+    background: rgba(58,46,34,0.42); color: #fff;
+    padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px;
+    cursor: pointer; backdrop-filter: blur(4px);
+  }
+  .level-picker {
+    position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); z-index: 25;
+    background: #3a2e22; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 8px 0;
+    display: none; min-width: 230px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); pointer-events: auto;
+  }
+  .level-picker.open { display: block; }
+  .level-option { padding: 10px 16px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+  .level-option:hover { background: rgba(255,255,255,0.1); }
+  .level-option.active { background: rgba(255,176,46,0.22); color: #ffcf8a; }
+  .level-range { font-weight: 400; opacity: 0.6; }
+
+  .sparkle { position: fixed; z-index: 4; font-size: 1.7rem; pointer-events: none; animation: sparkleFloat 1.1s ease-out forwards; }
+  @keyframes sparkleFloat { 0%{opacity:.95;transform:translate(-50%,0) scale(.5) rotate(0)} 100%{opacity:0;transform:translate(-50%,-120px) scale(1.1) rotate(120deg)} }
+  .confetti-piece { position: fixed; z-index: 50; pointer-events: none; }
+  @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  footer { position: fixed; bottom: 4px; right: 10px; z-index: 3; font-size: 0.72rem; color: var(--muted); opacity: 0.85; }
+  footer a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) { .sparkle { animation-duration: 0.01ms; } }
+</style>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
+    <script>
+     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+     plausible.init()
+    </script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<div class="ui">
+  <div class="top">
+    <div class="toprow">
+      <div>
+        <div class="score-bar"><span class="trophy">🥕</span><span class="score-num" id="score">0</span></div>
+        <div class="streak-bar" id="streak-bar"></div>
+      </div>
+    </div>
+    <div class="prompt" id="prompt">Put <b>5</b> carrots in!</div>
+  </div>
+  <div class="dock">
+    <div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
+  </div>
+</div>
+<div class="level-picker" id="level-picker"></div>
+
+<footer>Made with care by <a href="https://x.com/madebydia" target="_blank" rel="noopener">@madebydia</a></footer>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const LEVELS = [
+  { name: 'Count to 5',  mode: 'build',   min: 1, max: 5 },
+  { name: 'Count to 10', mode: 'build',   min: 2, max: 10 },
+  { name: 'Make Ten',    mode: 'maketen', min: 4, max: 8 },
+  { name: 'Ten Master',  mode: 'maketen', min: 1, max: 9 },
+];
+
+let score = 0, level = 0, streak = 0, roundHistory = [];
+let mode = 'build', target = 5, prefill = 0, count = 0, locked = false;
+
+const scoreEl = document.getElementById('score');
+const streakBar = document.getElementById('streak-bar');
+const promptEl = document.getElementById('prompt');
+const levelBadge = document.getElementById('level-badge');
+for (let i = 0; i < 5; i++) { const d = document.createElement('div'); d.className = 'streak-dot'; streakBar.appendChild(d); }
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function tone(freq, dur, type = 'sine', vol = 0.2) {
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination); o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  o.start(); o.stop(audioCtx.currentTime + dur);
+}
+function popSound(n) { tone(400 + n * 32, 0.14, 'triangle', 0.24); }
+function plopSound() { tone(280, 0.12, 'sine', 0.18); }
+function successSound() { [523, 659, 784, 1046].forEach((f, i) => setTimeout(() => tone(f, 0.32, 'sine', 0.22), i * 100)); }
+function speak(text) { if (!('speechSynthesis' in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.9; u.pitch = 1.2; speechSynthesis.speak(u); } catch (e) {} }
+
+/* ============================================================
+   THREE.JS SCENE
+   ============================================================ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xb6c7bb, 22, 52);
+function skyTexture() {
+  const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
+  const ctx = cv.getContext('2d'); const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#9bb3a6'); g.addColorStop(0.6, '#b8c8bb'); g.addColorStop(1, '#cdd6c5');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = skyTexture();
+
+const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+const camTarget = new THREE.Vector3(0, 0.9, 1.1);
+const camDir = new THREE.Vector3(0, 0.5, 0.87).normalize();
+
+scene.add(new THREE.HemisphereLight(0xeef0e6, 0x6a5238, 1.0));
+const sun = new THREE.DirectionalLight(0xfff4dc, 0.95);
+sun.position.set(-5, 11, 6); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -10; sun.shadow.camera.right = 10; sun.shadow.camera.top = 10; sun.shadow.camera.bottom = -10;
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+// Earth ground
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(120, 90), new THREE.MeshStandardMaterial({ color: 0x7a5236, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+// Muted mountains
+const mtnMat = new THREE.MeshStandardMaterial({ color: 0x7f9a91, roughness: 1 });
+[[-12, -26, 8], [2, -30, 11], [14, -27, 9]].forEach(([x, z, h]) => {
+  const m = new THREE.Mesh(new THREE.ConeGeometry(h * 0.95, h, 5), mtnMat); m.position.set(x, h / 2 - 2, z); m.rotation.y = 0.4; scene.add(m);
+});
+
+// Carrot patch (decorative row behind the rabbits)
+const carrotBodyMat = new THREE.MeshStandardMaterial({ color: 0xe08a2e, roughness: 0.6 });
+const carrotTopMat = new THREE.MeshStandardMaterial({ color: 0x5f8a3e, roughness: 0.8 });
+const carrotTopMat2 = new THREE.MeshStandardMaterial({ color: 0x4f7a36, roughness: 0.85 });
+const leafGeo = new THREE.SphereGeometry(0.1, 8, 6);
+function leafyTop(parent, n, splay) {
+  for (let i = 0; i < n; i++) {
+    const a = (i / n) * Math.PI * 2 + 0.3;
+    const len = 1.5 + (i % 3) * 0.32;
+    const leaf = new THREE.Mesh(leafGeo, i % 2 ? carrotTopMat : carrotTopMat2);
+    leaf.scale.set(0.5, len, 0.5);
+    leaf.position.set(Math.cos(a) * 0.06, len * 0.085, Math.sin(a) * 0.06);
+    leaf.rotation.set(Math.sin(a) * splay, 0, -Math.cos(a) * splay);
+    leaf.castShadow = true; parent.add(leaf);
+  }
+  const mid = new THREE.Mesh(leafGeo, carrotTopMat); mid.scale.set(0.6, 2.0, 0.6); mid.position.y = 0.17; parent.add(mid);
+}
+function plantedCarrot(x, z, s) {
+  const g = new THREE.Group();
+  const body = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.5, 8), carrotBodyMat); body.rotation.x = Math.PI; body.position.y = 0.25; g.add(body);
+  const top = new THREE.Group(); top.position.y = 0.48; leafyTop(top, 6, 0.32); g.add(top);
+  g.position.set(x, 0, z); g.scale.setScalar(s); scene.add(g);
+}
+for (let i = 0; i < 16; i++) plantedCarrot(-5 + i * 0.66, -3.6 - (i % 2) * 0.25, 0.9 + Math.random() * 0.25);
+
+// Rabbits
+function makeRabbit(color) {
+  const g = new THREE.Group();
+  const mat = new THREE.MeshStandardMaterial({ color, roughness: 0.9 });
+  const body = new THREE.Mesh(new THREE.SphereGeometry(0.6, 18, 16), mat); body.scale.set(1.35, 0.92, 1.0); body.position.set(-0.1, 0.52, 0); body.castShadow = true; g.add(body);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.42, 18, 16), mat); head.position.set(0.72, 0.74, 0); head.castShadow = true; g.add(head);
+  const snout = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 10), mat); snout.scale.set(1.1, 0.8, 0.85); snout.position.set(1.02, 0.62, 0); g.add(snout);
+  const earMat = mat;
+  const innerMat = new THREE.MeshStandardMaterial({ color: 0xe0b4a8, roughness: 0.9 });
+  for (const dz of [-0.16, 0.18]) {
+    const ear = new THREE.Mesh(new THREE.CapsuleGeometry(0.11, 0.55, 4, 8), earMat); ear.position.set(0.66, 1.25, dz); ear.rotation.z = -0.12 - dz; ear.castShadow = true; g.add(ear);
+    const inner = new THREE.Mesh(new THREE.CapsuleGeometry(0.055, 0.4, 4, 8), innerMat); inner.position.set(0.7, 1.25, dz); inner.rotation.z = -0.12 - dz; g.add(inner);
+  }
+  const tail = new THREE.Mesh(new THREE.SphereGeometry(0.2, 12, 10), new THREE.MeshStandardMaterial({ color: 0xf3ead8, roughness: 1 })); tail.position.set(-0.78, 0.55, 0); g.add(tail);
+  const eyeMat = new THREE.MeshStandardMaterial({ color: 0x1f1a16, roughness: 0.3 });
+  for (const dz of [-0.26, 0.26]) { const eye = new THREE.Mesh(new THREE.SphereGeometry(0.07, 10, 10), eyeMat); eye.position.set(0.95, 0.82, dz); g.add(eye); }
+  const nose = new THREE.Mesh(new THREE.SphereGeometry(0.06, 10, 10), new THREE.MeshStandardMaterial({ color: 0x8a4a4a, roughness: 0.5 })); nose.position.set(1.18, 0.6, 0); g.add(nose);
+  g.userData = { baseY: 0, hop: 0 };
+  scene.add(g);
+  return g;
+}
+const rabbitL = makeRabbit(0xcdb89a); rabbitL.position.set(-2.6, 0, -1.2); rabbitL.rotation.y = -0.7;       // faces camera, turned toward centre
+const rabbitR = makeRabbit(0x8a5e3a); rabbitR.position.set(2.6, 0, -1.2); rabbitR.rotation.y = Math.PI + 0.7; // faces camera, turned toward centre
+const rabbits = [rabbitL, rabbitR];
+
+/* ---- The wooden ten-frame tray ---- */
+const TRAY_Z = 2.1, TRAY_TOP = 0.42;
+const woodMat = new THREE.MeshStandardMaterial({ color: 0xd9c08c, roughness: 0.85 });
+const woodDarkMat = new THREE.MeshStandardMaterial({ color: 0xb89a63, roughness: 0.85 });
+const cellFloorMat = new THREE.MeshStandardMaterial({ color: 0xc7ab74, roughness: 0.9 });
+const tray = new THREE.Group();
+const COLS = 5, ROWS = 2, CW = 1.0;
+const trayW = COLS * CW + 0.5, trayD = ROWS * CW + 0.5;
+const slab = new THREE.Mesh(new THREE.BoxGeometry(trayW, 0.3, trayD), woodMat); slab.position.set(0, TRAY_TOP - 0.15, TRAY_Z); slab.receiveShadow = true; slab.castShadow = true; tray.add(slab);
+// rim
+for (const [dx, dz, w, d] of [[-(trayW/2-0.1), 0, 0.2, trayD], [(trayW/2-0.1), 0, 0.2, trayD], [0, -(trayD/2-0.1), trayW, 0.2], [0, (trayD/2-0.1), trayW, 0.2]]) {
+  const wall = new THREE.Mesh(new THREE.BoxGeometry(w, 0.34, d), woodDarkMat); wall.position.set(dx, TRAY_TOP + 0.02, TRAY_Z + dz); wall.castShadow = true; tray.add(wall);
+}
+// internal dividers
+for (let c = 1; c < COLS; c++) { const wall = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.24, trayD - 0.4), woodDarkMat); wall.position.set(-trayW/2 + 0.25 + c * CW, TRAY_TOP - 0.03, TRAY_Z); tray.add(wall); }
+{ const wall = new THREE.Mesh(new THREE.BoxGeometry(trayW - 0.4, 0.24, 0.08), woodDarkMat); wall.position.set(0, TRAY_TOP - 0.03, TRAY_Z); tray.add(wall); }
+scene.add(tray);
+
+// 10 cells (ten-frame order: top row 0..4, bottom row 5..9)
+const cells = [];
+function cellPos(i) {
+  const col = i % COLS, row = Math.floor(i / COLS);
+  const x = -trayW / 2 + 0.25 + col * CW + CW / 2 - 0.0;
+  const z = TRAY_Z + (row === 0 ? -CW / 2 : CW / 2);
+  return { x, z };
+}
+for (let i = 0; i < 10; i++) {
+  const { x, z } = cellPos(i);
+  const floor = new THREE.Mesh(new THREE.BoxGeometry(CW - 0.18, 0.05, CW - 0.18), cellFloorMat); floor.position.set(x, TRAY_TOP - 0.04, z); floor.receiveShadow = true; tray.add(floor);
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(CW - 0.1, 0.5, CW - 0.1), new THREE.MeshBasicMaterial({ visible: false }));
+  hit.position.set(x, TRAY_TOP + 0.2, z); scene.add(hit);
+  cells.push({ x, z, hit, carrot: null, filled: false, locked: false, pop: 0 });
+}
+
+function makeTrayCarrot() {
+  const g = new THREE.Group();
+  // slim tapered orange body, point sitting in the cell (apex at local y=0)
+  const body = new THREE.Mesh(new THREE.ConeGeometry(0.17, 0.5, 12), carrotBodyMat);
+  body.rotation.x = Math.PI; body.position.y = 0.25; body.castShadow = true; g.add(body);
+  // leafy green top — a soft bushy cluster of rounded blades
+  const top = new THREE.Group(); top.position.y = 0.48; leafyTop(top, 7, 0.32); g.add(top);
+  return g;
+}
+function fillCellVisual(i, animate) {
+  const cell = cells[i];
+  if (cell.carrot) return;
+  const c = makeTrayCarrot();
+  c.position.set(cell.x, TRAY_TOP - 0.05, cell.z);
+  c.rotation.y = Math.random() * Math.PI * 2; // vary the leaf fan
+  scene.add(c); cell.carrot = c; cell.filled = true;
+  cell.pop = animate ? clock.getElapsedTime() + 0.4 : 0;
+}
+function clearCell(i) {
+  const cell = cells[i];
+  if (cell.carrot) { scene.remove(cell.carrot); cell.carrot.traverse(o => { if (o.isMesh && o.geometry) o.geometry.dispose(); }); cell.carrot = null; }
+  cell.filled = false; cell.locked = false;
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function updateStreakBar() {
+  const dots = streakBar.querySelectorAll('.streak-dot');
+  const recent = roundHistory.slice(-5);
+  dots.forEach((d, i) => { d.className = 'streak-dot'; if (i < recent.length) d.classList.add(recent[i] ? 'lit' : 'miss'); });
+}
+function confetti() {
+  const colors = ['#ffb02e', '#e08a2e', '#5f8a3e', '#c4561f', '#f4e3b8'];
+  for (let i = 0; i < 40; i++) { const c = document.createElement('div'); c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + 'vw'; c.style.top = '-10px'; c.style.background = colors[Math.random() * colors.length | 0];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px'; c.style.width = (6 + Math.random() * 8) + 'px'; c.style.height = (6 + Math.random() * 8) + 'px';
+    c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`; c.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 4000);
+  }
+}
+function sparkleBurst() {
+  const e = ['✨', '⭐', '💫', '🥕']; const cx = innerWidth / 2, cy = innerHeight * 0.5;
+  for (let i = 0; i < 10; i++) { const s = document.createElement('div'); s.className = 'sparkle'; s.textContent = e[Math.floor(Math.random() * e.length)];
+    s.style.left = (cx + (Math.random() - 0.5) * 320) + 'px'; s.style.top = (cy + (Math.random() - 0.5) * 120) + 'px'; s.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1300);
+  }
+}
+
+/* ============================================================
+   ROUND FLOW
+   ============================================================ */
+function setPrompt() {
+  if (mode === 'build') promptEl.innerHTML = 'Put <b>' + target + '</b> carrot' + (target === 1 ? '' : 's') + ' in!';
+  else promptEl.innerHTML = '<b>' + prefill + '</b> in — how many more to make <b>10</b>?';
+}
+
+function newRound() {
+  locked = false;
+  for (let i = 0; i < 10; i++) clearCell(i);
+  const lv = LEVELS[level];
+  mode = lv.mode;
+  if (mode === 'build') { target = randInt(lv.min, lv.max); prefill = 0; }
+  else { target = 10; prefill = randInt(lv.min, lv.max); for (let i = 0; i < prefill; i++) { fillCellVisual(i, false); cells[i].locked = true; } }
+  count = prefill;
+  setPrompt();
+  levelBadge.textContent = lv.name;
+}
+
+function check() {
+  if (count === target) {
+    locked = true;
+    score++; streak++; scoreEl.textContent = score;
+    roundHistory.push(true);
+    if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) level++;
+    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+    updateStreakBar();
+    promptEl.innerHTML = ['Yay! 🎉', 'Perfect — <b>' + target + '</b>!', 'You did it!'][Math.floor(Math.random() * 3)];
+    rabbits.forEach((r, k) => { r.userData.hop = clock.getElapsedTime() + 1.0 + k * 0.08; });
+    speak(mode === 'maketen' ? (prefill + ' and ' + (10 - prefill) + ' make ten') : String(target));
+    successSound(); confetti(); sparkleBurst();
+    setTimeout(newRound, 2400);
+  }
+}
+
+function tapCell(i) {
+  if (locked) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const cell = cells[i];
+  if (cell.locked) return;
+  if (cell.filled) { clearCell(i); count--; plopSound(); }
+  else { fillCellVisual(i, true); count++; popSound(count); }
+  if (mode === 'build') promptEl.innerHTML = 'Put <b>' + target + '</b> carrot' + (target === 1 ? '' : 's') + ' in! <span style="opacity:.6">(' + count + ')</span>';
+  check();
+}
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+canvas.addEventListener('pointerdown', (e) => {
+  pointer.x = (e.clientX / innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  for (let i = 0; i < cells.length; i++) { if (raycaster.intersectObject(cells[i].hit).length) { tapCell(i); break; } }
+});
+
+/* ============================================================
+   RENDER LOOP
+   ============================================================ */
+const clock = new THREE.Clock();
+function frameScene() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  const aspect = w / h; camera.aspect = aspect;
+  const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+  const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+  const dist = Math.min(26, Math.max(8, Math.max(4.4 / Math.tan(hHalf), 3.6 / Math.tan(vHalf))));
+  camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+  camera.lookAt(camTarget);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', frameScene);
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.getElapsedTime();
+  // carrot pop-in
+  for (const cell of cells) {
+    if (cell.carrot) {
+      let s = 1;
+      if (t < cell.pop) s = 1 + Math.sin((cell.pop - t) * 14) * 0.18;
+      cell.carrot.scale.setScalar(s);
+    }
+  }
+  // rabbit idle + hop
+  for (const r of rabbits) {
+    let y = Math.sin(t * 1.4 + r.position.x) * 0.02;
+    if (t < r.userData.hop) y += Math.abs(Math.sin((r.userData.hop - t) * 9)) * 0.4;
+    r.position.y = y;
+  }
+  renderer.render(scene, camera);
+}
+
+/* ============================================================
+   LEVEL PICKER
+   ============================================================ */
+window.toggleLevelPicker = function () {
+  const p = document.getElementById('level-picker');
+  if (p.classList.contains('open')) { p.classList.remove('open'); return; }
+  p.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const o = document.createElement('div'); o.className = 'level-option' + (i === level ? ' active' : '');
+    o.innerHTML = '<span>' + lv.name + '</span><span class="level-range">' + (lv.mode === 'build' ? 'count' : 'make 10') + '</span>';
+    o.onclick = (e) => { e.stopPropagation(); level = i; streak = 0; roundHistory = []; updateStreakBar(); p.classList.remove('open'); newRound(); };
+    p.appendChild(o);
+  });
+  p.classList.add('open');
+};
+document.addEventListener('click', (e) => { if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) document.getElementById('level-picker').classList.remove('open'); });
+
+// Start
+frameScene();
+newRound();
+animate();
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-games-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/",
   "/games/index.html",
@@ -41,8 +41,9 @@ self.addEventListener("fetch", function (event) {
   if (url.origin !== location.origin || !url.pathname.startsWith("/games/")) return;
 
   if (event.request.mode === "navigate") {
+    // Always fetch game pages fresh (bypass the HTTP cache); fall back to cache offline.
     event.respondWith(
-      fetch(event.request).then(function (response) {
+      fetch(event.request, { cache: "no-store" }).then(function (response) {
         const copy = response.clone();
         caches.open(CACHE_NAME).then(function (cache) {
           cache.put(event.request, copy);

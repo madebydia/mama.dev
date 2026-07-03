@@ -356,6 +356,52 @@
     transform: translateY(7px);
   }
 
+  .theme-tenframe .window-bg {
+    background: #c6cdac;
+  }
+
+  .theme-tenframe .play-btn {
+    background: var(--mustard);
+    box-shadow: 0 7px 0 var(--mustard-shadow);
+  }
+
+  .theme-tenframe:active .play-btn {
+    box-shadow: 0 0 0 var(--mustard-shadow);
+    transform: translateY(7px);
+  }
+
+  .theme-sounds .window-bg { background: #e4dcae; }
+  .theme-sounds .play-btn { background: var(--teal); box-shadow: 0 7px 0 var(--teal-shadow); }
+  .theme-sounds:active .play-btn { box-shadow: 0 0 0 var(--teal-shadow); transform: translateY(7px); }
+
+  .theme-numberhop .window-bg { background: #bcd8e4; }
+  .theme-numberhop .play-btn { background: var(--terracotta); box-shadow: 0 7px 0 var(--terracotta-shadow); }
+  .theme-numberhop:active .play-btn { box-shadow: 0 0 0 var(--terracotta-shadow); transform: translateY(7px); }
+
+  .theme-pattern .window-bg { background: #d9d2e8; }
+  .theme-pattern .play-btn { background: var(--mustard); box-shadow: 0 7px 0 var(--mustard-shadow); }
+  .theme-pattern:active .play-btn { box-shadow: 0 0 0 var(--mustard-shadow); transform: translateY(7px); }
+
+  .theme-rhyme .window-bg { background: #cfc4dc; }
+  .theme-rhyme .play-btn { background: var(--teal); box-shadow: 0 7px 0 var(--teal-shadow); }
+  .theme-rhyme:active .play-btn { box-shadow: 0 0 0 var(--teal-shadow); transform: translateY(7px); }
+
+  .theme-takeaway .window-bg { background: #ecd0cc; }
+  .theme-takeaway .play-btn { background: var(--terracotta); box-shadow: 0 7px 0 var(--terracotta-shadow); }
+  .theme-takeaway:active .play-btn { box-shadow: 0 0 0 var(--terracotta-shadow); transform: translateY(7px); }
+
+  .theme-sorting .window-bg { background: #d4e0c4; }
+  .theme-sorting .play-btn { background: var(--mustard); box-shadow: 0 7px 0 var(--mustard-shadow); }
+  .theme-sorting:active .play-btn { box-shadow: 0 0 0 var(--mustard-shadow); transform: translateY(7px); }
+
+  .theme-memory .window-bg { background: #ecdcc8; }
+  .theme-memory .play-btn { background: var(--terracotta); box-shadow: 0 7px 0 var(--terracotta-shadow); }
+  .theme-memory:active .play-btn { box-shadow: 0 0 0 var(--terracotta-shadow); transform: translateY(7px); }
+
+  .theme-skipcount .window-bg { background: #c4dce0; }
+  .theme-skipcount .play-btn { background: var(--teal); box-shadow: 0 7px 0 var(--teal-shadow); }
+  .theme-skipcount:active .play-btn { box-shadow: 0 0 0 var(--teal-shadow); transform: translateY(7px); }
+
   @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-8px); }
@@ -706,6 +752,244 @@
           </svg>
         </div>
         <div class="card-title">Add-Up<br>Train</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-tenframe" href="/games/ten-frame/" aria-label="Play Carrot Ten-Frame">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <!-- bunny peeking -->
+            <g class="anim-float">
+              <ellipse cx="88" cy="26" rx="7" ry="18" fill="#cdb89a"></ellipse>
+              <ellipse cx="112" cy="26" rx="7" ry="18" fill="#cdb89a"></ellipse>
+              <ellipse cx="88" cy="28" rx="3" ry="11" fill="#e0b4a8"></ellipse>
+              <ellipse cx="112" cy="28" rx="3" ry="11" fill="#e0b4a8"></ellipse>
+              <ellipse cx="100" cy="58" rx="25" ry="21" fill="#cdb89a"></ellipse>
+              <circle cx="91" cy="56" r="3" fill="#1f1a16"></circle>
+              <circle cx="109" cy="56" r="3" fill="#1f1a16"></circle>
+              <ellipse cx="100" cy="67" rx="4" ry="3" fill="#8a4a4a"></ellipse>
+            </g>
+            <!-- wooden ten-frame tray -->
+            <rect x="20" y="100" width="160" height="78" rx="10" fill="#d9c08c" stroke="#b89a63" stroke-width="6"></rect>
+            <line x1="20" y1="139" x2="180" y2="139" stroke="#b89a63" stroke-width="4"></line>
+            <line x1="52" y1="100" x2="52" y2="178" stroke="#b89a63" stroke-width="4"></line>
+            <line x1="84" y1="100" x2="84" y2="178" stroke="#b89a63" stroke-width="4"></line>
+            <line x1="116" y1="100" x2="116" y2="178" stroke="#b89a63" stroke-width="4"></line>
+            <line x1="148" y1="100" x2="148" y2="178" stroke="#b89a63" stroke-width="4"></line>
+            <!-- 7 carrots (top row + 2) -->
+            <g fill="#e08a2e">
+              <polygon points="30,117 42,117 36,130"></polygon>
+              <polygon points="62,117 74,117 68,130"></polygon>
+              <polygon points="94,117 106,117 100,130"></polygon>
+              <polygon points="126,117 138,117 132,130"></polygon>
+              <polygon points="158,117 170,117 164,130"></polygon>
+              <polygon points="30,156 42,156 36,169"></polygon>
+              <polygon points="62,156 74,156 68,169"></polygon>
+            </g>
+            <g fill="#5f8a3e">
+              <rect x="31" y="111" width="10" height="6" rx="2"></rect>
+              <rect x="63" y="111" width="10" height="6" rx="2"></rect>
+              <rect x="95" y="111" width="10" height="6" rx="2"></rect>
+              <rect x="127" y="111" width="10" height="6" rx="2"></rect>
+              <rect x="159" y="111" width="10" height="6" rx="2"></rect>
+              <rect x="31" y="150" width="10" height="6" rx="2"></rect>
+              <rect x="63" y="150" width="10" height="6" rx="2"></rect>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Carrot<br>Ten-Frame</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-sounds" href="/games/letter-sounds/" aria-label="Play Sound Safari">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="14" y="158" width="172" height="8" rx="4" fill="#9a9450"></rect>
+            <g class="anim-float">
+              <rect x="38" y="84" width="62" height="62" rx="10" fill="#d9915a"></rect>
+              <rect x="48" y="94" width="42" height="42" rx="7" fill="#fbf5dc"></rect>
+              <text x="69" y="126" font-size="34" font-weight="900" fill="#3e3420" text-anchor="middle" font-family="Arial Rounded MT Bold, Arial">B</text>
+              <rect x="112" y="96" width="52" height="52" rx="9" fill="#9ab06a"></rect>
+              <rect x="120" y="104" width="36" height="36" rx="6" fill="#fbf5dc"></rect>
+              <text x="138" y="132" font-size="28" font-weight="900" fill="#3e3420" text-anchor="middle" font-family="Arial Rounded MT Bold, Arial">M</text>
+            </g>
+            <path d="M120 52 q10 -8 0 -16" stroke="#3e3420" stroke-width="5" fill="none" stroke-linecap="round"></path>
+            <path d="M132 58 q16 -14 0 -28" stroke="#3e3420" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.7"></path>
+            <path d="M144 64 q22 -20 0 -40" stroke="#3e3420" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.4"></path>
+            <text x="66" y="64" font-size="34" text-anchor="middle">🦁</text>
+          </svg>
+        </div>
+        <div class="card-title">Sound<br>Safari</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-numberhop" href="/games/number-hop/" aria-label="Play Number Hop">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="0" y="120" width="200" height="80" fill="#7fb4d0"></rect>
+            <g class="anim-drive-slow">
+              <ellipse cx="50" cy="150" rx="26" ry="10" fill="#6fae5a"></ellipse>
+              <circle cx="50" cy="148" r="12" fill="#eef8e4"></circle>
+              <text x="50" y="153" font-size="14" font-weight="900" fill="#24404a" text-anchor="middle">4</text>
+              <ellipse cx="112" cy="152" rx="26" ry="10" fill="#6fae5a"></ellipse>
+              <circle cx="112" cy="150" r="12" fill="#eef8e4"></circle>
+              <text x="112" y="155" font-size="14" font-weight="900" fill="#24404a" text-anchor="middle">5</text>
+              <ellipse cx="172" cy="148" rx="26" ry="10" fill="#6fae5a"></ellipse>
+              <circle cx="172" cy="146" r="12" fill="#eef8e4"></circle>
+              <text x="172" y="151" font-size="14" font-weight="900" fill="#24404a" text-anchor="middle">6</text>
+            </g>
+            <g class="anim-float">
+              <ellipse cx="50" cy="118" rx="20" ry="16" fill="#6fbf5a"></ellipse>
+              <circle cx="42" cy="104" r="7" fill="#6fbf5a"></circle>
+              <circle cx="58" cy="104" r="7" fill="#6fbf5a"></circle>
+              <circle cx="42" cy="102" r="3" fill="#1f2a1a"></circle>
+              <circle cx="58" cy="102" r="3" fill="#1f2a1a"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Number<br>Hop</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-pattern" href="/games/pattern-parade/" aria-label="Play Pattern Parade">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <path d="M0 30 L20 55 L40 30 L60 55 L80 30 L100 55 L120 30 L140 55 L160 30 L180 55 L200 30" fill="none" stroke="#b8aad0" stroke-width="4"></path>
+            <rect x="14" y="150" width="172" height="8" rx="4" fill="#c8ae7c"></rect>
+            <g class="anim-float">
+              <circle cx="40" cy="120" r="18" fill="#d9645f"></circle>
+              <rect x="74" y="102" width="34" height="34" rx="6" fill="#e8b84a"></rect>
+              <circle cx="132" cy="120" r="18" fill="#d9645f"></circle>
+              <circle cx="176" cy="120" r="19" fill="none" stroke="#3a3050" stroke-width="4" stroke-dasharray="7 7"></circle>
+              <text x="176" y="129" font-size="26" font-weight="900" fill="#3a3050" text-anchor="middle">?</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Pattern<br>Parade</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-rhyme" href="/games/rhyme-time/" aria-label="Play Rhyme Time">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <circle cx="168" cy="30" r="14" fill="#f4ecd0"></circle>
+            <rect x="14" y="158" width="172" height="8" rx="4" fill="#5a6a58"></rect>
+            <g class="anim-float">
+              <rect x="34" y="106" width="56" height="52" rx="6" fill="#c88a7a"></rect>
+              <path d="M28 108 L62 78 L96 108 Z" fill="#4a3a52"></path>
+              <text x="62" y="70" font-size="30" text-anchor="middle">🐱</text>
+              <rect x="112" y="106" width="56" height="52" rx="6" fill="#8a9ab8"></rect>
+              <path d="M106 108 L140 78 L174 108 Z" fill="#4a3a52"></path>
+              <text x="140" y="70" font-size="30" text-anchor="middle">🎩</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Rhyme<br>Time</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-takeaway" href="/games/take-away-train/" aria-label="Play Take-Away Train">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="14" y="152" width="172" height="7" rx="3" fill="#9c7a6a"></rect>
+            <g class="anim-drive-slow">
+              <rect x="24" y="98" width="52" height="34" rx="9" fill="#7a3a48"></rect>
+              <rect x="56" y="80" width="22" height="24" rx="6" fill="#5a4a6a"></rect>
+              <rect x="30" y="70" width="11" height="30" rx="4" fill="#2e2028"></rect>
+              <ellipse cx="46" cy="96" rx="6" ry="5" fill="#c69a3a"></ellipse>
+              <path d="M92 110 h54 v24 h-54 z" fill="#8a6a94"></path>
+              <circle cx="106" cy="106" r="8" fill="#cf4a3e"></circle>
+              <circle cx="121" cy="104" r="8" fill="#cf4a3e"></circle>
+              <circle cx="38" cy="135" r="10" fill="#2a1a20"></circle>
+              <circle cx="62" cy="135" r="10" fill="#2a1a20"></circle>
+              <circle cx="105" cy="139" r="9" fill="#2a1a20"></circle>
+              <circle cx="135" cy="139" r="9" fill="#2a1a20"></circle>
+            </g>
+            <circle cx="165" cy="146" r="8" fill="#cf4a3e"></circle>
+            <circle cx="182" cy="148" r="8" fill="#cf4a3e"></circle>
+            <rect x="158" y="72" width="32" height="10" rx="4" fill="#b9364f"></rect>
+          </svg>
+        </div>
+        <div class="card-title">Take-Away<br>Train</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-sorting" href="/games/sorting-bins/" aria-label="Play Sorting Bins">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="14" y="160" width="172" height="8" rx="4" fill="#8fa478"></rect>
+            <g>
+              <path d="M28 108 h58 v52 h-58 z" fill="#c8a86a"></path>
+              <circle cx="57" cy="134" r="16" fill="#f0e8d0"></circle>
+              <circle cx="57" cy="134" r="10" fill="#d9645f"></circle>
+              <path d="M114 108 h58 v52 h-58 z" fill="#c8a86a"></path>
+              <circle cx="143" cy="134" r="16" fill="#f0e8d0"></circle>
+              <circle cx="143" cy="134" r="10" fill="#6a9ad0"></circle>
+            </g>
+            <g class="anim-float">
+              <circle cx="100" cy="62" r="20" fill="#d9645f"></circle>
+              <circle cx="93" cy="55" r="5" fill="#fff" opacity="0.4"></circle>
+            </g>
+            <path d="M100 88 v14 M92 96 l8 8 8 -8" stroke="#2e4034" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div class="card-title">Sorting<br>Bins</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-memory" href="/games/memory-match/" aria-label="Play Memory Match">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="10" y="36" width="180" height="140" rx="8" fill="#d9645f" opacity="0.25"></rect>
+            <g class="anim-float">
+              <rect x="36" y="58" width="56" height="76" rx="8" fill="#6a9ad0"></rect>
+              <circle cx="52" cy="78" r="5" fill="#84aede"></circle>
+              <circle cx="76" cy="78" r="5" fill="#84aede"></circle>
+              <circle cx="52" cy="102" r="5" fill="#84aede"></circle>
+              <circle cx="76" cy="102" r="5" fill="#84aede"></circle>
+              <circle cx="64" cy="114" r="5" fill="#84aede"></circle>
+              <rect x="108" y="58" width="56" height="76" rx="8" fill="#fbf5e4" stroke="#c8b48a" stroke-width="5"></rect>
+              <text x="136" y="108" font-size="34" text-anchor="middle">⭐</text>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Memory<br>Match</div>
+        <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
+      </a>
+
+      <a class="game-card theme-skipcount" href="/games/skip-count/" aria-label="Play Skip-Count Stones">
+        <div class="card-window" aria-hidden="true">
+          <div class="window-bg"></div>
+          <svg class="illustration" viewBox="0 0 200 200">
+            <rect x="0" y="100" width="200" height="100" fill="#5a94b8"></rect>
+            <g>
+              <ellipse cx="42" cy="146" rx="26" ry="12" fill="#9aa4a0"></ellipse>
+              <circle cx="42" cy="143" r="13" fill="#eef2ec"></circle>
+              <text x="42" y="148" font-size="13" font-weight="900" fill="#2a3e46" text-anchor="middle">2</text>
+              <ellipse cx="102" cy="152" rx="26" ry="12" fill="#9aa4a0"></ellipse>
+              <circle cx="102" cy="149" r="13" fill="#eef2ec"></circle>
+              <text x="102" y="154" font-size="13" font-weight="900" fill="#2a3e46" text-anchor="middle">4</text>
+              <ellipse cx="162" cy="146" rx="26" ry="12" fill="#9aa4a0"></ellipse>
+              <circle cx="162" cy="143" r="13" fill="#eef2ec"></circle>
+              <text x="162" y="148" font-size="13" font-weight="900" fill="#2a3e46" text-anchor="middle">?</text>
+            </g>
+            <g class="anim-float">
+              <ellipse cx="102" cy="112" rx="18" ry="13" fill="#f0d060"></ellipse>
+              <circle cx="114" cy="98" r="9" fill="#f0d060"></circle>
+              <path d="M122 96 l10 3 -10 3 Z" fill="#e08a2e"></path>
+              <circle cx="116" cy="95" r="2.4" fill="#1f1a12"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="card-title">Skip-Count<br>Stones</div>
         <div class="play-btn" aria-hidden="true"><div class="play-icon"></div></div>
       </a>
 

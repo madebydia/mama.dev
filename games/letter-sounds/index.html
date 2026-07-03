@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#c8d8c0">
+<meta name="application-name" content="mama.dev games">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="mama.dev games">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/games/manifest.webmanifest">
+<link rel="icon" href="/games/icons/games-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/games/icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/games/icons/apple-touch-icon.png">
+<script src="/games/app.js" defer></script>
+<title>Sound Safari!</title>
+<style>
+  :root { --ink: #3e3420; --muted: #6e6040; --panel: #fbf5dc; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: ui-rounded, "Arial Rounded MT Bold", "Nunito", system-ui, sans-serif;
+    background: linear-gradient(#b8d4d0 0 52%, #b0ac5e 52% 100%);
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none;
+  }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+
+  .ui {
+    position: fixed; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; justify-content: space-between;
+    pointer-events: none;
+    padding: max(46px, calc(env(safe-area-inset-top) + 8px)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
+  }
+  .ui > * { pointer-events: auto; }
+
+  .top { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .toprow { width: 100%; display: flex; align-items: flex-start; justify-content: flex-end; }
+  .score-bar { display: flex; gap: 6px; align-items: center; }
+  .trophy { font-size: 26px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25)); }
+  .score-num { font-size: 30px; font-weight: 1000; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+  .streak-bar { display: flex; gap: 5px; margin-top: 6px; justify-content: flex-end; }
+  .streak-dot { width: 15px; height: 15px; border-radius: 50%; background: rgba(255,255,255,0.4); transition: background .3s, transform .3s; }
+  .streak-dot.lit { background: #e8a83a; transform: scale(1.2); box-shadow: 0 0 8px rgba(232,168,58,0.6); }
+  .streak-dot.miss { background: #d98a6a; transform: scale(1.2); }
+
+  .prompt {
+    align-self: center;
+    padding: 9px 24px;
+    background: rgba(251,245,220,0.95);
+    border: 3px solid var(--ink); border-radius: 999px;
+    box-shadow: 0 5px 0 rgba(62,52,32,0.22);
+    font-size: clamp(1.05rem, 3.8vw, 1.5rem); font-weight: 1000; text-align: center;
+  }
+  .prompt b { color: #b8641f; text-transform: uppercase; }
+
+  .dock { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .ctl-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 58px; height: 58px; font-size: 1.5rem;
+    border: 3px solid var(--ink); border-radius: 50%;
+    background: var(--panel); color: var(--ink); font-family: inherit; cursor: pointer;
+    box-shadow: 0 5px 0 rgba(62,52,32,0.22);
+    transition: transform 70ms ease, box-shadow 70ms ease;
+  }
+  .ctl-btn:active { transform: translateY(4px); box-shadow: 0 1px 0 rgba(62,52,32,0.22); }
+
+  .level-badge {
+    align-self: center;
+    background: rgba(62,52,32,0.42); color: #fff;
+    padding: 6px 18px; border-radius: 20px; font-size: 13px; font-weight: 800; letter-spacing: 1px;
+    cursor: pointer; backdrop-filter: blur(4px);
+  }
+  .level-picker {
+    position: fixed; bottom: 56px; left: 50%; transform: translateX(-50%); z-index: 25;
+    background: #3e3420; border: 2px solid rgba(255,255,255,0.2); border-radius: 12px; padding: 8px 0;
+    display: none; min-width: 230px; box-shadow: 0 8px 32px rgba(0,0,0,0.4); pointer-events: auto;
+  }
+  .level-picker.open { display: block; }
+  .level-option { padding: 10px 16px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+  .level-option:hover { background: rgba(255,255,255,0.1); }
+  .level-option.active { background: rgba(232,168,58,0.22); color: #f0cf8a; }
+  .level-range { font-weight: 400; opacity: 0.6; }
+
+  .sparkle { position: fixed; z-index: 4; font-size: 1.7rem; pointer-events: none; animation: sparkleFloat 1.1s ease-out forwards; }
+  @keyframes sparkleFloat { 0%{opacity:.95;transform:translate(-50%,0) scale(.5) rotate(0)} 100%{opacity:0;transform:translate(-50%,-120px) scale(1.1) rotate(120deg)} }
+  .confetti-piece { position: fixed; z-index: 50; pointer-events: none; }
+  @keyframes confetti-fall { 0%{transform:translateY(-10px) rotate(0);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  footer { position: fixed; bottom: 4px; right: 10px; z-index: 3; font-size: 0.72rem; color: var(--muted); opacity: 0.85; }
+  footer a { color: inherit; }
+  @media (prefers-reduced-motion: reduce) { .sparkle { animation-duration: 0.01ms; } }
+</style>
+    <!-- Privacy-friendly analytics by Plausible -->
+    <script async src="https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js"></script>
+    <script>
+     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+     plausible.init()
+    </script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+
+<canvas id="scene"></canvas>
+
+<div class="ui">
+  <div class="top">
+    <div class="toprow">
+      <div>
+        <div class="score-bar"><span class="trophy">🦁</span><span class="score-num" id="score">0</span></div>
+        <div class="streak-bar" id="streak-bar"></div>
+      </div>
+    </div>
+    <div class="prompt" id="prompt">Find the letter <b>B</b>!</div>
+  </div>
+  <div class="dock">
+    <button class="ctl-btn" id="speakBtn" aria-label="Say it again">🔊</button>
+    <div class="level-badge" id="level-badge" onclick="toggleLevelPicker()"></div>
+  </div>
+</div>
+<div class="level-picker" id="level-picker"></div>
+
+<footer>Made with care by <a href="https://x.com/madebydia" target="_blank" rel="noopener">@madebydia</a></footer>
+
+<script type="module">
+import * as THREE from 'three';
+
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const LETTERS = [
+  { l: 'a', word: 'apple',    emoji: '🍎', sound: 'ah' },
+  { l: 'b', word: 'ball',     emoji: '⚽', sound: 'buh' },
+  { l: 'c', word: 'cat',      emoji: '🐱', sound: 'kuh' },
+  { l: 'd', word: 'dog',      emoji: '🐶', sound: 'duh' },
+  { l: 'e', word: 'egg',      emoji: '🥚', sound: 'eh' },
+  { l: 'f', word: 'fish',     emoji: '🐟', sound: 'fff' },
+  { l: 'g', word: 'goat',     emoji: '🐐', sound: 'guh' },
+  { l: 'h', word: 'hat',      emoji: '🎩', sound: 'hah' },
+  { l: 'i', word: 'insect',   emoji: '🐞', sound: 'ih' },
+  { l: 'j', word: 'juice',    emoji: '🧃', sound: 'juh' },
+  { l: 'k', word: 'kite',     emoji: '🪁', sound: 'kuh' },
+  { l: 'l', word: 'lion',     emoji: '🦁', sound: 'lll' },
+  { l: 'm', word: 'moon',     emoji: '🌙', sound: 'mmm' },
+  { l: 'n', word: 'nest',     emoji: '🪺', sound: 'nnn' },
+  { l: 'o', word: 'octopus',  emoji: '🐙', sound: 'oh' },
+  { l: 'p', word: 'pig',      emoji: '🐷', sound: 'puh' },
+  { l: 'r', word: 'rabbit',   emoji: '🐰', sound: 'rrr' },
+  { l: 's', word: 'sun',      emoji: '☀️', sound: 'sss' },
+  { l: 't', word: 'turtle',   emoji: '🐢', sound: 'tuh' },
+  { l: 'u', word: 'umbrella', emoji: '☂️', sound: 'uh' },
+  { l: 'w', word: 'whale',    emoji: '🐳', sound: 'wuh' },
+  { l: 'z', word: 'zebra',    emoji: '🦓', sound: 'zzz' },
+];
+const SIMILAR = {
+  b: ['d','p'], d: ['b','p'], p: ['b','d'], m: ['n','w'], n: ['m','u'], u: ['n','v'],
+  w: ['m','v'], i: ['l','j'], l: ['i','t'], c: ['o','e'], o: ['c','a'], e: ['c','a'],
+  a: ['o','e'], s: ['z','c'], z: ['s','n'], f: ['t','e'], t: ['f','l'], h: ['n','b'],
+  k: ['x','h'], r: ['n','p'], g: ['q','p'], j: ['i','l'],
+};
+const LEVELS = [
+  { name: 'Letter Names',   mode: 'name',  n: 3 },
+  { name: 'First Sounds',   mode: 'sound', n: 3 },
+  { name: 'Tricky Letters', mode: 'sound', n: 4, similar: true },
+];
+const BLOCK_COLORS = ['#d9915a', '#9ab06a', '#c8a84a', '#9a86b8'];
+
+let score = 0, level = 0, streak = 0, roundHistory = [];
+let current = null, choiceLetters = [], locked = false;
+
+const scoreEl = document.getElementById('score');
+const streakBar = document.getElementById('streak-bar');
+const promptEl = document.getElementById('prompt');
+const levelBadge = document.getElementById('level-badge');
+for (let i = 0; i < 5; i++) { const d = document.createElement('div'); d.className = 'streak-dot'; streakBar.appendChild(d); }
+
+/* ============================================================
+   AUDIO
+   ============================================================ */
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function tone(freq, dur, type = 'sine', vol = 0.2) {
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.connect(g); g.connect(audioCtx.destination); o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(vol, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+  o.start(); o.stop(audioCtx.currentTime + dur);
+}
+function successSound() { [523, 659, 784].forEach((f, i) => setTimeout(() => tone(f, 0.32, 'sine', 0.22), i * 100)); }
+function boop() { tone(190, 0.18, 'sine', 0.2); }
+function speak(text) { if (!('speechSynthesis' in window)) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.rate = 0.85; u.pitch = 1.15; speechSynthesis.speak(u); } catch (e) {} }
+
+/* ============================================================
+   THREE.JS SCENE — savanna
+   ============================================================ */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xcfd8c0, 26, 60);
+function skyTexture() {
+  const cv = document.createElement('canvas'); cv.width = 16; cv.height = 256;
+  const ctx = cv.getContext('2d'); const g = ctx.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#9fc8cc'); g.addColorStop(0.6, '#cfe0c8'); g.addColorStop(1, '#efe8c0');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 16, 256);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+scene.background = skyTexture();
+
+const camera = new THREE.PerspectiveCamera(46, 1, 0.1, 100);
+const camTarget = new THREE.Vector3(0, 1.7, 0);
+const camDir = new THREE.Vector3(0, 0.34, 0.94).normalize();
+
+scene.add(new THREE.HemisphereLight(0xf4f0dc, 0x8a8248, 1.0));
+const sun = new THREE.DirectionalLight(0xfff2ce, 1.0);
+sun.position.set(-6, 12, 7); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.camera.left = -12; sun.shadow.camera.right = 12; sun.shadow.camera.top = 12; sun.shadow.camera.bottom = -12;
+sun.shadow.bias = -0.0004;
+scene.add(sun);
+
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(140, 90), new THREE.MeshStandardMaterial({ color: 0xb0ac5e, roughness: 1 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+// Acacia trees
+function acacia(x, z, s) {
+  const g = new THREE.Group();
+  const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.3, 2.8, 8), new THREE.MeshStandardMaterial({ color: 0x7a5a34, roughness: 1 }));
+  trunk.position.y = 1.4; trunk.rotation.z = 0.14; trunk.castShadow = true; g.add(trunk);
+  const folMat = new THREE.MeshStandardMaterial({ color: 0x5f7a3a, roughness: 1 });
+  const f1 = new THREE.Mesh(new THREE.SphereGeometry(1.9, 16, 12), folMat); f1.scale.y = 0.3; f1.position.set(0.3, 3.0, 0); f1.castShadow = true; g.add(f1);
+  const f2 = new THREE.Mesh(new THREE.SphereGeometry(1.2, 14, 10), folMat); f2.scale.y = 0.3; f2.position.set(-0.8, 3.4, 0.3); g.add(f2);
+  g.position.set(x, 0, z); g.scale.setScalar(s); scene.add(g);
+}
+acacia(-9, -9, 1.15); acacia(9.5, -11, 1.3); acacia(-14, -16, 1.5);
+
+// Dry bushes + sun disc
+const bushMat = new THREE.MeshStandardMaterial({ color: 0x9a9450, roughness: 1 });
+[[-5.5, 3.6, 0.5], [6, 3.4, 0.6], [11, -4, 0.8], [-12, -3, 0.7]].forEach(([x, z, r]) => {
+  const b = new THREE.Mesh(new THREE.SphereGeometry(r, 10, 8), bushMat); b.position.set(x, r * 0.5, z); b.scale.y = 0.65; scene.add(b);
+});
+const sunDisc = new THREE.Mesh(new THREE.CircleGeometry(2.8, 40), new THREE.MeshBasicMaterial({ color: 0xffedaa, fog: false }));
+sunDisc.position.set(10, 10, -30); scene.add(sunDisc);
+
+/* ---- Textures ---- */
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function letterTexture(letter, bg) {
+  const S = 256; const cv = document.createElement('canvas'); cv.width = cv.height = S; const ctx = cv.getContext('2d');
+  ctx.fillStyle = bg; roundRect(ctx, 14, 14, S - 28, S - 28, 30); ctx.fill();
+  ctx.fillStyle = '#fbf5dc'; roundRect(ctx, 38, 38, S - 76, S - 76, 22); ctx.fill();
+  ctx.fillStyle = '#3e3420';
+  ctx.font = '900 140px ui-rounded, "Arial Rounded MT Bold", Arial, sans-serif';
+  ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(letter.toUpperCase(), S / 2, S / 2 + 10);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+function emojiTexture(emoji) {
+  const S = 256; const cv = document.createElement('canvas'); cv.width = cv.height = S; const ctx = cv.getContext('2d');
+  ctx.fillStyle = '#fbf5dc'; roundRect(ctx, 8, 8, S - 16, S - 16, 28); ctx.fill();
+  ctx.strokeStyle = '#3e3420'; ctx.lineWidth = 8; roundRect(ctx, 8, 8, S - 16, S - 16, 28); ctx.stroke();
+  ctx.font = '160px serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillText(emoji, S / 2, S / 2 + 14);
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t;
+}
+
+/* ---- Picture signboard ---- */
+const signPost = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 2.6, 10), new THREE.MeshStandardMaterial({ color: 0x7a5a34, roughness: 1 }));
+signPost.position.set(0, 1.3, -2.4); signPost.castShadow = true; scene.add(signPost);
+const signMat = new THREE.MeshBasicMaterial({ map: emojiTexture('🦁'), transparent: true });
+const signBoard = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), signMat);
+signBoard.position.set(0, 3.7, -2.4); scene.add(signBoard);
+
+/* ---- Letter blocks ---- */
+const blocks = [];
+for (let i = 0; i < 4; i++) {
+  const group = new THREE.Group();
+  const faceMat = new THREE.MeshStandardMaterial({ map: letterTexture('a', BLOCK_COLORS[i]), roughness: 0.65 });
+  const sideMat = new THREE.MeshStandardMaterial({ color: BLOCK_COLORS[i], roughness: 0.65 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(1.5, 1.5, 1.5), [sideMat, sideMat, sideMat, sideMat, faceMat, sideMat]);
+  body.castShadow = true;
+  group.add(body);
+  group.position.set(0, 0.78, 1.2);
+  group.userData = { faceMat, body, baseX: 0, popUntil: 0, shakeUntil: 0, phase: Math.random() * 6 };
+  scene.add(group);
+  blocks.push(group);
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function randInt(a, b) { return Math.floor(Math.random() * (b - a + 1)) + a; }
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function updateStreakBar() {
+  const dots = streakBar.querySelectorAll('.streak-dot');
+  const recent = roundHistory.slice(-5);
+  dots.forEach((d, i) => { d.className = 'streak-dot'; if (i < recent.length) d.classList.add(recent[i] ? 'lit' : 'miss'); });
+}
+function confetti() {
+  const colors = ['#e8a83a', '#d9915a', '#9ab06a', '#c8a84a', '#9a86b8'];
+  for (let i = 0; i < 40; i++) { const c = document.createElement('div'); c.className = 'confetti-piece';
+    c.style.left = Math.random() * 100 + 'vw'; c.style.top = '-10px'; c.style.background = colors[Math.random() * colors.length | 0];
+    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px'; c.style.width = (6 + Math.random() * 8) + 'px'; c.style.height = (6 + Math.random() * 8) + 'px';
+    c.style.animation = `confetti-fall ${1.5 + Math.random() * 2}s ease-out forwards`; c.style.animationDelay = Math.random() * 0.5 + 's';
+    document.body.appendChild(c); setTimeout(() => c.remove(), 4000);
+  }
+}
+function sparkleBurst() {
+  const e = ['✨', '⭐', '💫', '🌟']; const cx = innerWidth / 2, cy = innerHeight * 0.5;
+  for (let i = 0; i < 10; i++) { const s = document.createElement('div'); s.className = 'sparkle'; s.textContent = e[Math.floor(Math.random() * e.length)];
+    s.style.left = (cx + (Math.random() - 0.5) * 320) + 'px'; s.style.top = (cy + (Math.random() - 0.5) * 120) + 'px'; s.style.animationDelay = (Math.random() * 0.2) + 's';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1300);
+  }
+}
+
+/* ============================================================
+   ROUND FLOW
+   ============================================================ */
+function speakPrompt() {
+  if (!current) return;
+  const lv = LEVELS[level];
+  if (lv.mode === 'name') speak('Find the letter ' + current.l.toUpperCase() + '!');
+  else speak(current.sound + '! ' + current.word + ' starts with ' + current.sound + '. Find the letter!');
+}
+
+function newRound() {
+  locked = false;
+  const lv = LEVELS[level];
+  let next;
+  do { next = rand(LETTERS); } while (current && next.l === current.l);
+  current = next;
+
+  // distractor letters
+  const used = new Set([current.l]);
+  const pool = [];
+  if (lv.similar && SIMILAR[current.l]) for (const d of SIMILAR[current.l]) { if (!used.has(d)) { pool.push(d); used.add(d); } }
+  const alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+  while (pool.length < lv.n - 1) { const d = rand(alphabet); if (!used.has(d)) { pool.push(d); used.add(d); } }
+  choiceLetters = shuffle([current.l, ...pool.slice(0, lv.n - 1)]);
+
+  // lay out blocks
+  const spacing = 2.1;
+  for (let i = 0; i < blocks.length; i++) {
+    const b = blocks[i];
+    if (i < lv.n) {
+      b.visible = true;
+      b.position.x = (i - (lv.n - 1) / 2) * spacing;
+      b.userData.baseX = b.position.x;
+      b.userData.faceMat.map.dispose();
+      b.userData.faceMat.map = letterTexture(choiceLetters[i], BLOCK_COLORS[i]);
+      b.userData.faceMat.needsUpdate = true;
+    } else b.visible = false;
+  }
+
+  // sign shows the word picture in sound mode
+  const showSign = lv.mode === 'sound';
+  signBoard.visible = signPost.visible = showSign;
+  if (showSign) { signMat.map.dispose(); signMat.map = emojiTexture(current.emoji); signMat.needsUpdate = true; }
+
+  if (lv.mode === 'name') promptEl.innerHTML = 'Find the letter <b>' + current.l + '</b>!';
+  else promptEl.innerHTML = 'What does <b>' + current.word + '</b> start with?';
+  levelBadge.textContent = lv.name;
+  setTimeout(speakPrompt, 500);
+}
+
+function pickBlock(i) {
+  if (locked || i >= LEVELS[level].n) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  const b = blocks[i];
+  if (choiceLetters[i] === current.l) {
+    locked = true;
+    b.userData.popUntil = clock.getElapsedTime() + 0.8;
+    score++; streak++; scoreEl.textContent = score;
+    roundHistory.push(true);
+    if (streak > 0 && streak % 5 === 0 && level < LEVELS.length - 1) level++;
+    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+    updateStreakBar();
+    speak(current.l.toUpperCase() + '! ' + current.l.toUpperCase() + ' says ' + current.sound + ', like ' + current.word + '!');
+    successSound(); confetti(); sparkleBurst();
+    setTimeout(newRound, 2400);
+  } else {
+    b.userData.shakeUntil = clock.getElapsedTime() + 0.45;
+    boop();
+    streak = 0; roundHistory.push(false);
+    if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
+    updateStreakBar();
+  }
+}
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+canvas.addEventListener('pointerdown', (e) => {
+  pointer.x = (e.clientX / innerWidth) * 2 - 1;
+  pointer.y = -(e.clientY / innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  for (let i = 0; i < blocks.length; i++) {
+    if (blocks[i].visible && raycaster.intersectObject(blocks[i], true).length) { pickBlock(i); break; }
+  }
+});
+document.getElementById('speakBtn').addEventListener('click', () => { if (audioCtx.state === 'suspended') audioCtx.resume(); speakPrompt(); });
+
+/* ============================================================
+   RENDER LOOP
+   ============================================================ */
+const clock = new THREE.Clock();
+function frameScene() {
+  const w = innerWidth, h = innerHeight;
+  renderer.setSize(w, h, false);
+  const aspect = w / h; camera.aspect = aspect;
+  const vHalf = THREE.MathUtils.degToRad(camera.fov / 2);
+  const hHalf = Math.atan(Math.tan(vHalf) * aspect);
+  const dist = Math.min(26, Math.max(8, Math.max(4.8 / Math.tan(hHalf), 3.3 / Math.tan(vHalf))));
+  camera.position.copy(camTarget).add(camDir.clone().multiplyScalar(dist));
+  camera.lookAt(camTarget);
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', frameScene);
+
+function animate() {
+  requestAnimationFrame(animate);
+  const dt = Math.min(clock.getDelta(), 0.05);
+  const t = clock.getElapsedTime();
+  for (const b of blocks) {
+    const u = b.userData;
+    let y = 0.78 + Math.sin(t * 1.3 + u.phase) * 0.03, x = u.baseX, s = 1;
+    if (t < u.popUntil) { const k = u.popUntil - t; y += Math.abs(Math.sin(k * 10)) * 0.5; s = 1 + Math.sin(k * 10) * 0.1; }
+    if (t < u.shakeUntil) x += Math.sin((u.shakeUntil - t) * 45) * 0.12;
+    b.position.set(x, y, 1.2); b.scale.setScalar(s);
+  }
+  signBoard.lookAt(camera.position.x, signBoard.position.y, camera.position.z);
+  renderer.render(scene, camera);
+}
+
+/* ============================================================
+   LEVEL PICKER
+   ============================================================ */
+window.toggleLevelPicker = function () {
+  const p = document.getElementById('level-picker');
+  if (p.classList.contains('open')) { p.classList.remove('open'); return; }
+  p.innerHTML = '';
+  LEVELS.forEach((lv, i) => {
+    const o = document.createElement('div'); o.className = 'level-option' + (i === level ? ' active' : '');
+    o.innerHTML = '<span>' + lv.name + '</span><span class="level-range">' + (lv.mode === 'name' ? 'names' : 'sounds') + '</span>';
+    o.onclick = (e) => { e.stopPropagation(); level = i; streak = 0; roundHistory = []; updateStreakBar(); p.classList.remove('open'); newRound(); };
+    p.appendChild(o);
+  });
+  p.classList.add('open');
+};
+document.addEventListener('click', (e) => { if (!e.target.closest('.level-picker') && !e.target.closest('.level-badge')) document.getElementById('level-picker').classList.remove('open'); });
+
+// Start
+frameScene();
+newRound();
+animate();
+</script>
+</body>
+</html>
