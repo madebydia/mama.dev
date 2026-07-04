@@ -4,25 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Worksheets | mama.dev</title>
-<meta name="description" content="Printable worksheet PDFs from mama.dev, including mazes, tracing pages, and early learning activities.">
+<meta name="description" content="Searchable printable worksheet PDFs from mama.dev, including mazes, tracing pages, and early learning activities.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/mama-home-tab.css">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-canvas: #fdf4ec;
-    --bg-white: #ffffff;
-    --bg-soft: #fff9f2;
-    --accent-orange: #f29d38;
-    --accent-orange-hover: #e58c27;
-    --accent-green: #8ac926;
-    --accent-blue: #4f93b0;
-    --text-main: #2d2a32;
-    --text-muted: #76777c;
-    --line-soft: rgba(45, 42, 50, 0.08);
-    --shadow-soft: 0 12px 36px rgba(212, 185, 160, 0.25);
-    --shadow-hover: 0 20px 48px rgba(212, 185, 160, 0.38);
+    --bg-page: #f3cd68;
+    --bg-dots: rgba(174, 126, 35, 0.3);
+    --paper: #fbf8ef;
+    --paper-raised: #fffdf7;
+    --paper-soft: #f3ebdc;
+    --ink: #263d4f;
+    --muted: #647a8e;
+    --line: rgba(38, 61, 79, 0.16);
+    --line-strong: rgba(38, 61, 79, 0.28);
+    --red: #c65d47;
+    --mustard: #d0a14c;
+    --teal: #69999c;
+    --green: #788f52;
+    --shadow: 0 12px 24px -12px rgba(38, 61, 79, 0.34), 0 3px 8px rgba(38, 61, 79, 0.12);
+    --shadow-hover: 0 18px 34px -14px rgba(38, 61, 79, 0.44), 0 8px 16px rgba(38, 61, 79, 0.12);
+    --font: "Quicksand", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
   * {
@@ -33,563 +36,2109 @@
     min-height: 100vh;
     margin: 0;
     background:
-      radial-gradient(circle at 8% 0%, rgba(255, 255, 255, 0.95) 0 18%, transparent 32%),
-      radial-gradient(circle at 100% 18%, rgba(246, 233, 223, 0.8) 0 16%, transparent 34%),
-      radial-gradient(circle at 92% 100%, rgba(255, 246, 235, 0.9) 0 22%, transparent 42%),
-      var(--bg-canvas);
-    color: var(--text-main);
-    font-family: "Nunito", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      radial-gradient(var(--bg-dots) 1px, transparent 1px),
+      var(--bg-page);
+    background-position: -12px -12px;
+    background-size: 24px 24px;
+    color: var(--ink);
+    font-family: var(--font);
     line-height: 1.45;
   }
 
-  .site-header {
-    width: min(1200px, 100%);
-    margin: 0 auto;
-    padding: 40px 24px 24px;
-  }
-
-  .brand {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text-main);
-    font-size: 24px;
-    font-weight: 800;
-    text-decoration: none;
-  }
-
-  .brand-mark {
-    width: 28px;
-    height: 28px;
-    display: inline-grid;
-    place-items: center;
-    border-radius: 9px;
-    background: var(--accent-orange);
-    color: var(--bg-white);
-    box-shadow: 0 8px 20px rgba(242, 157, 56, 0.22);
-  }
-
-  .brand small {
-    color: var(--accent-orange);
-    font-size: inherit;
-  }
-
-  .main-container {
-    width: min(1200px, 100%);
-    margin: 0 auto;
-    padding: 0 24px 80px;
-  }
-
-  .hero {
-    max-width: 660px;
-    margin: 0 auto 28px;
-    text-align: center;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: clamp(2.2rem, 5vw, 4rem);
-    font-weight: 800;
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-  }
-
-  .hero p {
-    margin: 16px auto 0;
-    color: var(--text-muted);
-    font-size: 18px;
-    line-height: 1.6;
-  }
-
-  .filters {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin: 0 0 34px;
-  }
-
-  .filter-btn {
-    min-height: 44px;
-    padding: 0 22px;
-    border: 2px solid transparent;
-    border-radius: 999px;
-    background: var(--bg-white);
-    box-shadow: 0 4px 12px rgba(212, 185, 160, 0.12);
-    color: var(--text-muted);
-    cursor: pointer;
+  button,
+  input {
     font: inherit;
-    font-size: 15px;
-    font-weight: 800;
-    transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
   }
 
-  .filter-btn:hover,
-  .filter-btn:focus-visible {
-    color: var(--text-main);
-    box-shadow: 0 8px 18px rgba(212, 185, 160, 0.22);
-    transform: translateY(-1px);
-    outline: none;
-  }
-
-  .filter-btn.active {
-    background: var(--accent-orange);
-    color: var(--bg-white);
-    box-shadow: 0 10px 26px rgba(242, 157, 56, 0.3);
-  }
-
-  .filter-btn[aria-pressed="true"] {
-    cursor: default;
-  }
-
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-    gap: 30px;
-  }
-
-  .card {
-    position: relative;
-    display: flex;
-    min-width: 0;
-    min-height: 100%;
-    flex-direction: column;
-    gap: 20px;
-    padding: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.75);
-    border-radius: 24px;
-    background: var(--bg-white);
-    box-shadow: var(--shadow-soft);
+  button {
     color: inherit;
-    text-decoration: none;
-    transition: transform 180ms ease, box-shadow 180ms ease;
   }
 
-  .card.is-hidden {
-    display: none;
-  }
-
-  .card:hover,
-  .card:focus-visible {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow-hover);
-    outline: none;
-  }
-
-  .preview {
-    position: relative;
-    overflow: hidden;
-    border-radius: 16px;
-    background: var(--bg-canvas);
-    aspect-ratio: 4 / 3;
-    border: 1px solid var(--line-soft);
-  }
-
-  .preview img {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  .preview.landscape img {
-    object-fit: cover;
-  }
-
-  .status-badge {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    width: 34px;
-    height: 34px;
-    display: grid;
-    place-items: center;
-    border: 3px solid var(--bg-white);
-    border-radius: 999px;
-    background: var(--accent-green);
-    box-shadow: 0 6px 16px rgba(138, 201, 38, 0.3);
-    color: var(--bg-white);
-  }
-
-  .status-badge svg {
-    width: 16px;
-    height: 16px;
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    stroke-width: 3;
-  }
-
-  .card-content {
+  .app-shell {
+    min-height: 100vh;
     display: flex;
-    flex: 1;
     flex-direction: column;
-    gap: 12px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent 220px),
+      transparent;
   }
 
-  .meta-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .tag {
-    display: inline-flex;
+  .top-bar {
+    display: grid;
+    grid-template-columns: minmax(160px, 1fr) minmax(220px, 340px);
+    gap: 18px;
     align-items: center;
-    min-height: 26px;
-    padding: 0 10px;
-    border-radius: 7px;
-    background: var(--bg-canvas);
-    color: var(--accent-orange);
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-
-  .tag.age {
-    background: #e8f5d8;
-    color: #5c8c14;
-  }
-
-  .tag.type {
-    background: #e8f4f7;
-    color: var(--accent-blue);
-  }
-
-  h2 {
-    margin: 0;
-    color: var(--text-main);
-    font-size: 21px;
-    font-weight: 800;
-    line-height: 1.24;
-  }
-
-  .desc {
-    margin: 0;
-    color: var(--text-muted);
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .download {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    min-height: 50px;
-    margin-top: auto;
+    margin: calc(32px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 14px max(20px, env(safe-area-inset-left));
+    padding: 14px 24px;
     border-radius: 999px;
-    background: var(--accent-orange);
-    color: var(--bg-white);
-    font-size: 16px;
-    font-weight: 800;
-    transition: background 160ms ease;
+    background: rgba(251, 248, 239, 0.94);
+    box-shadow: var(--shadow);
   }
 
-  .card:hover .download,
-  .card:focus-visible .download {
-    background: var(--accent-orange-hover);
+  .brand-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--ink);
+    font-size: clamp(1.05rem, 2.1vw, 1.5rem);
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: max-content;
   }
 
-  .download svg {
+  .brand-logo span:nth-child(4n+1) {
+    color: var(--red);
+  }
+
+  .brand-logo span:nth-child(4n+2) {
+    color: var(--ink);
+  }
+
+  .brand-logo span:nth-child(4n+3) {
+    color: var(--teal);
+  }
+
+  .brand-logo span:nth-child(4n+4) {
+    color: var(--mustard);
+  }
+
+  .search-icon svg,
+  .button-icon,
+  .empty-icon svg,
+  .dialog-close svg {
     width: 18px;
     height: 18px;
     fill: none;
     stroke: currentColor;
     stroke-linecap: round;
     stroke-linejoin: round;
-    stroke-width: 2.5;
+    stroke-width: 2.2;
   }
 
-  .note {
-    max-width: 680px;
-    margin: 44px auto 0;
-    color: var(--text-muted);
-    font-size: 14px;
+  .search-panel {
+    display: grid;
+    gap: 4px;
+    justify-items: stretch;
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid rgba(38, 61, 79, 0.18);
+    border-radius: 999px;
+    background: var(--paper-raised);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75), 0 2px 7px rgba(38, 61, 79, 0.08);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 18px;
+    color: var(--teal);
+    pointer-events: none;
+  }
+
+  .search-box input {
+    width: 100%;
+    min-height: 40px;
+    border: 0;
+    border-radius: inherit;
+    background: transparent;
+    color: var(--ink);
+    font-size: 0.84rem;
+    font-weight: 700;
+    outline: none;
+    padding: 0 16px 0 46px;
+  }
+
+  .search-box input::placeholder {
+    color: var(--muted);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .result-summary {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .file-drawer {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-tabs {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding: 0 max(22px, env(safe-area-inset-right)) 0 max(22px, env(safe-area-inset-left));
+    scrollbar-width: none;
+  }
+
+  .drawer-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tab {
+    flex: 0 0 auto;
+    min-width: 148px;
+    border: 0;
+    border-radius: 44px 44px 0 0;
+    background: rgba(251, 248, 239, 0.66);
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 16px 24px 14px;
+    text-transform: uppercase;
+    transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+  }
+
+  .tab:hover,
+  .tab:focus-visible {
+    background: rgba(251, 248, 239, 0.88);
+    color: var(--ink);
+    outline: none;
+  }
+
+  .tab.active {
+    background: var(--paper);
+    color: var(--red);
+    transform: translateY(1px);
+  }
+
+  .drawer-content {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 292px minmax(0, 1fr);
+    overflow: hidden;
+    border-top: 1px solid var(--line);
+    background: var(--paper);
+    box-shadow: 0 -10px 28px rgba(38, 61, 79, 0.08);
+  }
+
+  .mobile-filter-row {
+    display: none;
+  }
+
+  .filters-sidebar {
+    min-height: 0;
+    overflow-y: auto;
+    border-right: 1px solid var(--line);
+    background:
+      linear-gradient(90deg, rgba(38, 61, 79, 0.045), transparent 80%),
+      var(--paper);
+    padding: 26px 24px 34px max(24px, env(safe-area-inset-left));
+  }
+
+  .filter-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .filter-heading h2,
+  .grid-title h2 {
+    margin: 0;
+    font-size: 1rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+
+  .clear-btn {
+    border: 0;
+    background: transparent;
+    color: var(--red);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .clear-btn:disabled {
+    color: var(--muted);
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  .filter-group {
+    margin-bottom: 26px;
+  }
+
+  .filter-group h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 12px;
+    color: var(--teal);
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .filter-group h3::after {
+    content: "";
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+  }
+
+  .filter-option {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 32px;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.94rem;
+    font-weight: 700;
+  }
+
+  .filter-option + .filter-option {
+    margin-top: 6px;
+  }
+
+  .filter-option input {
+    appearance: none;
+    width: 19px;
+    height: 19px;
+    flex: 0 0 auto;
+    border: 2px solid var(--ink);
+    border-radius: 5px;
+    background: var(--paper-raised);
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+
+  .filter-option input::after {
+    content: "";
+    width: 8px;
+    height: 11px;
+    border: solid var(--paper-raised);
+    border-width: 0 3px 3px 0;
+    opacity: 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+
+  .filter-option input:checked {
+    border-color: var(--red);
+    background: var(--red);
+  }
+
+  .filter-option input:checked::after {
+    opacity: 1;
+  }
+
+  .results-panel {
+    min-width: 0;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 28px max(24px, env(safe-area-inset-right)) 42px 26px;
+  }
+
+  .grid-toolbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+    margin-bottom: 22px;
+  }
+
+  .grid-title p {
+    margin: 7px 0 0;
+    color: var(--muted);
+    font-size: 0.94rem;
+    font-weight: 600;
+  }
+
+  .active-chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 31px;
+    border: 1px solid rgba(198, 93, 71, 0.2);
+    border-radius: 999px;
+    background: rgba(198, 93, 71, 0.1);
+    color: var(--red);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0 10px;
+    text-transform: uppercase;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(236px, 1fr));
+    gap: 22px;
+  }
+
+  .printable-card {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(38, 61, 79, 0.08);
+    background: var(--paper-raised);
+    box-shadow: var(--shadow);
+    transition: transform 160ms ease, box-shadow 160ms ease;
+  }
+
+  .printable-card::after {
+    content: "";
+    position: absolute;
+    inset: 4px -4px -4px 4px;
+    z-index: -1;
+    background: rgba(38, 61, 79, 0.055);
+  }
+
+  .printable-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+  }
+
+  .thumb {
+    position: relative;
+    display: block;
+    aspect-ratio: 8.5 / 11;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+    background:
+      linear-gradient(135deg, rgba(255, 255, 255, 0.66), transparent),
+      var(--paper-soft);
+  }
+
+  .thumb.landscape {
+    aspect-ratio: 4 / 3;
+  }
+
+  .thumb img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .thumb.portrait img {
+    object-fit: contain;
+  }
+
+  .card-body {
+    min-height: 0;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .card-title-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .card-title {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.22;
+  }
+
+  .badge {
+    display: inline-flex;
+    min-height: 26px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: rgba(105, 153, 156, 0.16);
+    color: var(--teal);
+    flex: 0 0 auto;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0 9px;
+    text-transform: uppercase;
+  }
+
+  .card-desc {
+    display: -webkit-box;
+    min-height: 2.9em;
+    margin: 9px 0 12px;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    color: var(--muted);
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: auto 0 14px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    border-radius: 999px;
+    background: rgba(208, 161, 76, 0.16);
+    color: #8a651e;
+    font-size: 0.66rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    padding: 0 8px;
+    text-transform: uppercase;
+  }
+
+  .tag.skill {
+    background: rgba(198, 93, 71, 0.12);
+    color: var(--red);
+  }
+
+  .tag.fine-motor,
+  .tag.prewriting {
+    background: rgba(120, 143, 82, 0.16);
+    color: var(--green);
+  }
+
+  .tag.visual-tracking {
+    background: rgba(105, 153, 156, 0.16);
+    color: var(--teal);
+  }
+
+  .tag.penmanship {
+    background: rgba(198, 93, 71, 0.14);
+    color: var(--red);
+  }
+
+  .tag.vocabulary {
+    background: rgba(208, 161, 76, 0.18);
+    color: #8a651e;
+  }
+
+  .tag.airport {
+    background: rgba(105, 153, 156, 0.14);
+    color: #4d7f84;
+  }
+
+  .tag.vehicles,
+  .tag.trains {
+    background: rgba(48, 91, 136, 0.12);
+    color: #345d88;
+  }
+
+  .tag.space {
+    background: rgba(111, 96, 153, 0.14);
+    color: #665894;
+  }
+
+  .tag.animals,
+  .tag.farm,
+  .tag.ocean,
+  .tag.community,
+  .tag.food,
+  .tag.fruit,
+  .tag.vegetables,
+  .tag.weather,
+  .tag.rewards {
+    background: rgba(208, 161, 76, 0.16);
+    color: #8a651e;
+  }
+
+  .tag.cutting,
+  .tag.sorting,
+  .tag.habit-building {
+    background: rgba(120, 143, 82, 0.16);
+    color: var(--green);
+  }
+
+  .tag.counting,
+  .tag.number-writing,
+  .tag.numbers {
+    background: rgba(111, 96, 153, 0.14);
+    color: #665894;
+  }
+
+  .tag.airplanes,
+  .tag.boats,
+  .tag.cars,
+  .tag.balloons,
+  .tag.construction,
+  .tag.emergency,
+  .tag.words,
+  .tag.hygiene {
+    background: rgba(105, 153, 156, 0.14);
+    color: #4d7f84;
+  }
+
+  .card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 2px dotted var(--line-strong);
+  }
+
+  .action-btn,
+  .download-btn {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .download-btn {
+    border-color: transparent;
+    background: var(--red);
+    color: var(--paper-raised);
+  }
+
+  .action-btn:hover,
+  .action-btn:focus-visible,
+  .download-btn:hover,
+  .download-btn:focus-visible {
+    outline: 3px solid rgba(105, 153, 156, 0.24);
+    outline-offset: 2px;
+  }
+
+  .empty-state {
+    display: none;
+    min-height: 320px;
+    border: 2px dashed var(--line-strong);
+    background: rgba(255, 255, 255, 0.28);
+    place-items: center;
+    padding: 40px;
     text-align: center;
+  }
+
+  .empty-state.is-visible {
+    display: grid;
+  }
+
+  .empty-icon {
+    width: 54px;
+    height: 54px;
+    display: inline-grid;
+    place-items: center;
+    margin-bottom: 14px;
+    border-radius: 18px;
+    background: rgba(105, 153, 156, 0.14);
+    color: var(--teal);
+  }
+
+  .empty-state h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .empty-state p {
+    max-width: 360px;
+    margin: 8px auto 0;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .preview-dialog {
+    width: min(900px, calc(100vw - 28px));
+    max-height: min(880px, calc(100vh - 28px));
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--ink);
+  }
+
+  .preview-dialog::backdrop {
+    background: rgba(21, 29, 36, 0.48);
+    backdrop-filter: blur(4px);
+  }
+
+  .dialog-card {
+    display: grid;
+    grid-template-columns: minmax(260px, 0.92fr) minmax(260px, 1fr);
+    overflow: hidden;
+    border: 2px solid rgba(38, 61, 79, 0.18);
+    background: var(--paper-raised);
+    box-shadow: 0 26px 70px rgba(16, 26, 34, 0.32);
+  }
+
+  .dialog-preview {
+    min-height: 0;
+    background: var(--paper-soft);
+  }
+
+  .dialog-preview img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .dialog-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 26px;
+  }
+
+  .dialog-close {
+    align-self: flex-end;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: transparent;
+    cursor: pointer;
+    color: var(--ink);
+  }
+
+  .dialog-info h2 {
+    margin: 4px 0 10px;
+    font-size: clamp(1.7rem, 4vw, 2.8rem);
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .dialog-info p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .detail-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin: 24px 0;
+  }
+
+  .detail-item {
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.34);
+    padding: 10px 12px;
+  }
+
+  .detail-item span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .detail-item strong {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.96rem;
+  }
+
+  .dialog-download {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    margin-top: auto;
+    border-radius: 999px;
+    background: var(--red);
+    color: var(--paper-raised);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    text-transform: uppercase;
   }
 
   @media (prefers-color-scheme: dark) {
     :root {
-      --bg-canvas: #15100c;
-      --bg-white: #211913;
-      --bg-soft: #2b2119;
-      --accent-orange: #ffb85d;
-      --accent-orange-hover: #ffc979;
-      --accent-green: #b8df70;
-      --accent-blue: #90c9dd;
-      --text-main: #ffe8cc;
-      --text-muted: #c9ad90;
-      --line-soft: rgba(255, 223, 185, 0.14);
-      --shadow-soft: 0 14px 40px rgba(0, 0, 0, 0.48);
-      --shadow-hover: 0 22px 58px rgba(0, 0, 0, 0.62);
+      --bg-page: #182536;
+      --bg-dots: rgba(255, 190, 88, 0.13);
+      --paper: #172131;
+      --paper-raised: #202d3e;
+      --paper-soft: #101824;
+      --ink: #f4e7cf;
+      --muted: #b5c4cf;
+      --line: rgba(244, 231, 207, 0.13);
+      --line-strong: rgba(244, 231, 207, 0.24);
+      --red: #f38f6f;
+      --mustard: #e4b85f;
+      --teal: #8dc0bd;
+      --green: #b9cd7d;
+      --shadow: 0 14px 30px -16px rgba(0, 0, 0, 0.72), 0 3px 10px rgba(0, 0, 0, 0.36);
+      --shadow-hover: 0 22px 44px -18px rgba(0, 0, 0, 0.78), 0 9px 18px rgba(0, 0, 0, 0.42);
     }
 
-    body {
+    .app-shell {
       background:
-        radial-gradient(circle at 10% -4%, rgba(255, 183, 83, 0.18) 0 17%, transparent 36%),
-        radial-gradient(circle at 100% 18%, rgba(104, 64, 28, 0.34) 0 16%, transparent 36%),
-        radial-gradient(circle at 88% 100%, rgba(49, 32, 18, 0.88) 0 22%, transparent 43%),
-        var(--bg-canvas);
+        radial-gradient(circle at 75% -10%, rgba(228, 184, 95, 0.18), transparent 34%),
+        radial-gradient(circle at 8% 4%, rgba(141, 192, 189, 0.14), transparent 28%),
+        transparent;
     }
 
-    .brand-mark {
-      color: #211100;
-      box-shadow: 0 8px 24px rgba(255, 184, 93, 0.2);
+    .result-summary {
+      color: rgba(244, 231, 207, 0.82);
     }
 
-    .filter-btn {
-      border-color: rgba(255, 232, 204, 0.08);
-      background: #281f18;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-      color: var(--text-muted);
+    .top-bar {
+      background: rgba(32, 45, 62, 0.94);
     }
 
-    .filter-btn:hover,
-    .filter-btn:focus-visible {
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.44);
-      color: var(--text-main);
+    .search-box {
+      border-color: rgba(244, 231, 207, 0.12);
+      background: var(--paper-raised);
     }
 
-    .filter-btn.active {
-      color: #241202;
-      box-shadow: 0 12px 28px rgba(255, 184, 93, 0.2);
+    .tab {
+      background: rgba(32, 45, 62, 0.74);
     }
 
-    .card {
-      border-color: rgba(255, 232, 204, 0.08);
-    }
-
-    .preview {
-      background: #130f0c;
-    }
-
-    .status-badge {
-      border-color: var(--bg-white);
-      color: #172006;
+    .tab:hover,
+    .tab:focus-visible,
+    .tab.active {
+      background: var(--paper);
     }
 
     .tag {
-      background: rgba(255, 184, 93, 0.15);
-      color: #ffc979;
+      color: #f0cf80;
     }
 
-    .tag.age {
-      background: rgba(184, 223, 112, 0.16);
-      color: #d1ee8d;
+    .tag.fine-motor,
+    .tag.prewriting {
+      color: #cde395;
     }
 
-    .tag.type {
-      background: rgba(144, 201, 221, 0.16);
-      color: #b3e3f0;
+    .tag.visual-tracking,
+    .tag.airport {
+      color: #a8d8d5;
     }
 
-    .download {
-      color: #241202;
+    .tag.penmanship {
+      color: #ffad91;
+    }
+
+    .tag.vocabulary,
+    .tag.animals,
+    .tag.farm,
+    .tag.ocean,
+    .tag.community,
+    .tag.food,
+    .tag.fruit,
+    .tag.vegetables,
+    .tag.weather,
+    .tag.rewards {
+      color: #f0cf80;
+    }
+
+    .tag.vehicles,
+    .tag.trains {
+      color: #a8c7ef;
+    }
+
+    .tag.space,
+    .tag.counting,
+    .tag.number-writing,
+    .tag.numbers {
+      color: #c9b8ff;
+    }
+
+    .tag.cutting,
+    .tag.sorting,
+    .tag.habit-building {
+      color: #cde395;
+    }
+
+    .tag.airplanes,
+    .tag.boats,
+    .tag.cars,
+    .tag.balloons,
+    .tag.construction,
+    .tag.emergency,
+    .tag.words,
+    .tag.hygiene {
+      color: #a8d8d5;
+    }
+
+    .empty-state {
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .detail-item {
+      background: rgba(255, 255, 255, 0.04);
     }
   }
 
-  @media (max-width: 720px) {
-    .site-header {
-      padding: 26px 18px 14px;
-    }
-
-    .main-container {
-      padding: 0 18px 56px;
-    }
-
-    .hero {
-      margin-bottom: 24px;
-      text-align: left;
-    }
-
-    .hero p {
-      font-size: 16px;
-    }
-
-    .filters {
-      justify-content: flex-start;
-      margin-bottom: 26px;
-    }
-
-    .filter-btn {
-      min-height: 40px;
-      padding: 0 16px;
-      font-size: 14px;
-    }
-
-    .gallery {
+  @media (max-width: 900px) {
+    .top-bar {
       grid-template-columns: 1fr;
-      gap: 24px;
+      gap: 12px;
+      align-items: stretch;
+      margin: calc(28px + env(safe-area-inset-top)) max(16px, env(safe-area-inset-right)) 14px max(16px, env(safe-area-inset-left));
+      padding: 14px 16px 16px;
+      border-radius: 28px;
     }
 
-    .card {
-      border-radius: 20px;
-      padding: 14px;
+    .drawer-tabs {
+      padding-right: max(16px, env(safe-area-inset-right));
+      padding-left: max(16px, env(safe-area-inset-left));
     }
 
-    .preview {
-      border-radius: 14px;
+    .tab {
+      min-width: auto;
+      border-radius: 999px;
+      padding: 10px 16px;
+    }
+
+    .drawer-content {
+      display: flex;
+      flex-direction: column;
+      overflow: visible;
+      border-top: 0;
+    }
+
+    .mobile-filter-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper);
+      padding: 12px max(16px, env(safe-area-inset-right)) 12px max(16px, env(safe-area-inset-left));
+    }
+
+    .filter-toggle {
+      min-height: 40px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      background: var(--paper-raised);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0 14px;
+      text-transform: uppercase;
+    }
+
+    .filters-sidebar {
+      display: none;
+      width: 100%;
+      max-height: none;
+      border-right: 0;
+      border-bottom: 1px solid var(--line);
+      padding: 16px max(16px, env(safe-area-inset-right)) 18px max(16px, env(safe-area-inset-left));
+    }
+
+    body.filters-open .filters-sidebar {
+      display: block;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 20px;
+    }
+
+    .results-panel {
+      overflow: visible;
+      padding: 18px max(16px, env(safe-area-inset-right)) 40px max(16px, env(safe-area-inset-left));
+    }
+
+    .grid-toolbar {
+      grid-template-columns: 1fr;
+    }
+
+    .active-chips {
+      justify-content: flex-start;
+    }
+
+    .grid {
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 16px;
+    }
+
+    .card-body {
+      padding: 12px;
+    }
+
+    .card-actions {
+      grid-template-columns: 1fr;
+    }
+
+    .dialog-card {
+      grid-template-columns: 1fr;
+      max-height: calc(100vh - 28px);
+      overflow-y: auto;
+    }
+
+    .dialog-preview {
+      max-height: 44vh;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .top-bar {
+      margin-top: calc(28px + env(safe-area-inset-top));
+    }
+
+    .brand-logo {
+      font-size: 1.05rem;
+    }
+
+    .search-panel {
+      gap: 6px;
+    }
+
+    .search-box input {
+      min-height: 50px;
+    }
+
+    .filter-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .printable-card {
+      display: grid;
+      grid-template-columns: 118px minmax(0, 1fr);
+    }
+
+    .thumb,
+    .thumb.landscape {
+      height: 100%;
+      min-height: 190px;
+      aspect-ratio: auto;
+      border-right: 1px solid var(--line);
+      border-bottom: 0;
+    }
+
+    .card-title-row {
+      display: block;
+    }
+
+    .badge {
+      margin-top: 8px;
+    }
+
+    .tags {
+      margin-bottom: 10px;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .filter-btn,
-    .card,
-    .download {
+    .tab,
+    .printable-card {
       transition: none;
     }
   }
 </style>
 </head>
 <body>
-  <a class="mama-home-tab" href="/" aria-label="Back to mama.dev"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 10v10h14V10"></path><path d="M9 20v-6h6v6"></path></svg><span>mama.dev</span></a>
 
-  <nav class="site-header" aria-label="Worksheets">
-    <a href="/worksheets/" class="brand" aria-label="mama.dev worksheets">
-      <span class="brand-mark" aria-hidden="true">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="4" fill="currentColor" opacity="0.24"></rect><path d="M7 14l3-5 3 5 2-3 2 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-      </span>
-      mama.dev<small>/worksheets</small>
-    </a>
-  </nav>
+  <div class="app-shell">
+    <header class="top-bar">
+      <a class="brand-logo" href="/" aria-label="Back to mama.dev">
+        <span>M</span><span>A</span><span>M</span><span>A</span><span>.</span><span>D</span><span>E</span><span>V</span>
+      </a>
 
-  <main class="main-container">
-    <header class="hero">
-      <h1>Joyful learning, ready to print.</h1>
-      <p>Beautiful worksheet PDFs for mazes, early penmanship, quiet tables, and small hands that want a job.</p>
+      <div class="search-panel">
+        <label class="search-box" for="worksheet-search">
+          <span class="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"></circle><path d="m16.5 16.5 4 4"></path></svg></span>
+          <input id="worksheet-search" type="search" autocomplete="off" placeholder="Search worksheets">
+        </label>
+        <div id="result-summary" class="result-summary" aria-live="polite"></div>
+      </div>
     </header>
 
-    <div class="filters" aria-label="Filter worksheets">
-      <button class="filter-btn active" type="button" data-filter="all" aria-pressed="true">All Activities</button>
-      <button class="filter-btn" type="button" data-filter="maze" aria-pressed="false">Mazes</button>
-      <button class="filter-btn" type="button" data-filter="tracing" aria-pressed="false">Tracing</button>
-    </div>
+    <section class="file-drawer" aria-label="Worksheet library">
+      <nav class="drawer-tabs" aria-label="Worksheet collections">
+        <button class="tab active" type="button" data-tab="all" aria-pressed="true">All Files</button>
+        <button class="tab" type="button" data-tab="maze" aria-pressed="false">Mazes</button>
+        <button class="tab" type="button" data-tab="tracing" aria-pressed="false">Tracing</button>
+        <button class="tab" type="button" data-tab="cut-paste" aria-pressed="false">Cut + Paste</button>
+        <button class="tab" type="button" data-tab="math" aria-pressed="false">Math</button>
+        <button class="tab" type="button" data-tab="chart" aria-pressed="false">Charts</button>
+      </nav>
 
-    <section class="gallery" aria-label="Worksheet downloads">
-      <a class="card" href="files/mars-rover-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/mars-rover-maze.jpg" width="928" height="597" alt="Preview of Mars Rover Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Mars Rover Maze</h2>
-          <p class="desc">Guide the rover across a Mars base scene with a clear start and finish path.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
+      <div class="drawer-content">
+        <div class="mobile-filter-row">
+          <button id="filter-toggle" class="filter-toggle" type="button" aria-expanded="false"><svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16"></path><path d="M7 12h10"></path><path d="M10 18h4"></path></svg> Filters</button>
+          <button class="clear-btn" type="button" data-clear>Clear all</button>
         </div>
-      </a>
 
-      <a class="card" href="files/safari-jeep-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/safari-jeep-maze.jpg" width="932" height="600" alt="Preview of Safari Jeep Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Safari Jeep Maze</h2>
-          <p class="desc">Drive the jeep through a leafy jungle route toward the treehouse.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
+        <aside class="filters-sidebar" aria-label="Worksheet filters">
+          <div class="filter-heading">
+            <h2>Filters</h2>
+            <button class="clear-btn" type="button" data-clear>Clear all</button>
+          </div>
+          <div id="filter-groups" class="filter-grid"></div>
+        </aside>
 
-      <a class="card" href="files/train-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/train-maze.jpg" width="932" height="598" alt="Preview of Train Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Train Maze</h2>
-          <p class="desc">Follow the train tracks and drive the train to the station.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
+        <main class="results-panel">
+          <div class="grid-toolbar">
+            <div class="grid-title">
+              <h2 id="grid-heading">All worksheet files</h2>
+              <p>Preview a page, then download the PDF when it is the right one.</p>
+            </div>
+            <div id="active-chips" class="active-chips" aria-label="Active filters"></div>
+          </div>
 
-      <a class="card" href="files/tractor-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/tractor-maze.jpg" width="930" height="599" alt="Preview of Tractor Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Tractor Maze</h2>
-          <p class="desc">Drive the tractor through a farm path and finish at the barn.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
+          <div id="worksheet-grid" class="grid" aria-labelledby="grid-heading"></div>
 
-      <a class="card" href="files/fire-truck-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/fire-truck-maze.jpg" width="930" height="598" alt="Preview of Fire Truck Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Fire Truck Maze</h2>
-          <p class="desc">Help the fire truck find the station in a neighborhood scene.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
-
-      <a class="card" href="files/submarine-maze.pdf" download data-category="maze">
-        <span class="status-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"></path></svg></span>
-        <div class="preview landscape"><img src="previews/submarine-maze.jpg" width="930" height="598" alt="Preview of Submarine Maze worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag type">Maze</span><span class="tag age">Ages 4-7</span></div>
-          <h2>Submarine Maze</h2>
-          <p class="desc">Guide the submarine through coral toward the reef cave.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
-
-      <a class="card" href="files/airport-words-tracing.pdf" download data-category="tracing">
-        <div class="preview landscape"><img src="previews/airport-words-tracing.jpg" width="900" height="696" alt="Preview of Airport Words Tracing worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
-          <h2>Airport Words Tracing</h2>
-          <p class="desc">Airport vocabulary practice with dotted words for plane, tower, gate, terminal, fuel, tug, and belt.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
-
-      <a class="card" href="files/airport-line-tracing.pdf" download data-category="tracing">
-        <div class="preview landscape"><img src="previews/airport-line-tracing.jpg" width="900" height="696" alt="Preview of Trace the Airport worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
-          <h2>Trace the Airport</h2>
-          <p class="desc">A vehicle tracing page with dotted airplanes, service trucks, luggage, and sticker spaces.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
-
-      <a class="card" href="files/airport-sign-words-tracing.pdf" download data-category="tracing">
-        <div class="preview"><img src="previews/airport-sign-words-tracing.jpg" width="637" height="900" alt="Preview of Airport Sign Words Tracing worksheet" loading="eager" decoding="async"></div>
-        <div class="card-content">
-          <div class="meta-tags"><span class="tag">Penmanship</span><span class="tag age">Ages 3-5</span></div>
-          <h2>Airport Sign Words</h2>
-          <p class="desc">Trace short airport words on signboards, including plane, gate, crate, cone, tape, and lane.</p>
-          <span class="download">Download PDF <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"></path></svg></span>
-        </div>
-      </a>
+          <div id="empty-state" class="empty-state">
+            <div>
+              <span class="empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path d="M14 2v6h6"></path><path d="M9 15h6"></path><path d="M9 18h4"></path></svg></span>
+              <h2>No matching pages</h2>
+              <p>Try clearing a filter or searching for a broader theme like “vehicle,” “maze,” or “airport.”</p>
+            </div>
+          </div>
+        </main>
+      </div>
     </section>
+  </div>
 
-    <p class="note">All downloads are plain PDFs. Print at actual size unless your printer needs fit-to-page.</p>
-  </main>
+  <dialog id="preview-dialog" class="preview-dialog">
+    <div class="dialog-card">
+      <div class="dialog-preview"><img id="dialog-image" alt=""></div>
+      <div class="dialog-info">
+        <button class="dialog-close" type="button" aria-label="Close preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+        <span id="dialog-badge" class="badge"></span>
+        <h2 id="dialog-title"></h2>
+        <p id="dialog-desc"></p>
+        <div class="detail-list">
+          <div class="detail-item"><span>Type</span><strong id="dialog-type"></strong></div>
+          <div class="detail-item"><span>Theme</span><strong id="dialog-theme"></strong></div>
+          <div class="detail-item"><span>Pages</span><strong id="dialog-pages"></strong></div>
+        </div>
+        <div id="dialog-tags" class="tags"></div>
+        <a id="dialog-download" class="dialog-download" href="#" download>Download PDF <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg></a>
+      </div>
+    </div>
+  </dialog>
 
   <script>
-    const filterButtons = [...document.querySelectorAll(".filter-btn")];
-    const cards = [...document.querySelectorAll(".card")];
+    const worksheets = [
+      {
+            "id": "mars-rover-maze",
+            "title": "Mars Rover Maze",
+            "description": "Guide the rover across a Mars base scene with a clear start and finish path.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Space",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/mars-rover-maze.pdf",
+            "thumbnail": "previews/mars-rover-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "safari-jeep-maze",
+            "title": "Safari Jeep Maze",
+            "description": "Drive the jeep through a leafy jungle route toward the treehouse.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Animals",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/safari-jeep-maze.pdf",
+            "thumbnail": "previews/safari-jeep-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "train-maze",
+            "title": "Train Maze",
+            "description": "Follow the train tracks and drive the train to the station.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Trains",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/train-maze.pdf",
+            "thumbnail": "previews/train-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "tractor-maze",
+            "title": "Tractor Maze",
+            "description": "Drive the tractor through a farm path and finish at the barn.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Farm",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/tractor-maze.pdf",
+            "thumbnail": "previews/tractor-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "fire-truck-maze",
+            "title": "Fire Truck Maze",
+            "description": "Help the fire truck find the station in a neighborhood scene.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Community",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/fire-truck-maze.pdf",
+            "thumbnail": "previews/fire-truck-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "submarine-maze",
+            "title": "Submarine Maze",
+            "description": "Guide the submarine through coral toward the reef cave.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Ocean",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/submarine-maze.pdf",
+            "thumbnail": "previews/submarine-maze.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "airplane-maze",
+            "title": "Airplane Maze",
+            "description": "Help the airplane fly through the airport maze.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/airplane-maze.pdf",
+            "thumbnail": "previews/airplane-maze.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "boat-maze",
+            "title": "Boat Maze",
+            "description": "Sail the boat through the lighthouse maze.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Boats",
+                  "Ocean",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/boat-maze.pdf",
+            "thumbnail": "previews/boat-maze.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "construction-maze",
+            "title": "Construction Maze",
+            "description": "Help the dump truck get through the construction-site maze.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Construction",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/construction-maze.pdf",
+            "thumbnail": "previews/construction-maze.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "hot-air-balloon-maze",
+            "title": "Hot Air Balloon Maze",
+            "description": "Float the balloon through the sky path.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Balloons"
+            ],
+            "pages": 1,
+            "file": "files/hot-air-balloon-maze.pdf",
+            "thumbnail": "previews/hot-air-balloon-maze.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "boat-and-balloon-two-maze-page",
+            "title": "Boat and Balloon Two-Maze Page",
+            "description": "Two smaller mazes on one printable page: boat and hot air balloon.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Boats",
+                  "Balloons",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/boat-and-balloon-two-maze-page.pdf",
+            "thumbnail": "previews/boat-and-balloon-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "construction-and-airplane-two-maze-page",
+            "title": "Construction and Airplane Two-Maze Page",
+            "description": "Two smaller mazes on one printable page: construction truck and airplane.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Construction",
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/construction-and-airplane-two-maze-page.pdf",
+            "thumbnail": "previews/construction-and-airplane-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "fire-truck-and-submarine-two-maze-page",
+            "title": "Fire Truck and Submarine Two-Maze Page",
+            "description": "Two colorful mazes on one page: fire truck and submarine.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Community",
+                  "Ocean",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/fire-truck-and-submarine-two-maze-page.pdf",
+            "thumbnail": "previews/fire-truck-and-submarine-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "mars-rover-and-safari-jeep-two-maze-page",
+            "title": "Mars Rover and Safari Jeep Two-Maze Page",
+            "description": "Two adventure mazes on one page: Mars rover and safari jeep.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Space",
+                  "Animals",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/mars-rover-and-safari-jeep-two-maze-page.pdf",
+            "thumbnail": "previews/mars-rover-and-safari-jeep-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "ocean-and-air-two-maze-page",
+            "title": "Ocean and Air Two-Maze Page",
+            "description": "Two smaller vehicle mazes with ocean and sky themes.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Ocean",
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/ocean-and-air-two-maze-page.pdf",
+            "thumbnail": "previews/ocean-and-air-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "rocket-and-fire-truck-two-maze-page",
+            "title": "Rocket and Fire Truck Two-Maze Page",
+            "description": "Two smaller mazes on one page: rocket and fire truck.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Space",
+                  "Community",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/rocket-and-fire-truck-two-maze-page.pdf",
+            "thumbnail": "previews/rocket-and-fire-truck-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "space-and-emergency-two-maze-page",
+            "title": "Space and Emergency Two-Maze Page",
+            "description": "A two-maze page with rocket and fire truck paths.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Space",
+                  "Emergency",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/space-and-emergency-two-maze-page.pdf",
+            "thumbnail": "previews/space-and-emergency-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "submarine-and-helicopter-two-maze-page",
+            "title": "Submarine and Helicopter Two-Maze Page",
+            "description": "Two smaller mazes on one page: submarine and helicopter.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Ocean",
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/submarine-and-helicopter-two-maze-page.pdf",
+            "thumbnail": "previews/submarine-and-helicopter-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "train-and-tractor-two-maze-page",
+            "title": "Train and Tractor Two-Maze Page",
+            "description": "Two smaller mazes on one page: train and tractor.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Trains",
+                  "Farm",
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/train-and-tractor-two-maze-page.pdf",
+            "thumbnail": "previews/train-and-tractor-two-maze-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "two-maze-pages-pack",
+            "title": "Two-Maze Pages Pack",
+            "description": "A printable pack of two-maze pages for quick extra practice.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Vehicles"
+            ],
+            "pages": 4,
+            "file": "files/two-maze-pages-pack.pdf",
+            "thumbnail": "previews/two-maze-pages-pack.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "two-maze-pages-pack-2",
+            "title": "Two-Maze Pages Pack 2",
+            "description": "A second printable pack of two-maze pages for quick extra practice.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Vehicles"
+            ],
+            "pages": 4,
+            "file": "files/two-maze-pages-pack-2.pdf",
+            "thumbnail": "previews/two-maze-pages-pack-2.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "two-mazes-one-page",
+            "title": "Two Mazes One Page",
+            "description": "A compact two-maze worksheet for shorter table sessions.",
+            "type": "Maze",
+            "skills": [
+                  "Visual tracking",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Vehicles"
+            ],
+            "pages": 2,
+            "file": "files/two-mazes-one-page.pdf",
+            "thumbnail": "previews/two-mazes-one-page.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "airport-words-tracing",
+            "title": "Airport Words Tracing",
+            "description": "Airport vocabulary practice with dotted words for plane, tower, gate, terminal, fuel, tug, and belt.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airport",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/airport-words-tracing.pdf",
+            "thumbnail": "previews/airport-words-tracing.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "airport-line-tracing",
+            "title": "Trace the Airport",
+            "description": "A vehicle tracing page with dotted airplanes, service trucks, luggage, and sticker spaces.",
+            "type": "Tracing",
+            "skills": [
+                  "Prewriting",
+                  "Fine motor"
+            ],
+            "themes": [
+                  "Airport",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/airport-line-tracing.pdf",
+            "thumbnail": "previews/airport-line-tracing.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "airport-sign-words-tracing",
+            "title": "Airport Sign Words",
+            "description": "Trace short airport words on signboards, including plane, gate, crate, cone, tape, and lane.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airport",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/airport-sign-words-tracing.pdf",
+            "thumbnail": "previews/airport-sign-words-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "caravan-twin-otter-fortress-tracing",
+            "title": "Caravan, Twin Otter, and Fortress Tracing",
+            "description": "Trace airplane names for the Cessna Caravan, DHC-6 Twin Otter, and B-17 Flying Fortress.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/caravan-twin-otter-fortress-tracing.pdf",
+            "thumbnail": "previews/caravan-twin-otter-fortress-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "beluga-a380-stratotanker-tracing",
+            "title": "Beluga, A380, and Stratotanker Tracing",
+            "description": "Trace airplane names for the Airbus Beluga, Airbus A380, and KC-135 Stratotanker.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/beluga-a380-stratotanker-tracing.pdf",
+            "thumbnail": "previews/beluga-a380-stratotanker-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "jumbo-concorde-md-11-tracing",
+            "title": "Jumbo, Concorde, and MD-11 Tracing",
+            "description": "Trace airplane names for the Boeing 747, Concorde, and McDonnell Douglas MD-11.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/jumbo-concorde-md-11-tracing.pdf",
+            "thumbnail": "previews/jumbo-concorde-md-11-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "dreamlifter-blackbird-mustang-tracing",
+            "title": "Dreamlifter, Blackbird, and Mustang Tracing",
+            "description": "Trace airplane names for the Boeing Dreamlifter, SR-71 Blackbird, and P-51 Mustang.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Airplanes",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/dreamlifter-blackbird-mustang-tracing.pdf",
+            "thumbnail": "previews/dreamlifter-blackbird-mustang-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "car-word-tracing",
+            "title": "Car Word Tracing",
+            "description": "Practice writing the word car alongside simple car pictures.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Cars",
+                  "Vehicles"
+            ],
+            "pages": 1,
+            "file": "files/car-word-tracing.pdf",
+            "thumbnail": "previews/car-word-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "long-vowel-words-tracing",
+            "title": "Long Vowel Words Tracing",
+            "description": "Trace short long-vowel words with small picture cues.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Words"
+            ],
+            "pages": 1,
+            "file": "files/long-vowel-words-tracing.pdf",
+            "thumbnail": "previews/long-vowel-words-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "town-sign-words-tracing",
+            "title": "Town Sign Words Tracing",
+            "description": "Trace town and neighborhood words shown on storefront signs.",
+            "type": "Tracing",
+            "skills": [
+                  "Penmanship",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Community",
+                  "Words"
+            ],
+            "pages": 1,
+            "file": "files/town-sign-words-tracing.pdf",
+            "thumbnail": "previews/town-sign-words-tracing.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "weather-vocabulary-cut-and-paste",
+            "title": "Weather Vocabulary Cut and Paste",
+            "description": "Cut and paste weather words into the matching spots.",
+            "type": "Cut + Paste",
+            "skills": [
+                  "Cutting",
+                  "Vocabulary",
+                  "Sorting"
+            ],
+            "themes": [
+                  "Weather"
+            ],
+            "pages": 1,
+            "file": "files/weather-vocabulary-cut-and-paste.pdf",
+            "thumbnail": "previews/weather-vocabulary-cut-and-paste.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "fruit-vs-vegetable-cut-and-paste",
+            "title": "Fruit vs Vegetable Cut and Paste",
+            "description": "Use the reference page, then sort food stickers into fruit and vegetable boxes.",
+            "type": "Cut + Paste",
+            "skills": [
+                  "Cutting",
+                  "Sorting",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Food",
+                  "Fruit",
+                  "Vegetables"
+            ],
+            "pages": 2,
+            "file": "files/fruit-vs-vegetable-cut-and-paste.pdf",
+            "thumbnail": "previews/fruit-vs-vegetable-cut-and-paste.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "tooth-brushing-sticker-chart",
+            "title": "Tooth Brushing Sticker Chart",
+            "description": "A printable reward chart for tracking tooth brushing routines.",
+            "type": "Chart",
+            "skills": [
+                  "Habit building"
+            ],
+            "themes": [
+                  "Hygiene",
+                  "Rewards"
+            ],
+            "pages": 1,
+            "file": "files/tooth-brushing-sticker-chart.pdf",
+            "thumbnail": "previews/tooth-brushing-sticker-chart.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "number-tracing-0-9",
+            "title": "Number Tracing 0-9",
+            "description": "Trace numbers zero through nine on handwriting lines.",
+            "type": "Math",
+            "skills": [
+                  "Number writing",
+                  "Penmanship"
+            ],
+            "themes": [
+                  "Numbers"
+            ],
+            "pages": 1,
+            "file": "files/number-tracing-0-9.pdf",
+            "thumbnail": "previews/number-tracing-0-9.jpg",
+            "orientation": "landscape"
+      },
+      {
+            "id": "things-that-go-count-and-write",
+            "title": "Things That Go Count and Write",
+            "description": "Count vehicle groups and write the matching number.",
+            "type": "Math",
+            "skills": [
+                  "Counting",
+                  "Number writing"
+            ],
+            "themes": [
+                  "Vehicles",
+                  "Numbers"
+            ],
+            "pages": 1,
+            "file": "files/things-that-go-count-and-write.pdf",
+            "thumbnail": "previews/things-that-go-count-and-write.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "writing-numbers-worksheet",
+            "title": "Writing Numbers Worksheet",
+            "description": "Practice writing numbers in a full-page number grid.",
+            "type": "Math",
+            "skills": [
+                  "Number writing",
+                  "Penmanship"
+            ],
+            "themes": [
+                  "Numbers"
+            ],
+            "pages": 1,
+            "file": "files/writing-numbers-worksheet.pdf",
+            "thumbnail": "previews/writing-numbers-worksheet.jpg",
+            "orientation": "portrait"
+      }
+];
 
-    filterButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const filter = button.dataset.filter;
+    const filterGroups = [
+      {
+            "label": "Type",
+            "key": "type",
+            "values": [
+                  "Maze",
+                  "Tracing",
+                  "Cut + Paste",
+                  "Math",
+                  "Chart"
+            ]
+      },
+      {
+            "label": "Skill",
+            "key": "skills",
+            "values": [
+                  "Counting",
+                  "Cutting",
+                  "Fine motor",
+                  "Habit building",
+                  "Number writing",
+                  "Penmanship",
+                  "Prewriting",
+                  "Sorting",
+                  "Visual tracking",
+                  "Vocabulary"
+            ]
+      },
+      {
+            "label": "Theme",
+            "key": "themes",
+            "values": [
+                  "Airplanes",
+                  "Airport",
+                  "Animals",
+                  "Balloons",
+                  "Boats",
+                  "Cars",
+                  "Community",
+                  "Construction",
+                  "Emergency",
+                  "Farm",
+                  "Food",
+                  "Fruit",
+                  "Hygiene",
+                  "Numbers",
+                  "Ocean",
+                  "Rewards",
+                  "Space",
+                  "Trains",
+                  "Vegetables",
+                  "Vehicles",
+                  "Weather",
+                  "Words"
+            ]
+      }
+];
 
-        filterButtons.forEach((item) => {
-          const isSelected = item === button;
-          item.classList.toggle("active", isSelected);
-          item.setAttribute("aria-pressed", String(isSelected));
-        });
+    const state = {
+      tab: "all",
+      query: "",
+      filters: new Map()
+    };
 
-        cards.forEach((card) => {
-          const shouldShow = filter === "all" || card.dataset.category === filter;
-          card.classList.toggle("is-hidden", !shouldShow);
-          card.hidden = !shouldShow;
-        });
+    const grid = document.querySelector("#worksheet-grid");
+    const searchInput = document.querySelector("#worksheet-search");
+    const tabs = [...document.querySelectorAll(".tab")];
+    const filterGroupsEl = document.querySelector("#filter-groups");
+    const resultSummary = document.querySelector("#result-summary");
+    const activeChips = document.querySelector("#active-chips");
+    const emptyState = document.querySelector("#empty-state");
+    const clearButtons = [...document.querySelectorAll("[data-clear]")];
+    const filterToggle = document.querySelector("#filter-toggle");
+    const dialog = document.querySelector("#preview-dialog");
+    const dialogClose = dialog.querySelector(".dialog-close");
+
+    const iconDownload = '<svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>';
+    const iconEye = '<svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+    const shuffledWorksheets = shuffle([...worksheets]);
+
+    function shuffle(items) {
+      for (let index = items.length - 1; index > 0; index -= 1) {
+        const randomIndex = Math.floor(Math.random() * (index + 1));
+        [items[index], items[randomIndex]] = [items[randomIndex], items[index]];
+      }
+      return items;
+    }
+
+    function slug(value) {
+      return value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function tagClass(value) {
+      return `tag ${slug(value)}`;
+    }
+
+    function getValues(item, key) {
+      const value = item[key];
+      return Array.isArray(value) ? value : [value];
+    }
+
+    function matchesTab(item) {
+      if (state.tab === "all") return true;
+      if (state.tab === "cut-paste") return item.type === "Cut + Paste";
+      return item.type.toLowerCase() === state.tab;
+    }
+
+    function matchesSearch(item) {
+      if (!state.query) return true;
+      const haystack = [
+        item.title,
+        item.description,
+        item.type,
+        ...item.skills,
+        ...item.themes
+      ].join(" ").toLowerCase();
+      return haystack.includes(state.query);
+    }
+
+    function matchesFilters(item) {
+      for (const [key, selected] of state.filters.entries()) {
+        if (!selected.size) continue;
+        const values = getValues(item, key).map((value) => value.toLowerCase());
+        for (const option of selected) {
+          if (!values.includes(option.toLowerCase())) return false;
+        }
+      }
+      return true;
+    }
+
+    function filteredWorksheets() {
+      const source = state.tab === "all" ? shuffledWorksheets : worksheets;
+      return source.filter((item) => matchesTab(item) && matchesSearch(item) && matchesFilters(item));
+    }
+
+    function renderFilters() {
+      filterGroupsEl.innerHTML = filterGroups.map((group) => `
+        <section class="filter-group">
+          <h3>${group.label}</h3>
+          ${group.values.map((value) => {
+            const id = `filter-${group.key}-${slug(value)}`;
+            return `
+              <label class="filter-option" for="${id}">
+                <input id="${id}" type="checkbox" value="${value}" data-filter-key="${group.key}">
+                <span>${value}</span>
+              </label>
+            `;
+          }).join("")}
+        </section>
+      `).join("");
+    }
+
+    function renderCards(items) {
+      grid.innerHTML = items.map((item) => {
+        const tags = [...item.skills.slice(0, 2), ...item.themes.slice(0, 1)];
+        return `
+          <article class="printable-card">
+            <div class="thumb ${item.orientation}"><img src="${item.thumbnail}" alt="Preview of ${item.title} worksheet" loading="lazy" decoding="async"></div>
+            <div class="card-body">
+              <div class="card-title-row">
+                <h3 class="card-title">${item.title}</h3>
+                <span class="badge">${item.type}</span>
+              </div>
+              <p class="card-desc">${item.description}</p>
+              <div class="tags">
+                ${tags.map((tag) => `<span class="${tagClass(tag)}">${tag}</span>`).join("")}
+              </div>
+              <div class="card-actions">
+                <button class="action-btn" type="button" data-preview="${item.id}">${iconEye} Preview</button>
+                <a class="download-btn" href="${item.file}" download>${iconDownload} PDF</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderChips() {
+      const chips = [];
+      if (state.query) chips.push(`Search: ${state.query}`);
+      if (state.tab !== "all") {
+        const tabLabel = tabs.find((tab) => tab.dataset.tab === state.tab)?.textContent.trim();
+        if (tabLabel) chips.push(tabLabel);
+      }
+      for (const selected of state.filters.values()) {
+        selected.forEach((value) => chips.push(value));
+      }
+      activeChips.innerHTML = chips.map((chip) => `<span class="chip">${chip}</span>`).join("");
+      clearButtons.forEach((button) => {
+        button.disabled = !chips.length;
       });
+    }
+
+    function render() {
+      const items = filteredWorksheets();
+      renderCards(items);
+      renderChips();
+      const noun = items.length === 1 ? "worksheet" : "worksheets";
+      resultSummary.textContent = `${items.length} ${noun}`;
+      emptyState.classList.toggle("is-visible", items.length === 0);
+    }
+
+    function openPreview(id) {
+      const item = worksheets.find((worksheet) => worksheet.id === id);
+      if (!item) return;
+      document.querySelector("#dialog-image").src = item.thumbnail;
+      document.querySelector("#dialog-image").alt = `Preview of ${item.title} worksheet`;
+      document.querySelector("#dialog-badge").textContent = item.type;
+      document.querySelector("#dialog-title").textContent = item.title;
+      document.querySelector("#dialog-desc").textContent = item.description;
+      document.querySelector("#dialog-type").textContent = item.type;
+      document.querySelector("#dialog-theme").textContent = item.themes.join(", ");
+      document.querySelector("#dialog-pages").textContent = `${item.pages} page${item.pages === 1 ? "" : "s"}`;
+      document.querySelector("#dialog-tags").innerHTML = [...item.skills, ...item.themes].map((tag) => `<span class="${tagClass(tag)}">${tag}</span>`).join("");
+      document.querySelector("#dialog-download").href = item.file;
+      if (typeof dialog.showModal === "function") {
+        dialog.showModal();
+      }
+    }
+
+    function clearAll() {
+      state.query = "";
+      state.tab = "all";
+      state.filters.clear();
+      searchInput.value = "";
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.tab === "all";
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-pressed", String(selected));
+      });
+      document.querySelectorAll("[data-filter-key]").forEach((input) => {
+        input.checked = false;
+      });
+      document.body.classList.remove("filters-open");
+      filterToggle?.setAttribute("aria-expanded", "false");
+      render();
+    }
+
+    renderFilters();
+    render();
+
+    searchInput.addEventListener("input", () => {
+      state.query = searchInput.value.trim().toLowerCase();
+      render();
+    });
+
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", () => {
+        state.tab = tab.dataset.tab;
+        tabs.forEach((item) => {
+          const selected = item === tab;
+          item.classList.toggle("active", selected);
+          item.setAttribute("aria-pressed", String(selected));
+        });
+        render();
+      });
+    });
+
+    filterGroupsEl.addEventListener("change", (event) => {
+      const input = event.target.closest("[data-filter-key]");
+      if (!input) return;
+      const key = input.dataset.filterKey;
+      if (!state.filters.has(key)) state.filters.set(key, new Set());
+      const selected = state.filters.get(key);
+      if (input.checked) {
+        selected.add(input.value);
+      } else {
+        selected.delete(input.value);
+      }
+      render();
+    });
+
+    grid.addEventListener("click", (event) => {
+      const previewButton = event.target.closest("[data-preview]");
+      if (previewButton) openPreview(previewButton.dataset.preview);
+    });
+
+    clearButtons.forEach((button) => button.addEventListener("click", clearAll));
+
+    filterToggle?.addEventListener("click", () => {
+      const isOpen = document.body.classList.toggle("filters-open");
+      filterToggle.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    dialogClose.addEventListener("click", () => dialog.close());
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) dialog.close();
     });
   </script>
 </body>
