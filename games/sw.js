@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-games-";
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 const CORE_ASSETS = [
   "/games/",
   "/games/index.html",
@@ -10,6 +10,9 @@ const CORE_ASSETS = [
   "/games/icons/apple-touch-icon.png",
   "/assets/mama-home-tab.css"
 ];
+const ROOT_PATHS = new Set(CORE_ASSETS.map(function (asset) {
+  return new URL(asset, location.origin).pathname;
+}));
 
 self.addEventListener("install", function (event) {
   event.waitUntil(
@@ -39,6 +42,7 @@ self.addEventListener("fetch", function (event) {
 
   const url = new URL(event.request.url);
   if (url.origin !== location.origin || !url.pathname.startsWith("/games/")) return;
+  if (!ROOT_PATHS.has(url.pathname)) return;
 
   if (event.request.mode === "navigate") {
     // Always fetch game pages fresh (bypass the HTTP cache); fall back to cache offline.
