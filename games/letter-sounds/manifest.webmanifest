@@ -1,0 +1,37 @@
+{
+  "name": "Sound Safari",
+  "short_name": "Sound Safari",
+  "description": "A 3D letter-sound matching game for early readers.",
+  "id": "/games/letter-sounds/",
+  "start_url": "/games/letter-sounds/",
+  "scope": "/games/letter-sounds/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#c8d8c0",
+  "theme_color": "#c8d8c0",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/letter-sounds/icons/letter-sounds-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/letter-sounds/icons/letter-sounds-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/letter-sounds/icons/letter-sounds-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

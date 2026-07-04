@@ -1,0 +1,37 @@
+{
+  "name": "Take-Away Train",
+  "short_name": "Take Away",
+  "description": "A 3D subtraction game with train cars and take-away practice.",
+  "id": "/games/take-away-train/",
+  "start_url": "/games/take-away-train/",
+  "scope": "/games/take-away-train/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#e0a8b0",
+  "theme_color": "#e0a8b0",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/take-away-train/icons/take-away-train-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/take-away-train/icons/take-away-train-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/take-away-train/icons/take-away-train-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

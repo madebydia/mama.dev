@@ -1,0 +1,37 @@
+{
+  "name": "Number Hop",
+  "short_name": "Number Hop",
+  "description": "A 3D number-line hopping game for early math practice.",
+  "id": "/games/number-hop/",
+  "start_url": "/games/number-hop/",
+  "scope": "/games/number-hop/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#bfe0ec",
+  "theme_color": "#bfe0ec",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/number-hop/icons/number-hop-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/number-hop/icons/number-hop-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/number-hop/icons/number-hop-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

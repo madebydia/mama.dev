@@ -1,0 +1,37 @@
+{
+  "name": "Memory Match",
+  "short_name": "Memory",
+  "description": "A 3D memory matching game with animal cards.",
+  "id": "/games/memory-match/",
+  "start_url": "/games/memory-match/",
+  "scope": "/games/memory-match/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#c8dca8",
+  "theme_color": "#c8dca8",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/memory-match/icons/memory-match-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/memory-match/icons/memory-match-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/memory-match/icons/memory-match-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

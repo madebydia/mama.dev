@@ -1,0 +1,37 @@
+{
+  "name": "Sorting Bins",
+  "short_name": "Sorting",
+  "description": "A 3D sorting game for matching objects into categories.",
+  "id": "/games/sorting-bins/",
+  "start_url": "/games/sorting-bins/",
+  "scope": "/games/sorting-bins/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#bfe0d0",
+  "theme_color": "#bfe0d0",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/sorting-bins/icons/sorting-bins-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/sorting-bins/icons/sorting-bins-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/sorting-bins/icons/sorting-bins-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

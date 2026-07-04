@@ -1,0 +1,37 @@
+{
+  "name": "Pattern Parade",
+  "short_name": "Patterns",
+  "description": "A 3D pattern matching game with colorful shapes.",
+  "id": "/games/pattern-parade/",
+  "start_url": "/games/pattern-parade/",
+  "scope": "/games/pattern-parade/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#d8d0ec",
+  "theme_color": "#d8d0ec",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/pattern-parade/icons/pattern-parade-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/pattern-parade/icons/pattern-parade-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/pattern-parade/icons/pattern-parade-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

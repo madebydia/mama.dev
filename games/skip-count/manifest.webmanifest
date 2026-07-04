@@ -1,0 +1,37 @@
+{
+  "name": "Skip-Count Stones",
+  "short_name": "Skip Count",
+  "description": "A 3D skip-counting game with numbered stepping stones.",
+  "id": "/games/skip-count/",
+  "start_url": "/games/skip-count/",
+  "scope": "/games/skip-count/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#a8ccd8",
+  "theme_color": "#a8ccd8",
+  "categories": [
+    "education",
+    "games",
+    "kids"
+  ],
+  "icons": [
+    {
+      "src": "/games/skip-count/icons/skip-count-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/skip-count/icons/skip-count-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/games/skip-count/icons/skip-count-icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
