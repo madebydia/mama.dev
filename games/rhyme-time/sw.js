@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-rhyme-time-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/rhyme-time/",
   "/games/rhyme-time/index.html",
   "/games/rhyme-time/app.js",
-  "/games/rhyme-time/manifest.webmanifest",
-  "/games/rhyme-time/icons/favicon-32.png",
-  "/games/rhyme-time/icons/apple-touch-icon.png",
-  "/games/rhyme-time/icons/rhyme-time-icon-192.png",
-  "/games/rhyme-time/icons/rhyme-time-icon-512.png"
+  "/games/rhyme-time/manifest-20260705.webmanifest",
+  "/games/rhyme-time/icons/favicon-32-20260705.png",
+  "/games/rhyme-time/icons/apple-touch-icon-20260705.png",
+  "/games/rhyme-time/icons/rhyme-time-icon-192-20260705.png",
+  "/games/rhyme-time/icons/rhyme-time-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

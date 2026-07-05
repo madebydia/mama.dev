@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-skip-count-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/skip-count/",
   "/games/skip-count/index.html",
   "/games/skip-count/app.js",
-  "/games/skip-count/manifest.webmanifest",
-  "/games/skip-count/icons/favicon-32.png",
-  "/games/skip-count/icons/apple-touch-icon.png",
-  "/games/skip-count/icons/skip-count-icon-192.png",
-  "/games/skip-count/icons/skip-count-icon-512.png"
+  "/games/skip-count/manifest-20260705.webmanifest",
+  "/games/skip-count/icons/favicon-32-20260705.png",
+  "/games/skip-count/icons/apple-touch-icon-20260705.png",
+  "/games/skip-count/icons/skip-count-icon-192-20260705.png",
+  "/games/skip-count/icons/skip-count-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

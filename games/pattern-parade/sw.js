@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-pattern-parade-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/pattern-parade/",
   "/games/pattern-parade/index.html",
   "/games/pattern-parade/app.js",
-  "/games/pattern-parade/manifest.webmanifest",
-  "/games/pattern-parade/icons/favicon-32.png",
-  "/games/pattern-parade/icons/apple-touch-icon.png",
-  "/games/pattern-parade/icons/pattern-parade-icon-192.png",
-  "/games/pattern-parade/icons/pattern-parade-icon-512.png"
+  "/games/pattern-parade/manifest-20260705.webmanifest",
+  "/games/pattern-parade/icons/favicon-32-20260705.png",
+  "/games/pattern-parade/icons/apple-touch-icon-20260705.png",
+  "/games/pattern-parade/icons/pattern-parade-icon-192-20260705.png",
+  "/games/pattern-parade/icons/pattern-parade-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

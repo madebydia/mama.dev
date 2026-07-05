@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/shapes/",
   "/games/shapes/index.html",
   "/games/shapes/app.js",
-  "/games/shapes/manifest.webmanifest",
-  "/games/shapes/icons/favicon-32.png",
-  "/games/shapes/icons/apple-touch-icon.png",
-  "/games/shapes/icons/shapes-icon-192.png",
-  "/games/shapes/icons/shapes-icon-512.png",
+  "/games/shapes/manifest-20260705.webmanifest",
+  "/games/shapes/icons/favicon-32-20260705.png",
+  "/games/shapes/icons/apple-touch-icon-20260705.png",
+  "/games/shapes/icons/shapes-icon-192-20260705.png",
+  "/games/shapes/icons/shapes-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {

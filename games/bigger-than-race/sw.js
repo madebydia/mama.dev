@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/bigger-than-race/",
   "/games/bigger-than-race/index.html",
   "/games/bigger-than-race/app.js",
-  "/games/bigger-than-race/manifest.webmanifest",
-  "/games/bigger-than-race/icons/favicon-32.png",
-  "/games/bigger-than-race/icons/apple-touch-icon.png",
-  "/games/bigger-than-race/icons/bigger-than-race-icon-192.png",
-  "/games/bigger-than-race/icons/bigger-than-race-icon-512.png",
+  "/games/bigger-than-race/manifest-20260705.webmanifest",
+  "/games/bigger-than-race/icons/favicon-32-20260705.png",
+  "/games/bigger-than-race/icons/apple-touch-icon-20260705.png",
+  "/games/bigger-than-race/icons/bigger-than-race-icon-192-20260705.png",
+  "/games/bigger-than-race/icons/bigger-than-race-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {

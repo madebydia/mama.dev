@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/counting-orchard/",
   "/games/counting-orchard/index.html",
   "/games/counting-orchard/app.js",
-  "/games/counting-orchard/manifest.webmanifest",
-  "/games/counting-orchard/icons/favicon-32.png",
-  "/games/counting-orchard/icons/apple-touch-icon.png",
-  "/games/counting-orchard/icons/counting-orchard-icon-192.png",
-  "/games/counting-orchard/icons/counting-orchard-icon-512.png",
+  "/games/counting-orchard/manifest-20260705.webmanifest",
+  "/games/counting-orchard/icons/favicon-32-20260705.png",
+  "/games/counting-orchard/icons/apple-touch-icon-20260705.png",
+  "/games/counting-orchard/icons/counting-orchard-icon-192-20260705.png",
+  "/games/counting-orchard/icons/counting-orchard-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {

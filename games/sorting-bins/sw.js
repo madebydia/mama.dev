@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-sorting-bins-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/sorting-bins/",
   "/games/sorting-bins/index.html",
   "/games/sorting-bins/app.js",
-  "/games/sorting-bins/manifest.webmanifest",
-  "/games/sorting-bins/icons/favicon-32.png",
-  "/games/sorting-bins/icons/apple-touch-icon.png",
-  "/games/sorting-bins/icons/sorting-bins-icon-192.png",
-  "/games/sorting-bins/icons/sorting-bins-icon-512.png"
+  "/games/sorting-bins/manifest-20260705.webmanifest",
+  "/games/sorting-bins/icons/favicon-32-20260705.png",
+  "/games/sorting-bins/icons/apple-touch-icon-20260705.png",
+  "/games/sorting-bins/icons/sorting-bins-icon-192-20260705.png",
+  "/games/sorting-bins/icons/sorting-bins-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/bigger-ramp-jump/",
   "/games/bigger-ramp-jump/index.html",
   "/games/bigger-ramp-jump/app.js",
-  "/games/bigger-ramp-jump/manifest.webmanifest",
-  "/games/bigger-ramp-jump/icons/favicon-32.png",
-  "/games/bigger-ramp-jump/icons/apple-touch-icon.png",
-  "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-192.png",
-  "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-512.png",
+  "/games/bigger-ramp-jump/manifest-20260705.webmanifest",
+  "/games/bigger-ramp-jump/icons/favicon-32-20260705.png",
+  "/games/bigger-ramp-jump/icons/apple-touch-icon-20260705.png",
+  "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-192-20260705.png",
+  "/games/bigger-ramp-jump/icons/bigger-ramp-jump-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {

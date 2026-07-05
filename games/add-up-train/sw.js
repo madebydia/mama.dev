@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/add-up-train/",
   "/games/add-up-train/index.html",
   "/games/add-up-train/app.js",
-  "/games/add-up-train/manifest.webmanifest",
-  "/games/add-up-train/icons/favicon-32.png",
-  "/games/add-up-train/icons/apple-touch-icon.png",
-  "/games/add-up-train/icons/add-up-train-icon-192.png",
-  "/games/add-up-train/icons/add-up-train-icon-512.png",
+  "/games/add-up-train/manifest-20260705.webmanifest",
+  "/games/add-up-train/icons/favicon-32-20260705.png",
+  "/games/add-up-train/icons/apple-touch-icon-20260705.png",
+  "/games/add-up-train/icons/add-up-train-icon-192-20260705.png",
+  "/games/add-up-train/icons/add-up-train-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {

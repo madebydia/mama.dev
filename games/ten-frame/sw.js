@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-ten-frame-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/ten-frame/",
   "/games/ten-frame/index.html",
   "/games/ten-frame/app.js",
-  "/games/ten-frame/manifest.webmanifest",
-  "/games/ten-frame/icons/favicon-32.png",
-  "/games/ten-frame/icons/apple-touch-icon.png",
-  "/games/ten-frame/icons/ten-frame-icon-192.png",
-  "/games/ten-frame/icons/ten-frame-icon-512.png"
+  "/games/ten-frame/manifest-20260705.webmanifest",
+  "/games/ten-frame/icons/favicon-32-20260705.png",
+  "/games/ten-frame/icons/apple-touch-icon-20260705.png",
+  "/games/ten-frame/icons/ten-frame-icon-192-20260705.png",
+  "/games/ten-frame/icons/ten-frame-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

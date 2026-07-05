@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-memory-match-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/memory-match/",
   "/games/memory-match/index.html",
   "/games/memory-match/app.js",
-  "/games/memory-match/manifest.webmanifest",
-  "/games/memory-match/icons/favicon-32.png",
-  "/games/memory-match/icons/apple-touch-icon.png",
-  "/games/memory-match/icons/memory-match-icon-192.png",
-  "/games/memory-match/icons/memory-match-icon-512.png"
+  "/games/memory-match/manifest-20260705.webmanifest",
+  "/games/memory-match/icons/favicon-32-20260705.png",
+  "/games/memory-match/icons/apple-touch-icon-20260705.png",
+  "/games/memory-match/icons/memory-match-icon-192-20260705.png",
+  "/games/memory-match/icons/memory-match-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

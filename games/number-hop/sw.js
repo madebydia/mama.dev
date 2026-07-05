@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-number-hop-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/number-hop/",
   "/games/number-hop/index.html",
   "/games/number-hop/app.js",
-  "/games/number-hop/manifest.webmanifest",
-  "/games/number-hop/icons/favicon-32.png",
-  "/games/number-hop/icons/apple-touch-icon.png",
-  "/games/number-hop/icons/number-hop-icon-192.png",
-  "/games/number-hop/icons/number-hop-icon-512.png"
+  "/games/number-hop/manifest-20260705.webmanifest",
+  "/games/number-hop/icons/favicon-32-20260705.png",
+  "/games/number-hop/icons/apple-touch-icon-20260705.png",
+  "/games/number-hop/icons/number-hop-icon-192-20260705.png",
+  "/games/number-hop/icons/number-hop-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

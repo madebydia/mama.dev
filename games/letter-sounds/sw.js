@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-letter-sounds-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/letter-sounds/",
   "/games/letter-sounds/index.html",
   "/games/letter-sounds/app.js",
-  "/games/letter-sounds/manifest.webmanifest",
-  "/games/letter-sounds/icons/favicon-32.png",
-  "/games/letter-sounds/icons/apple-touch-icon.png",
-  "/games/letter-sounds/icons/letter-sounds-icon-192.png",
-  "/games/letter-sounds/icons/letter-sounds-icon-512.png"
+  "/games/letter-sounds/manifest-20260705.webmanifest",
+  "/games/letter-sounds/icons/favicon-32-20260705.png",
+  "/games/letter-sounds/icons/apple-touch-icon-20260705.png",
+  "/games/letter-sounds/icons/letter-sounds-icon-192-20260705.png",
+  "/games/letter-sounds/icons/letter-sounds-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

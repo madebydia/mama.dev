@@ -1,14 +1,14 @@
 const CACHE_PREFIX = "mama-take-away-train-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 const CORE_ASSETS = [
   "/games/take-away-train/",
   "/games/take-away-train/index.html",
   "/games/take-away-train/app.js",
-  "/games/take-away-train/manifest.webmanifest",
-  "/games/take-away-train/icons/favicon-32.png",
-  "/games/take-away-train/icons/apple-touch-icon.png",
-  "/games/take-away-train/icons/take-away-train-icon-192.png",
-  "/games/take-away-train/icons/take-away-train-icon-512.png"
+  "/games/take-away-train/manifest-20260705.webmanifest",
+  "/games/take-away-train/icons/favicon-32-20260705.png",
+  "/games/take-away-train/icons/apple-touch-icon-20260705.png",
+  "/games/take-away-train/icons/take-away-train-icon-192-20260705.png",
+  "/games/take-away-train/icons/take-away-train-icon-512-20260705.png"
 ];
 
 self.addEventListener("install", function (event) {

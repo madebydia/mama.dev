@@ -4,11 +4,11 @@ const CORE_ASSETS = [
   "/games/word-train/",
   "/games/word-train/index.html",
   "/games/word-train/app.js",
-  "/games/word-train/manifest.webmanifest",
-  "/games/word-train/icons/favicon-32.png",
-  "/games/word-train/icons/apple-touch-icon.png",
-  "/games/word-train/icons/word-train-icon-192.png",
-  "/games/word-train/icons/word-train-icon-512.png",
+  "/games/word-train/manifest-20260705.webmanifest",
+  "/games/word-train/icons/favicon-32-20260705.png",
+  "/games/word-train/icons/apple-touch-icon-20260705.png",
+  "/games/word-train/icons/word-train-icon-192-20260705.png",
+  "/games/word-train/icons/word-train-icon-512-20260705.png",
 ];
 
 self.addEventListener("install", function (event) {
