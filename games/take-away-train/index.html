@@ -431,7 +431,7 @@ function answer(n, btn) {
     if (roundHistory.length > 5) roundHistory = [roundHistory[roundHistory.length - 1]];
     updateStreakBar();
     document.querySelector('.prompt .eq').textContent = '= ' + target + '!';
-    speak(a + ' take away ' + m + ' is ' + target + '!');
+    speak(a + ' minus ' + m + ' is ' + target + '!');
     successSound(); confetti(); sparkleBurst();
     setTimeout(() => {
       choo();

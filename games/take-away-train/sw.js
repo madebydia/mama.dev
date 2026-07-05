@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-take-away-train-";
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 const CORE_ASSETS = [
   "/games/take-away-train/",
   "/games/take-away-train/index.html",
