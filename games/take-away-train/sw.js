@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "mama-take-away-train-";
-const CACHE_NAME = `${CACHE_PREFIX}v3`;
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const CORE_ASSETS = [
   "/games/take-away-train/",
   "/games/take-away-train/index.html",
@@ -42,7 +42,7 @@ self.addEventListener("fetch", function (event) {
 
   if (event.request.mode === "navigate") {
     event.respondWith(
-      fetch(event.request).then(function (response) {
+      fetch(event.request, { cache: "no-store" }).then(function (response) {
         const copy = response.clone();
         caches.open(CACHE_NAME).then(function (cache) {
           cache.put(event.request, copy);
