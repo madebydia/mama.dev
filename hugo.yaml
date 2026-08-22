@@ -1,0 +1,79 @@
+baseURL: https://mama.dev/
+title: mama.dev
+defaultContentLanguage: en
+enableRobotsTXT: true
+disableKinds:
+  - taxonomy
+  - term
+  - rss
+
+params:
+  description: Small practical tools, games, printables, and stories made for family life.
+  plausibleScript: https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js
+  socialHandle: madebydia
+
+module:
+  mounts:
+    - source: assets
+      target: assets
+    - source: content
+      target: content
+    - source: data
+      target: data
+    - source: layouts
+      target: layouts
+    - source: static
+      target: static
+    - source: legacy-pages/2026-calendar
+      target: static/2026-calendar
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+    - source: legacy-pages/airplane-games
+      target: static/airplane-games
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+    - source: legacy-pages/assets
+      target: static/assets
+    - source: legacy-pages/games
+      target: static/games
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+    - source: legacy-pages/log-templates
+      target: static/log-templates
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+        - '! .DS_Store'
+        - '! **/.DS_Store'
+    - source: legacy-pages/one-true-story
+      target: static/one-true-story
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+    - source: legacy-pages/what-to-eat
+      target: static/what-to-eat
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'
+    - source: legacy-pages/worksheets
+      target: static/worksheets
+      files:
+        - '! *.html'
+        - '! **/*.html'
+        - '! *.md'
+        - '! **/*.md'

@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {{ partial "head.html" . }}
+  {{ partial "legacy-head.html" . }}
+</head>
+{{- $source := readFile .Params.source -}}
+{{- $body := replaceRE `(?is)^.*?<body[^>]*>` "" $source -}}
+{{- $body = replaceRE `(?is)</body>.*$` "" $body -}}
+<body>
+  {{ $body | safeHTML }}
+</body>
+</html>

@@ -1,0 +1,12 @@
+{{- with .Params.source -}}
+  {{ partial "legacy-page.html" $ }}
+{{- else -}}
+<!doctype html>
+<html lang="en">
+<head>
+  {{ partial "head.html" . }}
+  <meta name="robots" content="noindex">
+</head>
+<body></body>
+</html>
+{{- end -}}

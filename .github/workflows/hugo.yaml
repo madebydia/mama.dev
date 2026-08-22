@@ -1,0 +1,61 @@
+name: Build and deploy Hugo site
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install Hugo
+        shell: bash
+        run: |
+          hugo_archive="hugo_extended_0.163.0_linux-amd64.tar.gz"
+          curl --fail --location --silent --show-error \
+            --output "$RUNNER_TEMP/$hugo_archive" \
+            "https://github.com/gohugoio/hugo/releases/download/v0.163.0/$hugo_archive"
+          echo "6291775b7d012f9b10fb377ba914e5b1589c0b0d2531b695fa9029be14750111  $RUNNER_TEMP/$hugo_archive" \
+            | sha256sum --check --strict
+          tar --extract --gzip --file "$RUNNER_TEMP/$hugo_archive" --directory "$RUNNER_TEMP" hugo
+          echo "$RUNNER_TEMP" >> "$GITHUB_PATH"
+      - name: Configure Pages
+        id: pages
+        uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
+      - name: Generate repository activity
+        run: ./scripts/build-repo-activity.sh
+      - name: Build site
+        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/" --printPathWarnings --panicOnWarning
+      - name: Verify rendered pages
+        run: ./scripts/verify-site.sh
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@cd2ce8fcbc39b97be8ca5fce6e763baed58fa128 # v5.0.0

@@ -1,0 +1,13 @@
+{{- $source := readFile .Params.source -}}
+{{- $head := replaceRE `(?is)^.*?<head[^>]*>` "" $source -}}
+{{- $head = replaceRE `(?is)</head>.*$` "" $head -}}
+{{- $head = replaceRE `(?is)<meta[^>]+charset[^>]*>` "" $head -}}
+{{- $head = replaceRE `(?is)<meta[^>]+name=["']viewport["'][^>]*>` "" $head -}}
+{{- $head = replaceRE `(?is)<meta[^>]+name=["']description["'][^>]*>` "" $head -}}
+{{- $head = replaceRE `(?is)<meta[^>]+(?:name|property)=["'](?:og:|twitter:)[^"']+["'][^>]*>` "" $head -}}
+{{- $head = replaceRE `(?is)<link[^>]+rel=["']canonical["'][^>]*>` "" $head -}}
+{{- $head = replaceRE `(?is)<title>.*?</title>` "" $head -}}
+{{- $head = replaceRE `(?is)<!--\s*Privacy-friendly analytics by Plausible\s*-->` "" $head -}}
+{{- $head = replaceRE `(?is)<script[^>]+src=["'][^"']*plausible\.io[^"']*["'][^>]*></script>` "" $head -}}
+{{- $head = replaceRE `(?is)<script[^>]*>\s*window\.plausible=.*?plausible\.init\(.*?\)\s*</script>` "" $head -}}
+{{- $head | safeHTML -}}

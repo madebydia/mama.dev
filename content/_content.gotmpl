@@ -1,0 +1,20 @@
+{{- range (index hugo.Data "legacy-pages") -}}
+  {{- $content := dict "mediaType" "text/markdown" "value" "" -}}
+  {{- $params := dict
+    "description" (.description | default site.Params.description)
+    "source" .source
+    "viewport" (.viewport | default "width=device-width, initial-scale=1.0")
+  -}}
+  {{- with .image -}}
+    {{- $params = merge $params (dict "image" .) -}}
+  {{- end -}}
+  {{- $page := dict
+    "content" $content
+    "kind" (.kind | default "page")
+    "params" $params
+    "path" .path
+    "title" .title
+    "url" .url
+  -}}
+  {{- $.AddPage $page -}}
+{{- end -}}

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body class="home-page">
+  <main class="grid-container">
+    <header class="cell span-3 brand-cell">
+      <span class="cell-num">01</span>
+      <a class="title-lg brand" href="/" aria-label="mama.dev home">MAMA<br>DEV_</a>
+      <span class="metadata">FAMILY SOFTWARE<br>MADE BY DIANA</span>
+    </header>
+
+    <section class="cell span-3 filled lead-cell" aria-labelledby="play-title">
+      <span class="cell-num">02</span>
+      <span class="lead-title" id="play-title">PLAY &amp; MAKE</span>
+      <span class="metadata">21 GAMES · 42 PRINTABLES</span>
+    </section>
+
+    <a class="cell span-2 compact-cell" href="https://github.com/madebydia/mama.dev" aria-labelledby="free-title">
+      <span class="cell-num">03</span>
+      <span class="eyebrow">OPEN SOURCE</span>
+      <h1 class="title-md" id="free-title">FREE TO USE</h1>
+      <span class="metadata">NO SIGN-IN</span>
+    </a>
+
+    {{ with index hugo.Data "repo-activity" }}
+    <section class="cell span-4 compact-cell" aria-labelledby="activity-title">
+      <span class="cell-num">04</span>
+      <h2 class="title-md" id="activity-title">REPO ACTIVITY</h2>
+      <svg class="commit-plot" viewBox="0 0 220 42" role="img" aria-labelledby="commit-title commit-desc">
+        <title id="commit-title">mama.dev repository commits</title>
+        <desc id="commit-desc">{{ .shown }} commits shown from {{ .first_date }} through {{ .last_date }}. Each dot is one commit.</desc>
+        {{ range .points }}
+        <circle class="commit-dot" cx="{{ .x }}" cy="{{ .y }}" r="2.25">
+          <title>{{ .date }} · {{ .hash }}</title>
+        </circle>
+        {{ end }}
+      </svg>
+      <span class="metadata">{{ if eq .shown .total }}{{ .total }} COMMITS{{ else }}LATEST {{ .shown }} OF {{ .total }} COMMITS{{ end }} · {{ .first_date }}—{{ .last_date }}</span>
+    </section>
+    {{ end }}
+
+    <a class="cell span-1 category-cell" href="/games/">
+      <span class="cell-num">05</span>
+      <strong class="title-md">GAMES</strong>
+      <span class="metadata">21 ITEMS</span>
+    </a>
+
+    <a class="cell span-1 category-cell" href="/what-to-eat/">
+      <span class="cell-num">06</span>
+      <strong class="title-md">TOOLS</strong>
+      <span class="metadata">2 ITEMS</span>
+    </a>
+
+    <a class="cell span-2 compact-cell" href="/what-to-eat/">
+      <span class="cell-num">07</span>
+      <span class="eyebrow">VISUAL MENU</span>
+      <strong class="title-md">WHAT TO EAT</strong>
+      <span class="metadata">CHOOSE A MEAL</span>
+    </a>
+
+    <a class="cell span-4 row-span-2 feature-cell" href="/games/word-train/">
+      <span class="cell-num">08</span>
+      <div class="feature-copy">
+        <span class="eyebrow">EARLY READING</span>
+        <strong class="title-lg">WORD<br>TRAIN</strong>
+        <span class="metadata">BUILD WORDS · 3D GAME</span>
+      </div>
+      <span class="feature-mark" aria-hidden="true"><span></span></span>
+    </a>
+
+    <a class="cell span-2 category-cell" href="/worksheets/">
+      <span class="cell-num">09</span>
+      <strong class="title-md">PRINTABLES</strong>
+      <span class="metadata">42 PDFS</span>
+    </a>
+
+    <a class="cell span-2 category-cell" href="/one-true-story/">
+      <span class="cell-num">10</span>
+      <strong class="title-md">STORIES</strong>
+      <span class="metadata">6 TRUE STORIES</span>
+    </a>
+
+    <a class="cell span-1 project-cell" href="/games/counting-orchard/">
+      <span class="cell-num">11</span>
+      <strong class="title-md">COUNTING<br>ORCHARD</strong>
+      <span class="tag">COUNTING</span>
+    </a>
+
+    <a class="cell span-1 project-cell" href="/games/letter-sounds/">
+      <span class="cell-num">12</span>
+      <strong class="title-md">SOUND<br>SAFARI</strong>
+      <span class="tag">LETTERS</span>
+    </a>
+
+    <a class="cell span-1 project-cell" href="/games/number-hop/">
+      <span class="cell-num">13</span>
+      <strong class="title-md">NUMBER<br>HOP</strong>
+      <span class="tag">ORDER</span>
+    </a>
+
+    <a class="cell span-1 project-cell" href="/games/pattern-parade/">
+      <span class="cell-num">14</span>
+      <strong class="title-md">PATTERN<br>PARADE</strong>
+      <span class="tag">PATTERNS</span>
+    </a>
+
+    <a class="cell span-3 story-cell airplane-cell" href="/one-true-story/stories/wright-brothers.html">
+      <span class="cell-num">15</span>
+      {{ partial "airplane-icon.html" . }}
+      <span class="eyebrow">WRIGHT BROTHERS</span>
+      <strong class="title-md">THE FIRST AIRPLANE FLIGHT</strong>
+      <span class="metadata">READ · PRINT</span>
+    </a>
+
+    <a class="cell span-3 story-cell" href="/2026-calendar/">
+      <span class="cell-num">16</span>
+      <span class="eyebrow">DAYS &amp; OCCASIONS</span>
+      <strong class="title-md">2026 CALENDAR</strong>
+      <span class="metadata">INTERACTIVE CALENDAR</span>
+    </a>
+
+    <a class="cell span-2 category-cell" href="/log-templates/">
+      <span class="cell-num">17</span>
+      <strong class="title-md">LOG TEMPLATES</strong>
+      <span class="metadata">3 PRINTABLE LOGS</span>
+    </a>
+
+    <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/cargo-count.html">
+      <span class="cell-num">18</span>
+      {{ partial "airplane-icon.html" . }}
+      <strong class="title-md">CARGO<br>COUNT</strong>
+    </a>
+
+    <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/logic-hangar.html">
+      <span class="cell-num">19</span>
+      {{ partial "airplane-icon.html" . }}
+      <strong class="title-md">LOGIC<br>HANGAR</strong>
+    </a>
+
+    <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/takeoff-path.html">
+      <span class="cell-num">20</span>
+      {{ partial "airplane-icon.html" . }}
+      <strong class="title-md">TAKEOFF<br>PATH</strong>
+    </a>
+
+    <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/pattern-lab.html">
+      <span class="cell-num">21</span>
+      {{ partial "airplane-icon.html" . }}
+      <strong class="title-md">PATTERN<br>LAB</strong>
+    </a>
+
+    <a class="cell span-4 closing-cell" href="/games/">
+      <span class="cell-num">22</span>
+      <strong class="title-md">ALL GAMES</strong>
+      <span class="metadata">15 GAMES · 6 AIRPLANE GAMES</span>
+    </a>
+
+    <a class="cell span-4 closing-cell" href="/worksheets/">
+      <span class="cell-num">23</span>
+      <strong class="title-md">ALL PRINTABLES</strong>
+      <span class="metadata">39 WORKSHEETS · 3 LOGS</span>
+    </a>
+
+    <section class="cell span-4 closing-cell source-cell" aria-labelledby="source-title">
+      <span class="cell-num">24</span>
+      <strong class="title-md" id="source-title">SOURCE</strong>
+      <span class="metadata">
+        <a href="https://github.com/madebydia/mama.dev">GITHUB.COM/MADEBYDIA/MAMA.DEV</a><br>
+        <a href="https://x.com/madebydia">@MADEBYDIA</a>
+      </span>
+    </section>
+  </main>
+
+  <footer class="site-meta">
+    <p>MAMA.DEV<br>FAMILY SOFTWARE<br>FREE TO USE</p>
+    <p>71 THINGS<br>21 GAMES · 42 PRINTABLES<br>6 STORIES · 2 TOOLS</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,236 @@
+- path: 2026-calendar
+  url: /2026-calendar/
+  source: legacy-pages/2026-calendar/index.html
+  title: 2026 Fun Calendar
+  description: An interactive 2026 calendar with holidays, occasions, and small animations.
+
+- path: airplane-games
+  kind: section
+  url: /airplane-games/
+  source: legacy-pages/airplane-games/index.html
+  title: Airplane Games
+  description: Six airplane-themed logic, counting, pattern, and path games.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/cargo-count
+  url: /airplane-games/cargo-count.html
+  source: legacy-pages/airplane-games/cargo-count.html
+  title: Cargo Count
+  description: Count cargo for the airplane.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/flight-path
+  url: /airplane-games/flight-path.html
+  source: legacy-pages/airplane-games/flight-path.html
+  title: Flight Path
+  description: Follow the airplane flight path.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/landing-path
+  url: /airplane-games/landing-path.html
+  source: legacy-pages/airplane-games/landing-path.html
+  title: Flight Landing
+  description: Guide the airplane through its landing path.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/logic-hangar
+  url: /airplane-games/logic-hangar.html
+  source: legacy-pages/airplane-games/logic-hangar.html
+  title: Logic Hangar
+  description: Solve airplane sorting and logic challenges.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/pattern-lab
+  url: /airplane-games/pattern-lab.html
+  source: legacy-pages/airplane-games/pattern-lab.html
+  title: Pattern Lab
+  description: Complete airplane patterns.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: airplane-games/takeoff-path
+  url: /airplane-games/takeoff-path.html
+  source: legacy-pages/airplane-games/takeoff-path.html
+  title: Flight Takeoff
+  description: Guide the airplane through its takeoff path.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+  image: /airplane-games/og-image.png
+
+- path: games
+  kind: section
+  url: /games/
+  source: legacy-pages/games/index.html
+  title: Games
+  description: A kid-friendly launcher for the games on mama.dev.
+  viewport: width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover
+
+- path: games/add-up-train
+  url: /games/add-up-train/
+  source: legacy-pages/games/add-up-train/index.html
+  title: Add-Up Train
+  description: Build addition problems with train cars.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/bigger-ramp-jump
+  url: /games/bigger-ramp-jump/
+  source: legacy-pages/games/bigger-ramp-jump/index.html
+  title: Bigger Ramp Jump
+  description: Change a ramp and see how far the truck jumps.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/bigger-than-race
+  url: /games/bigger-than-race/
+  source: legacy-pages/games/bigger-than-race/index.html
+  title: Race Car Numbers
+  description: Compare numbers in a racing game.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/counting-orchard
+  url: /games/counting-orchard/
+  source: legacy-pages/games/counting-orchard/index.html
+  title: Counting Orchard
+  description: Practice counting with fruit in an orchard.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/letter-sounds
+  url: /games/letter-sounds/
+  source: legacy-pages/games/letter-sounds/index.html
+  title: Sound Safari
+  description: Match letters with their sounds.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/memory-match
+  url: /games/memory-match/
+  source: legacy-pages/games/memory-match/index.html
+  title: Memory Match
+  description: Find matching picture cards.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/number-hop
+  url: /games/number-hop/
+  source: legacy-pages/games/number-hop/index.html
+  title: Number Hop
+  description: Follow numbers in order.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/pattern-parade
+  url: /games/pattern-parade/
+  source: legacy-pages/games/pattern-parade/index.html
+  title: Pattern Parade
+  description: Continue visual patterns.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/rhyme-time
+  url: /games/rhyme-time/
+  source: legacy-pages/games/rhyme-time/index.html
+  title: Rhyme Time
+  description: Find words that rhyme.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/shapes
+  url: /games/shapes/
+  source: legacy-pages/games/shapes/index.html
+  title: Fun with Shapes
+  description: Explore two- and three-dimensional shapes.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/skip-count
+  url: /games/skip-count/
+  source: legacy-pages/games/skip-count/index.html
+  title: Skip-Count Stones
+  description: Practice skip counting along a path.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/sorting-bins
+  url: /games/sorting-bins/
+  source: legacy-pages/games/sorting-bins/index.html
+  title: Sorting Bins
+  description: Sort objects into the right groups.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/take-away-train
+  url: /games/take-away-train/
+  source: legacy-pages/games/take-away-train/index.html
+  title: Take-Away Train
+  description: Build subtraction problems with train cars.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/ten-frame
+  url: /games/ten-frame/
+  source: legacy-pages/games/ten-frame/index.html
+  title: Carrot Ten-Frame
+  description: Practice quantities with a ten-frame.
+  viewport: width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover
+
+- path: games/word-train
+  url: /games/word-train/
+  source: legacy-pages/games/word-train/index.html
+  title: Word Train
+  description: A 3D word-building game for early readers.
+  viewport: width=device-width, initial-scale=1.0, viewport-fit=cover
+
+- path: log-templates
+  url: /log-templates/
+  source: legacy-pages/log-templates/index.html
+  title: Log Templates
+  description: Three printable logs for plane spotting, newborn care, and water tracking.
+
+- path: one-true-story
+  kind: section
+  url: /one-true-story/
+  source: legacy-pages/one-true-story/index.html
+  title: Interesting Stories
+  description: Six short nonfiction stories for early readers.
+
+- path: one-true-story/stories/america-birthday
+  url: /one-true-story/stories/america-birthday.html
+  source: legacy-pages/one-true-story/stories/america-birthday.html
+  title: The Story of America's Birthday
+  description: A printable early-reader story about Independence Day.
+
+- path: one-true-story/stories/dinosaurs
+  url: /one-true-story/stories/dinosaurs.html
+  source: legacy-pages/one-true-story/stories/dinosaurs.html
+  title: What Happened to the Dinosaurs?
+  description: A printable early-reader story about dinosaur extinction.
+
+- path: one-true-story/stories/golden-spike
+  url: /one-true-story/stories/golden-spike.html
+  source: legacy-pages/one-true-story/stories/golden-spike.html
+  title: The Golden Spike
+  description: A printable early-reader story about the transcontinental railroad.
+
+- path: one-true-story/stories/lego
+  url: /one-true-story/stories/lego.html
+  source: legacy-pages/one-true-story/stories/lego.html
+  title: The Invention of LEGO
+  description: A printable early-reader story about the invention of LEGO bricks.
+
+- path: one-true-story/stories/titanic
+  url: /one-true-story/stories/titanic.html
+  source: legacy-pages/one-true-story/stories/titanic.html
+  title: The Story of the Titanic
+  description: A printable early-reader story about the Titanic.
+
+- path: one-true-story/stories/wright-brothers
+  url: /one-true-story/stories/wright-brothers.html
+  source: legacy-pages/one-true-story/stories/wright-brothers.html
+  title: The First Airplane Flight
+  description: A printable early-reader story about the Wright brothers.
+
+- path: what-to-eat
+  url: /what-to-eat/
+  source: legacy-pages/what-to-eat/index.html
+  title: What to Eat
+  description: A visual food menu for kids who need help choosing.
+
+- path: worksheets
+  url: /worksheets/
+  source: legacy-pages/worksheets/index.html
+  title: Worksheets
+  description: Thirty-eight printable mazes, tracing pages, and early-learning activities.
