@@ -1103,6 +1103,7 @@
         <button class="tab" type="button" data-tab="math" aria-pressed="false">Math</button>
         <button class="tab" type="button" data-tab="language" aria-pressed="false">Language</button>
         <button class="tab" type="button" data-tab="chart" aria-pressed="false">Charts</button>
+        <button class="tab" type="button" data-tab="poster-set" aria-pressed="false">Posters</button>
       </nav>
 
       <div class="drawer-content">
@@ -1801,8 +1802,8 @@
       },
       {
             "id": "tooth-brushing-sticker-chart",
-            "title": "Tooth Brushing Sticker Chart",
-            "description": "A printable reward chart for tracking tooth brushing routines.",
+            "title": "30-Day T-Rex Tooth Brushing Chart",
+            "description": "A green T-Rex reward chart with 30 sticker spots for tracking tooth brushing routines.",
             "type": "Chart",
             "skills": [
                   "Habit building"
@@ -1852,6 +1853,41 @@
             "orientation": "portrait"
       },
       {
+            "id": "kid-friendly-riddles",
+            "title": "Kid-Friendly Riddles",
+            "description": "A printable set of gentle riddles with a questions-only page and an answer key.",
+            "type": "Riddles",
+            "skills": [
+                  "Reasoning",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "Words"
+            ],
+            "pages": 4,
+            "file": "files/kid-friendly-riddles.pdf",
+            "thumbnail": "previews/kid-friendly-riddles.jpg",
+            "orientation": "portrait"
+      },
+      {
+            "id": "independence-day-founding-posters",
+            "title": "Independence Day Founding Posters",
+            "description": "A four-poster printable set about colonists, religious freedom, self-government, and the Declaration of Independence.",
+            "type": "Poster Set",
+            "skills": [
+                  "History",
+                  "Vocabulary"
+            ],
+            "themes": [
+                  "America",
+                  "Independence Day"
+            ],
+            "pages": 4,
+            "file": "files/independence-day-founding-posters.pdf",
+            "thumbnail": "previews/independence-day-founding-posters.jpg",
+            "orientation": "portrait"
+      },
+      {
             "id": "writing-numbers-worksheet",
             "title": "Writing Numbers Worksheet",
             "description": "Practice writing numbers in a full-page number grid.",
@@ -1880,7 +1916,9 @@
                   "Cut + Paste",
                   "Math",
                   "Language",
-                  "Chart"
+                  "Chart",
+                  "Riddles",
+                  "Poster Set"
             ]
       },
       {
@@ -1891,9 +1929,11 @@
                   "Cutting",
                   "Fine motor",
                   "Habit building",
+                  "History",
                   "Number writing",
                   "Penmanship",
                   "Prewriting",
+                  "Reasoning",
                   "Sorting",
                   "Visual tracking",
                   "Vocabulary"
@@ -1903,6 +1943,7 @@
             "label": "Theme",
             "key": "themes",
             "values": [
+                  "America",
                   "Airplanes",
                   "Airport",
                   "Animals",
@@ -1916,6 +1957,7 @@
                   "Food",
                   "Fruit",
                   "Hygiene",
+                  "Independence Day",
                   "Numbers",
                   "Ocean",
                   "Rewards",
@@ -1975,6 +2017,7 @@
     function matchesTab(item) {
       if (state.tab === "all") return true;
       if (state.tab === "cut-paste") return item.type === "Cut + Paste";
+      if (state.tab === "poster-set") return item.type === "Poster Set";
       return item.type.toLowerCase() === state.tab;
     }
 
