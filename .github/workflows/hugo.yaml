@@ -41,7 +41,7 @@ jobs:
       - name: Generate repository activity
         run: ./scripts/build-repo-activity.sh
       - name: Build site
-        run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/" --printPathWarnings --panicOnWarning
+        run: hugo --gc --minify --printPathWarnings --panicOnWarning
       - name: Verify rendered pages
         run: ./scripts/verify-site.sh
       - name: Upload Pages artifact
