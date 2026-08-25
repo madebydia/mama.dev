@@ -36,6 +36,8 @@ for required_file in \
   worksheets/index.html \
   worksheets/files/airplane-words-have-jobs.pdf \
   worksheets/previews/airplane-words-have-jobs.jpg \
+  worksheets/files/kid-pilot-call-and-response-checklists.pdf \
+  worksheets/previews/kid-pilot-call-and-response-checklists.jpg \
   games/index.html \
   games/word-train/index.html \
   airplane-games/logic-hangar.html \
