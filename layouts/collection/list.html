@@ -143,6 +143,10 @@
       margin-top: 10px;
     }
 
+    .mobile-title-break {
+      display: none;
+    }
+
     .collection-stats {
       display: flex;
       justify-content: flex-end;
@@ -315,6 +319,10 @@
         margin-top: 32px;
       }
 
+      .mobile-title-break {
+        display: block;
+      }
+
       .collection-stats {
         justify-content: flex-start;
       }
@@ -326,6 +334,10 @@
     }
 
     @media (max-width: 500px) {
+      h1 {
+        font-size: 34px;
+      }
+
       .collection-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 24px 10px;
@@ -365,8 +377,7 @@
 
   <section class="collection-heading" aria-labelledby="collection-title">
     <div>
-      <div class="eyebrow">Household collection index · audited 2026-08-26</div>
-      <h1 id="collection-title">Cars, trucks, aircraft &amp; spacecraft.</h1>
+      <h1 id="collection-title">Cars, trucks,<br class="mobile-title-break"> aircraft &amp; spacecraft.</h1>
     </div>
     <div class="collection-stats" aria-label="Collection totals">
       <span><strong id="visible-count">46</strong><br>showing</span>
@@ -380,7 +391,7 @@
   </main>
 
   <footer>
-    <div class="footer-copy">46 cataloged models.</div>
+    <div class="footer-copy">Household collection index · audited 2026-08-26</div>
   </footer>
 
   <script>
@@ -391,7 +402,7 @@
         type: "land",
         image: "/collection/assets/lexus-lx.png",
         series: "Moving Parts · 16/54",
-        spec: "White · scale not recorded",
+        spec: "White · 1:69",
         note: "Acquired February 16, 2026",
         ref: "2022 LEXUS LX"
       },
@@ -401,7 +412,7 @@
         type: "land",
         image: "/collection/assets/volkswagen-beetle.png",
         series: "Mainline · 93/100",
-        spec: "Green · scale not recorded",
+        spec: "Green · 1:64",
         note: "Acquired February 16, 2026",
         ref: "1962 VOLKSWAGEN BEETLE"
       },
@@ -411,7 +422,7 @@
         type: "land",
         image: "/collection/assets/ford-custom-300.png",
         series: "Mainline · 21/100",
-        spec: "Red · scale not recorded",
+        spec: "Red · 1:64",
         note: "Acquired February 16, 2026",
         ref: "1957 FORD CUSTOM 300"
       },
@@ -421,7 +432,7 @@
         type: "land",
         image: "/collection/assets/datsun-510-rally.png",
         series: "2025 Mainline · 51/125",
-        spec: "Light blue · scale not recorded",
+        spec: "Light blue · 1:61",
         note: "Acquired February 16, 2026",
         ref: "70 DATSUN 510 RALLY"
       },
@@ -491,7 +502,7 @@
         type: "land",
         image: "/collection/assets/ram-ambulance.png",
         series: "Moving Parts · 26/54",
-        spec: "Ambulance · scale not recorded",
+        spec: "Ambulance · 1:64",
         note: "Acquired April 1, 2026",
         ref: "2019 RAM AMBULANCE"
       },
@@ -501,7 +512,7 @@
         type: "land",
         image: "/collection/assets/tesla-cybertruck.png",
         series: "Moving Parts",
-        spec: "Gray · scale not recorded",
+        spec: "Gray · 1:64",
         note: "Acquired April 1, 2026",
         ref: "TESLA CYBERTRUCK"
       },
@@ -551,7 +562,7 @@
         type: "land",
         image: "/collection/assets/cement-king.png",
         series: "Working Rigs · 8/16",
-        spec: "White / gray · scale not recorded",
+        spec: "White / gray · 1:99",
         note: "Acquired May 27, 2026",
         ref: "CEMENT KING HD"
       },
@@ -571,7 +582,7 @@
         type: "land",
         image: "/collection/assets/workstar-dump-truck.png",
         series: "Working Rigs · Dump Truck",
-        spec: "Orange · scale not recorded",
+        spec: "Orange · 1:64",
         note: "Acquired May 27, 2026",
         ref: "INTERNATIONAL WORKSTAR 7500"
       },
@@ -701,7 +712,7 @@
         type: "air",
         image: "/collection/assets/space-shuttle.png",
         series: "Sky Busters · 13/32",
-        spec: "Spacecraft · scale not recorded",
+        spec: "Spacecraft · non-uniform Sky Busters scale",
         note: "Acquired December 6, 2025",
         ref: "SPACE SHUTTLE ORBITER"
       },
@@ -711,7 +722,7 @@
         type: "air",
         image: "/collection/assets/northrop-b2.png",
         series: "Sky Busters · 22/31",
-        spec: "Stealth bomber · scale not recorded",
+        spec: "Stealth bomber · non-uniform Sky Busters scale",
         note: "Acquired December 6, 2025",
         ref: "NORTHROP GRUMMAN B-2"
       },
@@ -727,7 +738,7 @@
       },
       {
         name: "Airbus A330 Beluga XL",
-        brand: "LDQUNS",
+        brand: "Generic",
         type: "air",
         image: "/collection/assets/beluga-xl.png",
         series: "Display model · alloy / die-cast",
@@ -742,7 +753,7 @@
         image: "/collection/assets/super-guppy.png",
         series: "Large display model · L2057",
         spec: "NASA livery · N941NA · 1:200",
-        note: "Acquired November 1, 2025 · delivered November 6",
+        note: "Acquired November 1, 2025 · propellers broken",
         ref: "SQ WINGS L2057"
       },
       {
@@ -751,7 +762,7 @@
         type: "air",
         image: "/collection/assets/c130-hercules.png",
         series: "Sky Busters · 28/32",
-        spec: "Transport aircraft · scale not recorded",
+        spec: "Transport aircraft · non-uniform Sky Busters scale",
         note: "Acquired December 13, 2025",
         ref: "JCM90"
       },
@@ -771,7 +782,7 @@
         type: "air",
         image: "/collection/assets/gee-bee.png",
         series: "Sky Busters · 19/32",
-        spec: "Racing aircraft · scale not recorded",
+        spec: "Racing aircraft · non-uniform Sky Busters scale",
         note: "Acquired December 27, 2025",
         ref: "BBJCM88"
       },
@@ -801,7 +812,7 @@
         type: "air",
         image: "/collection/assets/emirates-a380.png",
         series: "Realtoy single-plane model",
-        spec: "Emirates livery · scale not recorded",
+        spec: "Emirates livery · approx. 1:480 from published dimensions",
         note: "Acquired December 6, 2025",
         ref: "RT9904"
       },
@@ -821,7 +832,7 @@
         type: "air",
         image: "/collection/assets/british-airways-concorde.png",
         series: "Single-plane toy",
-        spec: "White · scale not recorded",
+        spec: "White · approx. 1:420 by length · toy proportions",
         note: "Acquired July 11, 2026",
         ref: "BRITISH AIRWAYS CONCORDE"
       },
@@ -855,9 +866,9 @@
     const searchInput = document.getElementById("collection-search");
     const filterButtons = [...document.querySelectorAll(".filter-button")];
     const filterTitles = {
-      all: "Cars, trucks, aircraft & spacecraft.",
-      land: "Cars & trucks.",
-      air: "Aircraft & spacecraft."
+      all: 'Cars, trucks,<br class="mobile-title-break"> aircraft & spacecraft.',
+      land: 'Cars &<br class="mobile-title-break"> trucks.',
+      air: 'Aircraft &<br class="mobile-title-break"> spacecraft.'
     };
     let activeFilter = "all";
 
@@ -904,7 +915,7 @@
       const query = searchInput.value.trim().toLowerCase();
       let count = 0;
 
-      collectionTitle.textContent = filterTitles[activeFilter];
+      collectionTitle.innerHTML = filterTitles[activeFilter];
 
       cards.forEach((card) => {
         const categoryMatches = activeFilter === "all" || card.dataset.type === activeFilter;

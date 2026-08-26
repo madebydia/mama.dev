@@ -86,15 +86,37 @@ for collection_label in 'All vehicles' 'Land vehicles' 'Air & space'; do
   fi
 done
 
-for collection_title in 'Cars, trucks, aircraft & spacecraft.' 'Cars & trucks.' 'Aircraft & spacecraft.'; do
+for collection_title in 'Cars, trucks,<br class="mobile-title-break"> aircraft & spacecraft.' 'Cars &<br class="mobile-title-break"> trucks.' 'Aircraft &<br class="mobile-title-break"> spacecraft.'; do
   if ! grep -q "$collection_title" "$site_dir/collection/index.html"; then
     echo "Collection filter title is missing: $collection_title" >&2
     exit 1
   fi
 done
 
-if ! grep -q '46 cataloged models.' "$site_dir/collection/index.html"; then
-  echo "Collection footer count is missing" >&2
+if ! grep -q 'footer-copy>Household collection index · audited 2026-08-26' "$site_dir/collection/index.html"; then
+  echo "Collection index footer is missing" >&2
+  exit 1
+fi
+
+if grep -q '46 cataloged models.' "$site_dir/collection/index.html"; then
+  echo "Redundant collection footer count is still present" >&2
+  exit 1
+fi
+
+if grep -qi 'scale not recorded' "$site_dir/collection/index.html"; then
+  echo "Unresolved collection scale note is still present" >&2
+  exit 1
+fi
+
+for collection_scale in 'White · 1:69' 'Light blue · 1:61' 'White / gray · 1:99' 'non-uniform Sky Busters scale' 'approx. 1:480 from published dimensions' 'approx. 1:420 by length · toy proportions'; do
+  if ! grep -q "$collection_scale" "$site_dir/collection/index.html"; then
+    echo "Collection scale detail is missing: $collection_scale" >&2
+    exit 1
+  fi
+done
+
+if ! grep -q 'Acquired November 1, 2025 · propellers broken' "$site_dir/collection/index.html"; then
+  echo "Super Guppy condition note is missing" >&2
   exit 1
 fi
 
@@ -117,7 +139,7 @@ if [[ "$dad_collection_notes" != "10" ]]; then
   exit 1
 fi
 
-if ! grep -q '@media(max-width:500px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))' "$site_dir/collection/index.html"; then
+if ! grep -q '@media(max-width:500px)' "$site_dir/collection/index.html" || ! grep -q '.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))' "$site_dir/collection/index.html"; then
   echo "Collection mobile grid is not two columns" >&2
   exit 1
 fi
