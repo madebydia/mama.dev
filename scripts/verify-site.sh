@@ -33,6 +33,10 @@ fi
 
 for required_file in \
   index.html \
+  collection/index.html \
+  collection/assets/lexus-lx.jpg \
+  collection/assets/cessna-172.jpg \
+  collection/assets/sources.tsv \
   worksheets/index.html \
   worksheets/files/airplane-words-have-jobs.pdf \
   worksheets/previews/airplane-words-have-jobs.jpg \
@@ -48,6 +52,24 @@ for required_file in \
   CNAME; do
   if [[ ! -f "$site_dir/$required_file" ]]; then
     echo "Missing required output: $required_file" >&2
+    exit 1
+  fi
+done
+
+collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.jpg' | wc -l | tr -d ' ')"
+if [[ "$collection_image_count" != "34" ]]; then
+  echo "Expected 34 collection images; found $collection_image_count" >&2
+  exit 1
+fi
+
+if ! grep -q 'MATCHBOX<br>DARON<br>COLLECTION' "$site_dir/collection/index.html"; then
+  echo "Collection header is missing its complete label" >&2
+  exit 1
+fi
+
+for collection_label in 'All vehicles' 'Land vehicles' 'Air vehicles'; do
+  if ! grep -q "$collection_label" "$site_dir/collection/index.html"; then
+    echo "Collection filter is missing: $collection_label" >&2
     exit 1
   fi
 done

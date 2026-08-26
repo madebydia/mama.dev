@@ -1,0 +1,831 @@
+<!doctype html>
+<html lang="en">
+<head>
+  {{ partial "head.html" . }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f4f1;
+      --paper: #fff;
+      --text: #080808;
+      --muted: #5a5a55;
+      --rule: #111;
+      --red: #e7473c;
+      --blue: #367fc2;
+      --green: #3e9962;
+      --yellow: #e7bd3c;
+      --font-main: "Inter", Arial, sans-serif;
+      --font-mono: "JetBrains Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      padding: 34px clamp(18px, 3vw, 48px) 48px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .site-header {
+      display: grid;
+      grid-template-columns: minmax(130px, 1fr) minmax(360px, 3fr) minmax(210px, 1fr);
+      gap: 22px;
+      align-items: end;
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .brand {
+      color: inherit;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: -1.3px;
+      line-height: .88;
+      text-decoration: none;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: clamp(18px, 3vw, 42px);
+    }
+
+    .filter-button {
+      appearance: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      padding: 4px 0 5px;
+      text-transform: uppercase;
+    }
+
+    .filter-button:hover,
+    .filter-button:focus-visible {
+      border-bottom-color: var(--muted);
+      outline: none;
+    }
+
+    .filter-button[aria-selected="true"] {
+      border-bottom-color: var(--text);
+    }
+
+    .search {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .search input {
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--text);
+      border-radius: 0;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      outline: none;
+      padding: 5px 0 4px;
+    }
+
+    .search input::placeholder {
+      color: #777;
+      opacity: 1;
+    }
+
+    .search input:focus {
+      border-bottom-width: 2px;
+    }
+
+    .collection-heading {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: 22px;
+      align-items: end;
+      margin: 38px 0 28px;
+    }
+
+    .eyebrow,
+    .collection-stats {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 800px;
+      font-size: clamp(38px, 6.2vw, 88px);
+      font-weight: 900;
+      letter-spacing: -.065em;
+      line-height: .92;
+      margin-top: 10px;
+    }
+
+    .collection-stats {
+      display: flex;
+      justify-content: flex-end;
+      gap: 24px;
+      color: var(--muted);
+    }
+
+    .collection-stats strong {
+      color: var(--text);
+      font-size: 18px;
+      letter-spacing: -.04em;
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 34px 20px;
+    }
+
+    .item-card {
+      min-width: 0;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 20px;
+    }
+
+    .item-card[hidden] {
+      display: none;
+    }
+
+    .image-container {
+      display: flex;
+      aspect-ratio: 1;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin-bottom: 15px;
+      padding: clamp(14px, 2.1vw, 30px);
+      background: var(--paper);
+    }
+
+    .image-container[data-accent="blue"] { background: var(--blue); }
+    .image-container[data-accent="green"] { background: var(--green); }
+    .image-container[data-accent="red"] { background: var(--red); }
+    .image-container[data-accent="yellow"] { background: var(--yellow); }
+
+    .image-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .18));
+      transition: transform .32s cubic-bezier(.23, 1, .32, 1);
+    }
+
+    .item-card:hover img {
+      transform: scale(1.055) rotate(-2deg);
+    }
+
+    .item-title {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.18;
+    }
+
+    .item-separator {
+      font-size: 12px;
+      line-height: 1.2;
+      margin: 3px 0;
+    }
+
+    .item-manufacturer {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 11px;
+    }
+
+    .metadata {
+      border-top: 1px solid var(--rule);
+      margin-top: 0;
+      padding-top: 9px;
+      text-transform: none;
+    }
+
+    .meta-row {
+      margin-bottom: 8px;
+    }
+
+    .meta-label {
+      display: block;
+      font-size: 9px;
+      font-weight: 900;
+      letter-spacing: .025em;
+      margin-bottom: 2px;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      display: block;
+      color: #20201d;
+      font-size: 10px;
+      line-height: 1.42;
+    }
+
+    .meta-value-mono {
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-state {
+      display: none;
+      grid-column: 1 / -1;
+      border: 1px solid var(--rule);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 34px;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .empty-state[data-visible="true"] {
+      display: block;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: end;
+      margin-top: 76px;
+      border-top: 1px solid var(--rule);
+      padding-top: 18px;
+    }
+
+    .footer-copy {
+      max-width: 560px;
+      color: var(--muted);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1.6;
+      text-transform: uppercase;
+    }
+
+    .footer-mark {
+      width: 50px;
+      border: 2px solid var(--text);
+      font-size: 21px;
+      font-weight: 900;
+      line-height: 1;
+      text-align: center;
+    }
+
+    .footer-mark span {
+      display: block;
+      padding: 6px;
+    }
+
+    .footer-mark span + span {
+      border-top: 2px solid var(--text);
+    }
+
+    @media (max-width: 1180px) {
+      .collection-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .site-header {
+        grid-template-columns: minmax(110px, .8fr) minmax(330px, 2fr) minmax(200px, 1fr);
+      }
+    }
+
+    @media (max-width: 780px) {
+      body {
+        padding: 22px 18px 36px;
+      }
+
+      .site-header,
+      .collection-heading {
+        grid-template-columns: 1fr;
+      }
+
+      .filters {
+        order: 3;
+        gap: 20px;
+      }
+
+      .search {
+        max-width: 420px;
+      }
+
+      .collection-heading {
+        margin-top: 32px;
+      }
+
+      .collection-stats {
+        justify-content: flex-start;
+      }
+
+      .collection-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 28px 14px;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .collection-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .collection-stats {
+        gap: 17px;
+      }
+
+      .image-container {
+        padding: 26px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .image-container img {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <div class="brand" aria-label="Matchbox and Daron collection">MATCHBOX<br>DARON<br>COLLECTION</div>
+
+    <nav class="filters" role="tablist" aria-label="Vehicle type">
+      <button class="filter-button" type="button" role="tab" aria-selected="true" data-filter="all">All vehicles</button>
+      <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="land">Land vehicles</button>
+      <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="air">Air vehicles</button>
+    </nav>
+
+    <label class="search" for="collection-search">
+      Search collection
+      <input id="collection-search" type="search" placeholder="MODEL / SERIES / REF" autocomplete="off" spellcheck="false">
+    </label>
+  </header>
+
+  <section class="collection-heading" aria-labelledby="collection-title">
+    <div>
+      <div class="eyebrow">Household collection index · audited 2026-08-26</div>
+      <h1 id="collection-title">Cars, trucks & aircraft.</h1>
+    </div>
+    <div class="collection-stats" aria-label="Collection totals">
+      <span><strong id="visible-count">34</strong><br>showing</span>
+      <span><strong>20</strong><br>land</span>
+      <span><strong>14</strong><br>air</span>
+    </div>
+  </section>
+
+  <main class="collection-grid" id="collection-grid" aria-live="polite">
+    <div class="empty-state" id="empty-state">No vehicles match this search.</div>
+  </main>
+
+  <footer>
+    <div class="footer-copy">
+      34 cataloged models from Matchbox, Daron, and Skymarks. Product photography is stored locally; source links are recorded with the collection assets.
+    </div>
+    <div class="footer-mark" aria-label="Matchbox Daron collection"><span>M</span><span>D</span></div>
+  </footer>
+
+  <script>
+    const vehicles = [
+      {
+        name: "2022 Lexus LX",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/lexus-lx.jpg",
+        series: "Moving Parts · 16/54",
+        spec: "White · scale not recorded",
+        note: "Acquired February 16, 2026",
+        ref: "2022 LEXUS LX"
+      },
+      {
+        name: "1962 Volkswagen Beetle",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/volkswagen-beetle.jpg",
+        series: "Mainline · 93/100",
+        spec: "Green · scale not recorded",
+        note: "Acquired February 16, 2026",
+        ref: "1962 VOLKSWAGEN BEETLE"
+      },
+      {
+        name: "1957 Ford Custom 300",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ford-custom-300.jpg",
+        series: "Mainline · 21/100",
+        spec: "Red · scale not recorded",
+        note: "Acquired February 16, 2026",
+        ref: "1957 FORD CUSTOM 300"
+      },
+      {
+        name: "’70 Datsun 510 Rally",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/datsun-510-rally.jpg",
+        series: "2025 Mainline · 51/125",
+        spec: "Light blue · scale not recorded",
+        note: "Acquired February 16, 2026",
+        ref: "70 DATSUN 510 RALLY"
+      },
+      {
+        name: "2019 Jeep Renegade",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/jeep-renegade.jpg",
+        series: "European Streets · 10/24",
+        spec: "Blue · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "2019 JEEP RENEGADE"
+      },
+      {
+        name: "’90 Volkswagen Golf Country",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/volkswagen-golf-country.jpg",
+        series: "Off Road Rally · 3/6",
+        spec: "Orange · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "90 VOLKSWAGEN GOLF COUNTRY"
+      },
+      {
+        name: "Ford F-550 Super Duty",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ford-f550.jpg",
+        series: "Mainline · 41/125",
+        spec: "Blue / yellow · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "FORD F-550 SUPER DUTY"
+      },
+      {
+        name: "Ford Police Interceptor Utility",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ford-police-interceptor.jpg",
+        series: "Mainline · 75/125",
+        spec: "Black / white · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "FORD POLICE INTERCEPTOR"
+      },
+      {
+        name: "Garbage King Dump Truck",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/garbage-king.jpg",
+        series: "Mainline · 99/125",
+        spec: "Red · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "GARBAGE KING"
+      },
+      {
+        name: "Blaze Blaster III",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/blaze-blaster.jpg",
+        series: "2025 Mainline · 13/125",
+        spec: "Firetruck · 1:64",
+        note: "Acquired February 16, 2026",
+        ref: "BLAZE BLASTER III"
+      },
+      {
+        name: "2019 Ram Ambulance",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ram-ambulance.jpg",
+        series: "Moving Parts · 26/54",
+        spec: "Ambulance · scale not recorded",
+        note: "Acquired April 1, 2026",
+        ref: "2019 RAM AMBULANCE"
+      },
+      {
+        name: "Tesla Cybertruck",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/tesla-cybertruck.jpg",
+        series: "Moving Parts",
+        spec: "Gray · scale not recorded",
+        note: "Acquired April 1, 2026",
+        ref: "TESLA CYBERTRUCK"
+      },
+      {
+        name: "MBX EV School Bus",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ev-school-bus.jpg",
+        series: "2025 Mainline · 123/125",
+        spec: "Yellow · 1:64",
+        note: "Acquired April 1, 2026",
+        ref: "MBX EV SCHOOL BUS"
+      },
+      {
+        name: "1964 Porsche 911",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/porsche-911.jpg",
+        series: "Moving Parts · 01/50",
+        spec: "Blue · 1:64",
+        note: "Acquired April 1, 2026",
+        ref: "1964 PORSCHE 911"
+      },
+      {
+        name: "2004 Honda S2000",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/honda-s2000.jpg",
+        series: "Moving Parts · 06/50",
+        spec: "White · 1:64",
+        note: "Acquired April 1, 2026",
+        ref: "2004 HONDA S2000"
+      },
+      {
+        name: "’76 International Scout 4x4",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/international-scout.jpg",
+        series: "Die-cast 4x4",
+        spec: "Finish and scale not recorded",
+        note: "Acquired May 16, 2026",
+        ref: "76 INTERNATIONAL SCOUT 4X4"
+      },
+      {
+        name: "Cement King HD",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/cement-king.jpg",
+        series: "Working Rigs · 8/16",
+        spec: "White / gray · scale not recorded",
+        note: "Acquired May 27, 2026",
+        ref: "CEMENT KING HD"
+      },
+      {
+        name: "Ground Grabber Truck",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/ground-grabber.jpg",
+        series: "Construction vehicle",
+        spec: "Yellow · 1:64 · pull-back action",
+        note: "Acquired May 27, 2026",
+        ref: "GROUND GRABBER"
+      },
+      {
+        name: "International WorkStar 7500",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/workstar-dump-truck.jpg",
+        series: "Working Rigs · Dump Truck",
+        spec: "Orange · scale not recorded",
+        note: "Acquired May 27, 2026",
+        ref: "INTERNATIONAL WORKSTAR 7500"
+      },
+      {
+        name: "FedEx BrightDrop Zevo 600",
+        brand: "Matchbox",
+        type: "land",
+        image: "/collection/assets/fedex-brightdrop.jpg",
+        series: "Working Truck",
+        spec: "FedEx livery · 1:64",
+        note: "Acquired May 30, 2026",
+        ref: "BRIGHTDROP ZEVO 600"
+      },
+      {
+        name: "UPS Boeing 747-400",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/ups-boeing-747.jpg",
+        series: "Sky Busters · 9/32",
+        spec: "White · UPS livery",
+        note: "Acquired December 6, 2025",
+        ref: "JCN03"
+      },
+      {
+        name: "Space Shuttle Orbiter",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/space-shuttle.jpg",
+        series: "Sky Busters · 13/32",
+        spec: "Spacecraft · scale not recorded",
+        note: "Acquired December 6, 2025",
+        ref: "SPACE SHUTTLE ORBITER"
+      },
+      {
+        name: "Northrop Grumman B-2",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/northrop-b2.jpg",
+        series: "Sky Busters · 22/31",
+        spec: "Stealth bomber · scale not recorded",
+        note: "Acquired December 6, 2025",
+        ref: "NORTHROP GRUMMAN B-2"
+      },
+      {
+        name: "Airbus A320 Beluga",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/airbus-beluga.jpg",
+        series: "Sky Busters · 26/32",
+        spec: "White · cargo aircraft",
+        note: "Acquired December 13, 2025",
+        ref: "HVM54"
+      },
+      {
+        name: "Lockheed C-130 Super Hercules",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/c130-hercules.jpg",
+        series: "Sky Busters · 28/32",
+        spec: "Transport aircraft · scale not recorded",
+        note: "Acquired December 13, 2025",
+        ref: "JCM90"
+      },
+      {
+        name: "CH-47 Chinook",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/chinook.jpg",
+        series: "Sky Busters · 1/32",
+        spec: "Rescue livery · tandem-rotor helicopter",
+        note: "Acquired December 27, 2025",
+        ref: "BBJCN08"
+      },
+      {
+        name: "Gee Bee",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/gee-bee.jpg",
+        series: "Sky Busters · 19/32",
+        spec: "Racing aircraft · scale not recorded",
+        note: "Acquired December 27, 2025",
+        ref: "BBJCM88"
+      },
+      {
+        name: "Boeing F/A-18 Super Hornet",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/fa18-super-hornet.jpg",
+        series: "Sky Busters · 15/32",
+        spec: "Black / red · listing notes 1:64",
+        note: "Acquired March 9, 2026",
+        ref: "F/A-18 SUPER HORNET"
+      },
+      {
+        name: "SpaceX Falcon Heavy",
+        brand: "Matchbox",
+        type: "air",
+        image: "/collection/assets/falcon-heavy.jpg",
+        series: "Sky Busters · includes playmat",
+        spec: "White · heavy-lift rocket",
+        note: "Acquired April 10, 2026",
+        ref: "HHT44"
+      },
+      {
+        name: "Emirates Airbus A380",
+        brand: "Daron",
+        type: "air",
+        image: "/collection/assets/emirates-a380.jpg",
+        series: "Realtoy single-plane model",
+        spec: "Emirates livery · scale not recorded",
+        note: "Acquired December 6, 2025",
+        ref: "RT9904"
+      },
+      {
+        name: "American Eagle ERJ145",
+        brand: "Skymarks / Daron",
+        type: "air",
+        image: "/collection/assets/american-eagle-erj145.jpg",
+        series: "ExpressJet livery",
+        spec: "Display model · 1:100",
+        note: "Acquired June 27, 2026",
+        ref: "SKR859"
+      },
+      {
+        name: "British Airways Concorde",
+        brand: "Daron",
+        type: "air",
+        image: "/collection/assets/british-airways-concorde.jpg",
+        series: "Single-plane toy",
+        spec: "White · scale not recorded",
+        note: "Acquired July 11, 2026",
+        ref: "BRITISH AIRWAYS CONCORDE"
+      },
+      {
+        name: "British Airways Boeing 787",
+        brand: "Daron",
+        type: "air",
+        image: "/collection/assets/british-airways-787.jpg",
+        series: "Single-plane model",
+        spec: "Die-cast metal with plastic parts",
+        note: "Acquired August 3, 2026",
+        ref: "RT6005"
+      },
+      {
+        name: "Cessna 172 Skyhawk",
+        brand: "Daron Runway24",
+        type: "air",
+        image: "/collection/assets/cessna-172.jpg",
+        series: "Runway24 · connectible runway",
+        spec: "Die-cast · 1:87",
+        note: "Acquired August 24, 2026",
+        ref: "CESSNA 172 SKYHAWK"
+      }
+    ];
+
+    const accents = ["none", "blue", "none", "red", "yellow", "green"];
+    const grid = document.getElementById("collection-grid");
+    const emptyState = document.getElementById("empty-state");
+    const visibleCount = document.getElementById("visible-count");
+    const searchInput = document.getElementById("collection-search");
+    const filterButtons = [...document.querySelectorAll(".filter-button")];
+    let activeFilter = "all";
+
+    const escapeHtml = (value) => String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+
+    const cards = vehicles.map((vehicle, index) => {
+      const article = document.createElement("article");
+      const searchable = [vehicle.name, vehicle.brand, vehicle.series, vehicle.spec, vehicle.note, vehicle.ref, vehicle.type].join(" ").toLowerCase();
+      article.className = "item-card";
+      article.dataset.type = vehicle.type;
+      article.dataset.search = searchable;
+      article.innerHTML = `
+        <div class="image-container" data-accent="${accents[index % accents.length]}">
+          <img src="${escapeHtml(vehicle.image)}" alt="${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.name)} model" loading="lazy" decoding="async">
+        </div>
+        <div class="item-title">${escapeHtml(vehicle.name)}</div>
+        <div class="item-separator" aria-hidden="true">×</div>
+        <div class="item-manufacturer">${escapeHtml(vehicle.brand)}</div>
+        <div class="metadata">
+          <div class="meta-row">
+            <span class="meta-label">■ Series</span>
+            <span class="meta-value">${escapeHtml(vehicle.series)}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">▲ Finish / Spec</span>
+            <span class="meta-value">${escapeHtml(vehicle.spec)}</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">● Collection note</span>
+            <span class="meta-value">${escapeHtml(vehicle.note)}</span>
+          </div>
+          <div class="meta-value-mono">Ref: ${escapeHtml(vehicle.ref)}</div>
+        </div>`;
+      grid.insertBefore(article, emptyState);
+      return article;
+    });
+
+    function applyFilters() {
+      const query = searchInput.value.trim().toLowerCase();
+      let count = 0;
+
+      cards.forEach((card) => {
+        const categoryMatches = activeFilter === "all" || card.dataset.type === activeFilter;
+        const searchMatches = !query || card.dataset.search.includes(query);
+        const visible = categoryMatches && searchMatches;
+        card.hidden = !visible;
+        if (visible) count += 1;
+      });
+
+      visibleCount.textContent = count;
+      emptyState.dataset.visible = count === 0 ? "true" : "false";
+    }
+
+    filterButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter;
+        filterButtons.forEach((candidate) => {
+          candidate.setAttribute("aria-selected", candidate === button ? "true" : "false");
+        });
+        applyFilters();
+      });
+    });
+
+    searchInput.addEventListener("input", applyFilters);
+  </script>
+</body>
+</html>
