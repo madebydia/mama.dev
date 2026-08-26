@@ -67,14 +67,14 @@ if ! grep -q 'aria-label=Collection>COLLECTION</div>' "$site_dir/collection/inde
   exit 1
 fi
 
-for collection_label in 'All vehicles' 'Land vehicles' 'Air vehicles'; do
+for collection_label in 'All vehicles' 'Land vehicles' 'Air & space'; do
   if ! grep -q "$collection_label" "$site_dir/collection/index.html"; then
     echo "Collection filter is missing: $collection_label" >&2
     exit 1
   fi
 done
 
-for collection_title in 'Cars, trucks & aircraft.' 'Cars & trucks.' 'Aircraft.'; do
+for collection_title in 'Cars, trucks, aircraft & spacecraft.' 'Cars & trucks.' 'Aircraft & spacecraft.'; do
   if ! grep -q "$collection_title" "$site_dir/collection/index.html"; then
     echo "Collection filter title is missing: $collection_title" >&2
     exit 1

@@ -377,7 +377,7 @@
     <nav class="filters" role="tablist" aria-label="Vehicle type">
       <button class="filter-button" type="button" role="tab" aria-selected="true" data-filter="all">All vehicles</button>
       <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="land">Land vehicles</button>
-      <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="air">Air vehicles</button>
+      <button class="filter-button" type="button" role="tab" aria-selected="false" data-filter="air">Air &amp; space</button>
     </nav>
 
     <label class="search" for="collection-search">
@@ -389,12 +389,12 @@
   <section class="collection-heading" aria-labelledby="collection-title">
     <div>
       <div class="eyebrow">Household collection index · audited 2026-08-26</div>
-      <h1 id="collection-title">Cars, trucks & aircraft.</h1>
+      <h1 id="collection-title">Cars, trucks, aircraft &amp; spacecraft.</h1>
     </div>
     <div class="collection-stats" aria-label="Collection totals">
       <span><strong id="visible-count">34</strong><br>showing</span>
       <span><strong>20</strong><br>land</span>
-      <span><strong>14</strong><br>air</span>
+      <span><strong>14</strong><br>air + space</span>
     </div>
   </section>
 
@@ -761,9 +761,9 @@
     const searchInput = document.getElementById("collection-search");
     const filterButtons = [...document.querySelectorAll(".filter-button")];
     const filterTitles = {
-      all: "Cars, trucks & aircraft.",
+      all: "Cars, trucks, aircraft & spacecraft.",
       land: "Cars & trucks.",
-      air: "Aircraft."
+      air: "Aircraft & spacecraft."
     };
     let activeFilter = "all";
 
