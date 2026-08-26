@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A one-page true story about Joseph Swan, Thomas Edison, and the teams who made electric light practical.">
+  <title>The Invention of the Light Bulb — One True Story</title>
+  <style>
+    :root { --ink:#17263b; --cream:#fbf5e8; --gold:#e8b94f; --coral:#d96c58; --teal:#367e7a; --pale-teal:#dcebe6; --paper:#fff; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e8dfce; color:var(--ink); font-family:Arial,sans-serif; }
+    .toolbar { position:sticky; top:0; z-index:5; display:flex; justify-content:center; gap:.75rem; padding:.75rem; background:rgba(23,38,59,.94); }
+    .toolbar a, .toolbar button { border:0; border-radius:999px; padding:.7rem 1rem; background:var(--gold); color:var(--ink); font:700 .9rem Arial,sans-serif; text-decoration:none; cursor:pointer; }
+    .page { width:min(8.5in,100%); min-height:11in; margin:1.5rem auto; background:var(--cream); box-shadow:0 8px 35px rgba(0,0,0,.18); overflow:hidden; }
+    header { min-height:2.65in; padding:.38in 2.9in .35in .48in; background:var(--ink); color:#fff; position:relative; border-bottom:.08in solid var(--gold); }
+    .kicker { display:inline-block; padding:.08in .17in; border-radius:999px; background:var(--gold); color:var(--ink); font-size:.78rem; font-weight:800; letter-spacing:.04em; }
+    h1 { margin:.18in 0 .12in; max-width:5in; font-size:2.15rem; line-height:1; text-transform:uppercase; }
+    header p { margin:0; max-width:4.45in; color:#e8edf3; font-size:1rem; line-height:1.35; }
+    figure { position:absolute; right:.42in; top:.3in; width:2.15in; margin:0; padding:.12in; background:#fff; border-radius:.08in; color:var(--ink); }
+    figure img { width:100%; height:1.78in; object-fit:contain; display:block; }
+    figcaption { font-size:.51rem; line-height:1.25; text-transform:uppercase; }
+    .content { padding:.38in .48in .25in; }
+    .story { column-count:2; column-gap:.38in; }
+    .story p { margin:0 0 .16in; font-size:.77rem; line-height:1.42; break-inside:avoid; }
+    .story p:first-child { font-size:.86rem; font-weight:700; }
+    .highlight { padding:0 .04in; border-radius:.04in; background:#f6e6b5; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+    .story-note { margin:.18in 0; padding:.17in .2in; border-radius:.08in; background:#f6e6b5; break-inside:avoid; }
+    .story-note strong { display:block; margin-bottom:.05in; color:var(--coral); font-size:.74rem; letter-spacing:.04em; }
+    .story-note p { margin:0; font-size:.88rem; font-weight:700; line-height:1.35; }
+    .ending { clear:both; margin-top:.1in; padding:.16in .2in; border-radius:.08in; background:var(--pale-teal); font-size:.7rem; line-height:1.35; }
+    .ending strong { color:var(--teal); }
+    footer { display:flex; justify-content:space-between; gap:.25in; padding:0 .48in .3in; color:#5e6571; font-size:.51rem; line-height:1.3; }
+    footer strong { color:var(--ink); }
+    @media (max-width:700px) {
+      .page { margin:0; min-height:0; }
+      header { padding:1.5rem; }
+      figure { position:static; width:100%; margin:1rem 0 0; }
+      figure img { height:16rem; }
+      .content { padding:1.5rem; }
+      .story { column-count:1; }
+      footer { padding:0 1.5rem 1.5rem; }
+    }
+    @media print {
+      @page { size:Letter; margin:0; }
+      body { background:#fff; }
+      .toolbar { display:none; }
+      .page { width:8.5in; height:11in; min-height:11in; margin:0; box-shadow:none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="toolbar" aria-label="Story controls">
+    <a href="../">All stories</a>
+    <a href="the-invention-of-the-light-bulb.pdf" download>Download color PDF</a>
+    <button type="button" onclick="window.print()">Print this page</button>
+  </nav>
+  <main class="page">
+    <header>
+      <span class="kicker">ONE TRUE STORY</span>
+      <h1>The Invention of the Light Bulb</h1>
+      <p>Many inventors helped turn a glowing experiment into light for homes.</p>
+      <figure>
+        <img src="/assets/images/edison-carbon-lamp-smithsonian.jpg" alt="Historic Edison carbon-filament lamp">
+        <figcaption>Edison carbon-filament lamp, c. 1880 · Smithsonian (CC0)</figcaption>
+      </figure>
+    </header>
+    <div class="content">
+      <article class="story">
+        <p>On a winter evening in 1879, a glass bulb began to glow at Menlo Park, New Jersey. Thomas Edison and the workers in his laboratory watched the tiny thread of light. They had been chasing that glow for more than a year.</p>
+        <p>They were not the first people to make electric light. Inventors had experimented with it for decades. In Britain, <span class="highlight">Joseph Swan</span> was making a practical carbon lamp too, and he demonstrated his lamp in 1879.</p>
+        <p>At Menlo Park, Edison worked with a team nicknamed the <span class="highlight">muckers</span>. They tried one material after another for the filament, the thin part that glows. Platinum, rubber and even soot were tested. Most attempts shone briefly, then went dark.</p>
+        <div class="story-note"><strong>1,000 WAYS</strong><p>People later told the story this way: Edison had not failed 1,000 times. He had found 1,000 ways that did not work.</p></div>
+        <p>The exact number and wording are uncertain. But the real work was just as stubborn: <span class="highlight">hundreds of experiments and thousands of material tests</span>. Each failure gave the team another clue about what to try next.</p>
+        <p>Then they tried a small cotton thread. They baked it until it became carbon, sealed it inside a glass bulb and pumped out the air. The filament glowed for at least <span class="highlight">13 hours</span>. At last, the light stayed on.</p>
+        <p>A working bulb was not enough. The team also needed generators, wires, switches, fuses, meters and sockets. They built a whole system so people could use electric light safely.</p>
+        <p>In 1882, Edison’s Pearl Street station began sending power to customers in lower Manhattan. Rooms that had once been lit by candles or gas could glow with electric light.</p>
+        <p>The change did not happen overnight. Most families kept using candles and gas lamps for many years. But the glowing buildings at Menlo Park had shown that an electric-light system really could work.</p>
+        <p>So who invented the light bulb? There is no one-person answer. Swan, Edison, their teams and earlier experimenters all helped. The light bulb was not one sudden bright idea. It was a long chain of dim tries, careful notes, teamwork—and one glow that finally lasted.</p>
+      </article>
+      <div class="ending"><strong>A small bulb. A very big system.</strong> Edison’s practical light worked because the lamp and the power system were designed together.</div>
+    </div>
+    <footer><span><strong>MAMA.DEV · READ · NOTICE · WONDER</strong></span><span>Sources: National Park Service, Edison NHS; Smithsonian National Museum of American History; Science Museum Group</span></footer>
+  </main>
+</body>
+</html>

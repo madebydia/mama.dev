@@ -27,41 +27,36 @@
     {{ with index hugo.Data "repo-activity" }}
     <section class="cell span-4 compact-cell" aria-labelledby="activity-title">
       <span class="cell-num">04</span>
-      <h2 class="title-md" id="activity-title">REPO ACTIVITY</h2>
+      <h2 class="title-md" id="activity-title">SITE UPDATES</h2>
       <svg class="commit-plot" viewBox="0 0 220 42" role="img" aria-labelledby="commit-title commit-desc">
-        <title id="commit-title">mama.dev repository commits</title>
-        <desc id="commit-desc">{{ .shown }} commits shown from {{ .first_date }} through {{ .last_date }}. Each dot is one commit.</desc>
+        <title id="commit-title">mama.dev site updates</title>
+        <desc id="commit-desc">{{ .shown }} updates shown from {{ .first_date }} through {{ .last_date }}. Each dot is one update.</desc>
         {{ range .points }}
         <circle class="commit-dot" cx="{{ .x }}" cy="{{ .y }}" r="2.25">
           <title>{{ .date }} · {{ .hash }}</title>
         </circle>
         {{ end }}
       </svg>
-      <span class="metadata">{{ if eq .shown .total }}{{ .total }} COMMITS{{ else }}LATEST {{ .shown }} OF {{ .total }} COMMITS{{ end }} · {{ .first_date }}—{{ .last_date }}</span>
+      <span class="metadata">{{ if eq .shown .total }}{{ .total }} UPDATES{{ else }}LATEST {{ .shown }} OF {{ .total }} UPDATES{{ end }} · {{ .first_date }}—{{ .last_date }}</span>
     </section>
     {{ end }}
 
-    <a class="cell span-1 category-cell" href="/games/">
+    <a class="cell span-2 category-cell airplane-cell" href="/airplane-games/index.html">
       <span class="cell-num">05</span>
-      <strong class="title-md">GAMES</strong>
-      <span class="metadata">21 ITEMS</span>
-    </a>
-
-    <a class="cell span-1 category-cell" href="/what-to-eat/">
-      <span class="cell-num">06</span>
-      <strong class="title-md">TOOLS</strong>
-      <span class="metadata">2 ITEMS</span>
+      {{ partial "airplane-icon.html" . }}
+      <strong class="title-md">AIRPLANE GAMES</strong>
+      <span class="metadata">6 AIRPLANE GAMES</span>
     </a>
 
     <a class="cell span-2 compact-cell" href="/what-to-eat/">
-      <span class="cell-num">07</span>
+      <span class="cell-num">06</span>
       <span class="eyebrow">VISUAL MENU</span>
       <strong class="title-md">WHAT TO EAT</strong>
       <span class="metadata">CHOOSE A MEAL</span>
     </a>
 
     <a class="cell span-4 row-span-2 feature-cell" href="/games/word-train/">
-      <span class="cell-num">08</span>
+      <span class="cell-num">07</span>
       <div class="feature-copy">
         <span class="eyebrow">EARLY READING</span>
         <strong class="title-lg">WORD<br>TRAIN</strong>
@@ -71,43 +66,43 @@
     </a>
 
     <a class="cell span-2 category-cell" href="/worksheets/">
-      <span class="cell-num">09</span>
-      <strong class="title-md">PRINTABLES</strong>
+      <span class="cell-num">08</span>
+      <strong class="title-md">ALL PRINTABLES</strong>
       <span class="metadata">46 PDFS</span>
     </a>
 
     <a class="cell span-2 category-cell" href="/one-true-story/">
-      <span class="cell-num">10</span>
+      <span class="cell-num">09</span>
       <strong class="title-md">STORIES</strong>
-      <span class="metadata">6 TRUE STORIES</span>
+      <span class="metadata">7 TRUE STORIES</span>
     </a>
 
     <a class="cell span-1 project-cell" href="/games/counting-orchard/">
-      <span class="cell-num">11</span>
+      <span class="cell-num">10</span>
       <strong class="title-md">COUNTING<br>ORCHARD</strong>
       <span class="tag">COUNTING</span>
     </a>
 
     <a class="cell span-1 project-cell" href="/games/letter-sounds/">
-      <span class="cell-num">12</span>
+      <span class="cell-num">11</span>
       <strong class="title-md">SOUND<br>SAFARI</strong>
       <span class="tag">LETTERS</span>
     </a>
 
     <a class="cell span-1 project-cell" href="/games/number-hop/">
-      <span class="cell-num">13</span>
+      <span class="cell-num">12</span>
       <strong class="title-md">NUMBER<br>HOP</strong>
       <span class="tag">ORDER</span>
     </a>
 
     <a class="cell span-1 project-cell" href="/games/pattern-parade/">
-      <span class="cell-num">14</span>
+      <span class="cell-num">13</span>
       <strong class="title-md">PATTERN<br>PARADE</strong>
       <span class="tag">PATTERNS</span>
     </a>
 
     <a class="cell span-3 story-cell airplane-cell" href="/one-true-story/stories/wright-brothers.html">
-      <span class="cell-num">15</span>
+      <span class="cell-num">14</span>
       {{ partial "airplane-icon.html" . }}
       <span class="eyebrow">WRIGHT BROTHERS</span>
       <strong class="title-md">THE FIRST AIRPLANE FLIGHT</strong>
@@ -115,59 +110,53 @@
     </a>
 
     <a class="cell span-3 story-cell" href="/2026-calendar/">
-      <span class="cell-num">16</span>
+      <span class="cell-num">15</span>
       <span class="eyebrow">DAYS &amp; OCCASIONS</span>
       <strong class="title-md">2026 CALENDAR</strong>
       <span class="metadata">INTERACTIVE CALENDAR</span>
     </a>
 
     <a class="cell span-2 category-cell" href="/log-templates/">
-      <span class="cell-num">17</span>
+      <span class="cell-num">16</span>
       <strong class="title-md">LOG TEMPLATES</strong>
       <span class="metadata">3 PRINTABLE LOGS</span>
     </a>
 
     <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/cargo-count.html">
-      <span class="cell-num">18</span>
+      <span class="cell-num">17</span>
       {{ partial "airplane-icon.html" . }}
       <strong class="title-md">CARGO<br>COUNT</strong>
     </a>
 
     <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/logic-hangar.html">
-      <span class="cell-num">19</span>
+      <span class="cell-num">18</span>
       {{ partial "airplane-icon.html" . }}
       <strong class="title-md">LOGIC<br>HANGAR</strong>
     </a>
 
     <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/takeoff-path.html">
-      <span class="cell-num">20</span>
+      <span class="cell-num">19</span>
       {{ partial "airplane-icon.html" . }}
       <strong class="title-md">TAKEOFF<br>PATH</strong>
     </a>
 
     <a class="cell span-1 mini-cell airplane-cell" href="/airplane-games/pattern-lab.html">
-      <span class="cell-num">21</span>
+      <span class="cell-num">20</span>
       {{ partial "airplane-icon.html" . }}
       <strong class="title-md">PATTERN<br>LAB</strong>
     </a>
 
-    <a class="cell span-6 closing-cell" href="/games/">
-      <span class="cell-num">22</span>
+    <a class="cell span-full closing-cell" href="/games/">
+      <span class="cell-num">21</span>
       <strong class="title-md">ALL GAMES</strong>
-      <span class="metadata">15 GAMES · 6 AIRPLANE GAMES</span>
-    </a>
-
-    <a class="cell span-6 closing-cell" href="/worksheets/">
-      <span class="cell-num">23</span>
-      <strong class="title-md">ALL PRINTABLES</strong>
-      <span class="metadata">42 WORKSHEETS · 3 LOGS</span>
+      <span class="metadata">15 GAMES</span>
     </a>
 
   </main>
 
   <footer class="site-meta">
     <p>MAMA.DEV<br>FAMILY SOFTWARE<br>FREE TO USE</p>
-    <p>75 THINGS<br>21 GAMES · 46 PRINTABLES<br>6 STORIES · 2 TOOLS</p>
+    <p>76 THINGS<br>21 GAMES · 46 PRINTABLES<br>7 STORIES · 2 TOOLS</p>
   </footer>
 </body>
 </html>

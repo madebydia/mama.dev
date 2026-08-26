@@ -85,6 +85,7 @@ a.filled:focus-visible {
 .span-3 { grid-column: span 3; }
 .span-4 { grid-column: span 4; }
 .span-6 { grid-column: span 6; }
+.span-full { grid-column: 1 / -1; }
 .row-span-2 { grid-row: span 2; }
 
 .cell-num,
@@ -271,7 +272,7 @@ a.filled:focus-visible {
 }
 
 .closing-cell {
-  border-top: 1px solid var(--line);
+  border-right: 0;
 }
 
 .closing-cell .title-md {

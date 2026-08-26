@@ -185,7 +185,7 @@
   url: /one-true-story/
   source: legacy-pages/one-true-story/index.html
   title: Interesting Stories
-  description: Six short nonfiction stories for early readers.
+  description: Seven short nonfiction stories for early readers.
 
 - path: one-true-story/stories/america-birthday
   url: /one-true-story/stories/america-birthday.html
@@ -210,6 +210,12 @@
   source: legacy-pages/one-true-story/stories/lego.html
   title: The Invention of LEGO
   description: A printable early-reader story about the invention of LEGO bricks.
+
+- path: one-true-story/stories/light-bulb
+  url: /one-true-story/stories/light-bulb.html
+  source: legacy-pages/one-true-story/stories/light-bulb.html
+  title: The Invention of the Light Bulb
+  description: A one-page true story about the inventors who made electric light practical.
 
 - path: one-true-story/stories/titanic
   url: /one-true-story/stories/titanic.html
