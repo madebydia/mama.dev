@@ -62,8 +62,8 @@ if [[ "$collection_image_count" != "34" ]]; then
   exit 1
 fi
 
-if ! grep -q 'MATCHBOX<br>DARON<br>COLLECTION' "$site_dir/collection/index.html"; then
-  echo "Collection header is missing its complete label" >&2
+if ! grep -q 'aria-label=Collection>COLLECTION</div>' "$site_dir/collection/index.html"; then
+  echo "Collection header is missing" >&2
   exit 1
 fi
 
