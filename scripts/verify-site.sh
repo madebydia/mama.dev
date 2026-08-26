@@ -108,7 +108,7 @@ if grep -qi 'scale not recorded' "$site_dir/collection/index.html"; then
   exit 1
 fi
 
-for surprise_detail in 'surprise:!0' 'Shh, it’s a surprise' 'Click and hold to reveal' 'Press and hold to reveal surprise model' 'surpriseHoldDuration=900'; do
+for surprise_detail in 'surprise:!0' 'Shh, it’s a surprise' 'Click and hold to reveal' 'Press and hold to reveal surprise model' 'surpriseHoldDuration=900' 'classList.remove("is-revealed")' 'setAttribute("aria-hidden","true")'; do
   if ! grep -q "$surprise_detail" "$site_dir/collection/index.html"; then
     echo "Collection surprise-card behavior is missing: $surprise_detail" >&2
     exit 1

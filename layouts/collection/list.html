@@ -205,10 +205,11 @@
       touch-action: none;
       user-select: none;
       -webkit-touch-callout: none;
+      transition: opacity .16s ease;
     }
 
-    .surprise-cover[hidden] {
-      display: none;
+    .item-card.is-surprise.is-revealed .surprise-cover {
+      opacity: 0;
     }
 
     .surprise-cover::after {
@@ -970,6 +971,8 @@
       const cancelReveal = () => {
         window.clearTimeout(revealTimer);
         cover.classList.remove("is-holding");
+        article.classList.remove("is-revealed");
+        content.setAttribute("aria-hidden", "true");
       };
 
       const beginReveal = () => {
@@ -979,7 +982,6 @@
         revealTimer = window.setTimeout(() => {
           article.classList.add("is-revealed");
           content.setAttribute("aria-hidden", "false");
-          cover.hidden = true;
         }, surpriseHoldDuration);
       };
 
