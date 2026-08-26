@@ -36,6 +36,7 @@ for required_file in \
   collection/index.html \
   collection/assets/lexus-lx.png \
   collection/assets/hot-wheels-limozeen.png \
+  collection/assets/beluga-xl.png \
   collection/assets/super-guppy.png \
   collection/assets/cessna-172.png \
   collection/assets/sources.tsv \
@@ -68,8 +69,8 @@ if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html";
 fi
 
 collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
-if [[ "$collection_image_count" != "45" ]]; then
-  echo "Expected 45 collection images; found $collection_image_count" >&2
+if [[ "$collection_image_count" != "46" ]]; then
+  echo "Expected 46 collection images; found $collection_image_count" >&2
   exit 1
 fi
 
@@ -92,12 +93,12 @@ for collection_title in 'Cars, trucks, aircraft & spacecraft.' 'Cars & trucks.' 
   fi
 done
 
-if ! grep -q '45 cataloged models.' "$site_dir/collection/index.html"; then
+if ! grep -q '46 cataloged models.' "$site_dir/collection/index.html"; then
   echo "Collection footer count is missing" >&2
   exit 1
 fi
 
-for collection_model in 'Airbus A320 Beluga' 'Aero Spacelines 377SGT Super Guppy'; do
+for collection_model in 'Airbus A320 Beluga' 'Airbus A330 Beluga XL' 'Aero Spacelines 377SGT Super Guppy'; do
   model_count="$(grep -o "$collection_model" "$site_dir/collection/index.html" | wc -l | tr -d ' ')"
   if [[ "$model_count" != "1" ]]; then
     echo "Expected one collection record for $collection_model; found $model_count" >&2
