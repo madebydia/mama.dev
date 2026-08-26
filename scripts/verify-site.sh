@@ -42,6 +42,8 @@ for required_file in \
   worksheets/previews/airplane-words-have-jobs.jpg \
   worksheets/files/kid-pilot-call-and-response-checklists.pdf \
   worksheets/previews/kid-pilot-call-and-response-checklists.jpg \
+  worksheets/files/parts-of-a-beluga-whale.pdf \
+  worksheets/previews/parts-of-a-beluga-whale.jpg \
   games/index.html \
   games/word-train/index.html \
   airplane-games/logic-hangar.html \
