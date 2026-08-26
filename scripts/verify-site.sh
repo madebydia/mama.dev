@@ -35,6 +35,7 @@ for required_file in \
   index.html \
   collection/index.html \
   collection/assets/lexus-lx.png \
+  collection/assets/hot-wheels-limozeen.png \
   collection/assets/cessna-172.png \
   collection/assets/sources.tsv \
   worksheets/index.html \
@@ -66,8 +67,8 @@ if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html";
 fi
 
 collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
-if [[ "$collection_image_count" != "34" ]]; then
-  echo "Expected 34 collection images; found $collection_image_count" >&2
+if [[ "$collection_image_count" != "44" ]]; then
+  echo "Expected 44 collection images; found $collection_image_count" >&2
   exit 1
 fi
 
@@ -89,6 +90,16 @@ for collection_title in 'Cars, trucks, aircraft & spacecraft.' 'Cars & trucks.' 
     exit 1
   fi
 done
+
+if ! grep -q '44 cataloged models.' "$site_dir/collection/index.html"; then
+  echo "Collection footer count is missing" >&2
+  exit 1
+fi
+
+if grep -qE 'footer-mark|Matchbox, Daron, and Skymarks|Product photography is stored locally' "$site_dir/collection/index.html"; then
+  echo "Retired collection footer branding or copy is still present" >&2
+  exit 1
+fi
 
 if ! grep -q '@media(max-width:500px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))' "$site_dir/collection/index.html"; then
   echo "Collection mobile grid is not two columns" >&2
