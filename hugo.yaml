@@ -10,7 +10,6 @@ disableKinds:
 params:
   description: Small practical tools, games, printables, and stories made for family life.
   plausibleScript: https://plausible.io/js/pa-FbfZnrKrtH_PX4s12h-v-.js
-  socialHandle: madebydia
 
 module:
   mounts:

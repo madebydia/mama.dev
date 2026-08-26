@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .field { fill: #00a370; }
+    .mark { fill: #f2f4f0; }
+    @media (prefers-color-scheme: dark) {
+      .field { fill: #a89ab9; }
+      .mark { fill: #1c1b20; }
+    }
+  </style>
+  <rect class="field" width="64" height="64" rx="12" />
+  <path class="mark" d="M9 13h9l8 12 8-12h9v33h-9V28l-8 11-8-11v18H9Z" />
+  <rect class="mark" x="46" y="42" width="10" height="4" />
+</svg>

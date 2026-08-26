@@ -84,6 +84,7 @@ a.filled:focus-visible {
 .span-2 { grid-column: span 2; }
 .span-3 { grid-column: span 3; }
 .span-4 { grid-column: span 4; }
+.span-6 { grid-column: span 6; }
 .row-span-2 { grid-row: span 2; }
 
 .cell-num,
@@ -269,16 +270,12 @@ a.filled:focus-visible {
   fill: currentColor;
 }
 
+.closing-cell {
+  border-top: 1px solid var(--line);
+}
+
 .closing-cell .title-md {
   margin-top: 26px;
-}
-
-.closing-cell .metadata a {
-  text-underline-offset: 3px;
-}
-
-.source-cell {
-  border-top: 1px solid var(--line);
 }
 
 .site-meta {
@@ -355,7 +352,8 @@ a.filled:focus-visible {
 
   .span-2,
   .span-3,
-  .span-4 {
+  .span-4,
+  .span-6 {
     grid-column: span 2;
   }
 

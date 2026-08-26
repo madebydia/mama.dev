@@ -7,6 +7,7 @@
 {{- $head = replaceRE `(?is)<meta[^>]+(?:name|property)=["'](?:og:|twitter:)[^"']+["'][^>]*>` "" $head -}}
 {{- $head = replaceRE `(?is)<link[^>]+rel=["']canonical["'][^>]*>` "" $head -}}
 {{- $head = replaceRE `(?is)<title>.*?</title>` "" $head -}}
+{{- $head = replaceRE `(?is)<link[^>]+rel=["'](?:shortcut\s+)?icon["'][^>]*>` "" $head -}}
 {{- $head = replaceRE `(?is)<!--\s*Privacy-friendly analytics by Plausible\s*-->` "" $head -}}
 {{- $head = replaceRE `(?is)<script[^>]+src=["'][^"']*plausible\.io[^"']*["'][^>]*></script>` "" $head -}}
 {{- $head = replaceRE `(?is)<script[^>]*>\s*window\.plausible=.*?plausible\.init\(.*?\)\s*</script>` "" $head -}}
