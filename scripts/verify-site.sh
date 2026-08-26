@@ -74,4 +74,11 @@ for collection_label in 'All vehicles' 'Land vehicles' 'Air vehicles'; do
   fi
 done
 
+for collection_title in 'Cars, trucks & aircraft.' 'Cars & trucks.' 'Aircraft.'; do
+  if ! grep -q "$collection_title" "$site_dir/collection/index.html"; then
+    echo "Collection filter title is missing: $collection_title" >&2
+    exit 1
+  fi
+done
+
 echo "Verified $html_count HTML pages with one shared Plausible head each."

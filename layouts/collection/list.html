@@ -756,8 +756,14 @@
     const grid = document.getElementById("collection-grid");
     const emptyState = document.getElementById("empty-state");
     const visibleCount = document.getElementById("visible-count");
+    const collectionTitle = document.getElementById("collection-title");
     const searchInput = document.getElementById("collection-search");
     const filterButtons = [...document.querySelectorAll(".filter-button")];
+    const filterTitles = {
+      all: "Cars, trucks & aircraft.",
+      land: "Cars & trucks.",
+      air: "Aircraft."
+    };
     let activeFilter = "all";
 
     const escapeHtml = (value) => String(value)
@@ -802,6 +808,8 @@
     function applyFilters() {
       const query = searchInput.value.trim().toLowerCase();
       let count = 0;
+
+      collectionTitle.textContent = filterTitles[activeFilter];
 
       cards.forEach((card) => {
         const categoryMatches = activeFilter === "all" || card.dataset.type === activeFilter;
