@@ -108,6 +108,18 @@ if grep -qi 'scale not recorded' "$site_dir/collection/index.html"; then
   exit 1
 fi
 
+for surprise_detail in 'surprise:!0' 'Shh, it’s a surprise' 'Click and hold to reveal' 'Press and hold to reveal surprise model' 'surpriseHoldDuration=900'; do
+  if ! grep -q "$surprise_detail" "$site_dir/collection/index.html"; then
+    echo "Collection surprise-card behavior is missing: $surprise_detail" >&2
+    exit 1
+  fi
+done
+
+if ! grep -q 'ref:"CESSNA 172 SKYHAWK",surprise:!0' "$site_dir/collection/index.html"; then
+  echo "Cessna is not configured as the surprise model" >&2
+  exit 1
+fi
+
 for collection_scale in 'White · 1:69' 'Light blue · 1:61' 'White / gray · 1:99' 'non-uniform Sky Busters scale' 'approx. 1:480 from published dimensions' 'approx. 1:420 by length · toy proportions'; do
   if ! grep -q "$collection_scale" "$site_dir/collection/index.html"; then
     echo "Collection scale detail is missing: $collection_scale" >&2

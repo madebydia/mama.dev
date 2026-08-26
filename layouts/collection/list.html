@@ -172,6 +172,87 @@
       padding-bottom: 20px;
     }
 
+    .item-card.is-surprise {
+      position: relative;
+    }
+
+    .surprise-content {
+      transition: opacity .24s ease;
+    }
+
+    .item-card.is-surprise:not(.is-revealed) .surprise-content {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .surprise-cover {
+      position: absolute;
+      inset: 0 0 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--rule);
+      background: var(--yellow);
+      color: var(--text);
+      cursor: pointer;
+      font: inherit;
+      padding: 24px;
+      text-align: center;
+      touch-action: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    .surprise-cover[hidden] {
+      display: none;
+    }
+
+    .surprise-cover::after {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      content: "";
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    .surprise-cover.is-holding::after {
+      transform: scaleX(1);
+      transition: transform 900ms linear;
+    }
+
+    .surprise-kicker {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .surprise-title {
+      max-width: 260px;
+      font-size: clamp(24px, 3.2vw, 42px);
+      font-weight: 900;
+      letter-spacing: -.045em;
+      line-height: .95;
+      margin: 12px 0;
+    }
+
+    .surprise-instruction {
+      max-width: 210px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      line-height: 1.45;
+      text-transform: uppercase;
+    }
+
     .item-card[hidden] {
       display: none;
     }
@@ -353,7 +434,8 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .image-container img {
+      .image-container img,
+      .surprise-content {
         transition: none;
       }
     }
@@ -854,7 +936,8 @@
         series: "Runway24 · connectible runway",
         spec: "Die-cast · 1:87",
         note: "Acquired August 24, 2026",
-        ref: "CESSNA 172 SKYHAWK"
+        ref: "CESSNA 172 SKYHAWK",
+        surprise: true
       }
     ];
 
@@ -879,13 +962,56 @@
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
 
+    const surpriseHoldDuration = 900;
+
+    function armSurpriseReveal(article, cover, content) {
+      let revealTimer;
+
+      const cancelReveal = () => {
+        window.clearTimeout(revealTimer);
+        cover.classList.remove("is-holding");
+      };
+
+      const beginReveal = () => {
+        if (article.classList.contains("is-revealed")) return;
+        cancelReveal();
+        cover.classList.add("is-holding");
+        revealTimer = window.setTimeout(() => {
+          article.classList.add("is-revealed");
+          content.setAttribute("aria-hidden", "false");
+          cover.hidden = true;
+        }, surpriseHoldDuration);
+      };
+
+      cover.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0) return;
+        event.preventDefault();
+        cover.setPointerCapture?.(event.pointerId);
+        beginReveal();
+      });
+      ["pointerup", "pointercancel", "lostpointercapture"].forEach((eventName) => {
+        cover.addEventListener(eventName, cancelReveal);
+      });
+      cover.addEventListener("contextmenu", (event) => event.preventDefault());
+      cover.addEventListener("keydown", (event) => {
+        if ((event.key === "Enter" || event.key === " ") && !event.repeat) {
+          event.preventDefault();
+          beginReveal();
+        }
+      });
+      cover.addEventListener("keyup", (event) => {
+        if (event.key === "Enter" || event.key === " ") cancelReveal();
+      });
+      cover.addEventListener("blur", cancelReveal);
+    }
+
     const cards = vehicles.map((vehicle, index) => {
       const article = document.createElement("article");
       const searchable = [vehicle.name, vehicle.brand, vehicle.series, vehicle.spec, vehicle.note, vehicle.ref, vehicle.type].join(" ").toLowerCase();
       article.className = "item-card";
       article.dataset.type = vehicle.type;
       article.dataset.search = searchable;
-      article.innerHTML = `
+      const cardContent = `
         <div class="image-container" data-accent="${accents[index % accents.length]}">
           <img src="${escapeHtml(vehicle.image)}" alt="${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.name)} model" loading="lazy" decoding="async">
         </div>
@@ -907,6 +1033,20 @@
           </div>
           <div class="meta-value-mono">Ref: ${escapeHtml(vehicle.ref)}</div>
         </div>`;
+
+      if (vehicle.surprise) {
+        article.classList.add("is-surprise");
+        article.innerHTML = `
+          <div class="surprise-content" aria-hidden="true">${cardContent}</div>
+          <button class="surprise-cover" type="button" aria-label="Press and hold to reveal surprise model">
+            <span class="surprise-kicker">Shh, it’s a surprise</span>
+            <span class="surprise-title">A new model is waiting.</span>
+            <span class="surprise-instruction">Click and hold to reveal</span>
+          </button>`;
+        armSurpriseReveal(article, article.querySelector(".surprise-cover"), article.querySelector(".surprise-content"));
+      } else {
+        article.innerHTML = cardContent;
+      }
       grid.insertBefore(article, emptyState);
       return article;
     });
