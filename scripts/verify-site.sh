@@ -101,6 +101,12 @@ if grep -qE 'footer-mark|Matchbox, Daron, and Skymarks|Product photography is st
   exit 1
 fi
 
+dad_collection_notes="$(grep -o "Dad's collection" "$site_dir/collection/index.html" | wc -l | tr -d ' ')"
+if [[ "$dad_collection_notes" != "10" ]]; then
+  echo "Expected 10 Dad's collection notes; found $dad_collection_notes" >&2
+  exit 1
+fi
+
 if ! grep -q '@media(max-width:500px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))' "$site_dir/collection/index.html"; then
   echo "Collection mobile grid is not two columns" >&2
   exit 1
