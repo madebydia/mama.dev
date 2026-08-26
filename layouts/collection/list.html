@@ -350,7 +350,8 @@
 
     @media (max-width: 500px) {
       .collection-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 24px 10px;
       }
 
       .collection-stats {
@@ -358,7 +359,7 @@
       }
 
       .image-container {
-        padding: 26px;
+        padding: 14px;
       }
     }
 

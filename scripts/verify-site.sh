@@ -81,4 +81,9 @@ for collection_title in 'Cars, trucks & aircraft.' 'Cars & trucks.' 'Aircraft.';
   fi
 done
 
+if ! grep -q '@media(max-width:500px){.collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))' "$site_dir/collection/index.html"; then
+  echo "Collection mobile grid is not two columns" >&2
+  exit 1
+fi
+
 echo "Verified $html_count HTML pages with one shared Plausible head each."
