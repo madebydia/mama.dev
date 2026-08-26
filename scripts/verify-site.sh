@@ -44,6 +44,8 @@ for required_file in \
   worksheets/previews/kid-pilot-call-and-response-checklists.jpg \
   worksheets/files/parts-of-a-beluga-whale.pdf \
   worksheets/previews/parts-of-a-beluga-whale.jpg \
+  worksheets/files/build-action-switch-cards.pdf \
+  worksheets/previews/build-action-switch-cards.jpg \
   games/index.html \
   games/word-train/index.html \
   airplane-games/logic-hangar.html \
@@ -57,6 +59,11 @@ for required_file in \
     exit 1
   fi
 done
+
+if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html"; then
+  echo "Build-Action Switch Cards catalog record is missing" >&2
+  exit 1
+fi
 
 collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.jpg' | wc -l | tr -d ' ')"
 if [[ "$collection_image_count" != "34" ]]; then
