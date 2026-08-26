@@ -34,8 +34,8 @@ fi
 for required_file in \
   index.html \
   collection/index.html \
-  collection/assets/lexus-lx.jpg \
-  collection/assets/cessna-172.jpg \
+  collection/assets/lexus-lx.png \
+  collection/assets/cessna-172.png \
   collection/assets/sources.tsv \
   worksheets/index.html \
   worksheets/files/airplane-words-have-jobs.pdf \
@@ -65,7 +65,7 @@ if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html";
   exit 1
 fi
 
-collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.jpg' | wc -l | tr -d ' ')"
+collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
 if [[ "$collection_image_count" != "34" ]]; then
   echo "Expected 34 collection images; found $collection_image_count" >&2
   exit 1
