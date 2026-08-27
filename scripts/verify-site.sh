@@ -5,6 +5,8 @@ site_dir="${1:-public}"
 plausible_script="pa-FbfZnrKrtH_PX4s12h-v-.js"
 html_count=0
 
+python3 scripts/verify-food-menu.py
+
 while IFS= read -r -d '' html_file; do
   html_count=$((html_count + 1))
   script_count="$( (grep -o "$plausible_script" "$html_file" || true) | wc -l | tr -d ' ' )"
@@ -51,6 +53,12 @@ for required_file in \
   worksheets/previews/build-action-switch-cards.jpg \
   games/index.html \
   games/word-train/index.html \
+  what-to-eat/index.html \
+  what-to-eat/foods.json \
+  what-to-eat/images/chicken.webp \
+  what-to-eat/images/fish.webp \
+  what-to-eat/images/yogurt.webp \
+  what-to-eat/images/apple.webp \
   airplane-games/logic-hangar.html \
   one-true-story/stories/wright-brothers.html \
   log-templates/index.html \

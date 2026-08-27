@@ -1,0 +1,948 @@
+[
+  {
+    "id": "eggs",
+    "name": "eggs",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1 small egg",
+      "calories": 54,
+      "protein": 4,
+      "carbs": 0,
+      "fat": 4
+    },
+    "image": "images/eggs.webp"
+  },
+  {
+    "id": "chicken",
+    "name": "chicken",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "blue",
+    "image": "images/chicken.webp",
+    "nutrition": {
+      "portion": "2 tbsp shredded",
+      "calories": 45,
+      "protein": 8,
+      "carbs": 0,
+      "fat": 1
+    }
+  },
+  {
+    "id": "bacon",
+    "name": "bacon",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1 slice",
+      "calories": 43,
+      "protein": 3,
+      "carbs": 0,
+      "fat": 3
+    },
+    "image": "images/bacon.webp"
+  },
+  {
+    "id": "beef",
+    "name": "beef",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "2 tbsp ground",
+      "calories": 50,
+      "protein": 5,
+      "carbs": 0,
+      "fat": 3
+    },
+    "image": "images/beef.webp"
+  },
+  {
+    "id": "fish",
+    "name": "fish",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "red",
+    "image": "images/fish.webp",
+    "nutrition": {
+      "portion": "1 oz fillet",
+      "calories": 36,
+      "protein": 7,
+      "carbs": 0,
+      "fat": 1
+    }
+  },
+  {
+    "id": "shrimp",
+    "name": "shrimp",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "3-4 small",
+      "calories": 30,
+      "protein": 6,
+      "carbs": 0,
+      "fat": 0
+    },
+    "image": "images/shrimp.webp"
+  },
+  {
+    "id": "hot-dog",
+    "name": "hot dog",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1/2 hot dog",
+      "calories": 75,
+      "protein": 3,
+      "carbs": 1,
+      "fat": 7
+    },
+    "image": "images/hot-dog.webp"
+  },
+  {
+    "id": "ham",
+    "name": "ham",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1 slice diced",
+      "calories": 30,
+      "protein": 5,
+      "carbs": 0,
+      "fat": 1
+    },
+    "image": "images/ham.webp"
+  },
+  {
+    "id": "nuts",
+    "name": "nuts",
+    "section": "Proteins",
+    "categories": [
+      "protein"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "4-5 pieces",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 1,
+      "fat": 3
+    },
+    "image": "images/nuts.webp"
+  },
+  {
+    "id": "beans",
+    "name": "beans",
+    "section": "Proteins",
+    "categories": [
+      "protein",
+      "vegetable"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp",
+      "calories": 40,
+      "protein": 3,
+      "carbs": 7,
+      "fat": 0
+    },
+    "image": "images/beans.webp"
+  },
+  {
+    "id": "milk",
+    "name": "milk",
+    "section": "Dairy",
+    "categories": [
+      "dairy",
+      "protein"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1/2 cup",
+      "calories": 75,
+      "protein": 4,
+      "carbs": 6,
+      "fat": 4
+    },
+    "image": "images/milk.webp"
+  },
+  {
+    "id": "cheese",
+    "name": "cheese",
+    "section": "Dairy",
+    "categories": [
+      "dairy",
+      "protein"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "1/2 oz cubed",
+      "calories": 57,
+      "protein": 4,
+      "carbs": 0,
+      "fat": 5
+    },
+    "image": "images/cheese.webp"
+  },
+  {
+    "id": "yogurt",
+    "name": "yogurt",
+    "section": "Dairy",
+    "categories": [
+      "dairy",
+      "protein"
+    ],
+    "color": "yellow",
+    "image": "images/yogurt.webp",
+    "nutrition": {
+      "portion": "1/4 cup",
+      "calories": 37,
+      "protein": 2,
+      "carbs": 3,
+      "fat": 2
+    }
+  },
+  {
+    "id": "butter",
+    "name": "butter",
+    "section": "Dairy",
+    "categories": [
+      "dairy"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/2 tsp",
+      "calories": 18,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 2
+    },
+    "image": "images/butter.webp"
+  },
+  {
+    "id": "apple",
+    "name": "apple",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "red",
+    "image": "images/apple.webp",
+    "nutrition": {
+      "portion": "1/4 apple sliced",
+      "calories": 24,
+      "protein": 0,
+      "carbs": 6,
+      "fat": 0
+    }
+  },
+  {
+    "id": "banana",
+    "name": "banana",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "1/2 small banana",
+      "calories": 45,
+      "protein": 1,
+      "carbs": 11,
+      "fat": 0
+    },
+    "image": "images/banana.webp"
+  },
+  {
+    "id": "grapes",
+    "name": "grapes",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "8-10 halved",
+      "calories": 35,
+      "protein": 0,
+      "carbs": 9,
+      "fat": 0
+    },
+    "image": "images/grapes.webp"
+  },
+  {
+    "id": "strawberry",
+    "name": "strawberry",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "3-4 small",
+      "calories": 15,
+      "protein": 0,
+      "carbs": 4,
+      "fat": 0
+    },
+    "image": "images/strawberry.webp"
+  },
+  {
+    "id": "watermelon",
+    "name": "watermelon",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1/4 cup cubed",
+      "calories": 12,
+      "protein": 0,
+      "carbs": 3,
+      "fat": 0
+    },
+    "image": "images/watermelon.webp"
+  },
+  {
+    "id": "orange",
+    "name": "orange",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2-3 segments",
+      "calories": 20,
+      "protein": 0,
+      "carbs": 5,
+      "fat": 0
+    },
+    "image": "images/orange.webp"
+  },
+  {
+    "id": "peach",
+    "name": "peach",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1/4 peach sliced",
+      "calories": 15,
+      "protein": 0,
+      "carbs": 4,
+      "fat": 0
+    },
+    "image": "images/peach.webp"
+  },
+  {
+    "id": "cherries",
+    "name": "cherries",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "4-5 pitted",
+      "calories": 25,
+      "protein": 0,
+      "carbs": 6,
+      "fat": 0
+    },
+    "image": "images/cherries.webp"
+  },
+  {
+    "id": "blueberries",
+    "name": "blueberries",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "2 tbsp",
+      "calories": 20,
+      "protein": 0,
+      "carbs": 5,
+      "fat": 0
+    },
+    "image": "images/blueberries.webp"
+  },
+  {
+    "id": "pineapple",
+    "name": "pineapple",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp chunks",
+      "calories": 20,
+      "protein": 0,
+      "carbs": 5,
+      "fat": 0
+    },
+    "image": "images/pineapple.webp"
+  },
+  {
+    "id": "mango",
+    "name": "mango",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "2 tbsp cubed",
+      "calories": 25,
+      "protein": 0,
+      "carbs": 6,
+      "fat": 0
+    },
+    "image": "images/mango.webp"
+  },
+  {
+    "id": "pear",
+    "name": "pear",
+    "section": "Fruits",
+    "categories": [
+      "fruit"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/4 pear sliced",
+      "calories": 25,
+      "protein": 0,
+      "carbs": 6,
+      "fat": 0
+    },
+    "image": "images/pear.webp"
+  },
+  {
+    "id": "broccoli",
+    "name": "broccoli",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "2-3 florets",
+      "calories": 10,
+      "protein": 1,
+      "carbs": 2,
+      "fat": 0
+    },
+    "image": "images/broccoli.webp"
+  },
+  {
+    "id": "carrot",
+    "name": "carrot",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp cooked",
+      "calories": 12,
+      "protein": 0,
+      "carbs": 3,
+      "fat": 0
+    },
+    "image": "images/carrot.webp"
+  },
+  {
+    "id": "tomato",
+    "name": "tomato",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "2 tbsp diced",
+      "calories": 6,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    "image": "images/tomato.webp"
+  },
+  {
+    "id": "corn",
+    "name": "corn",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "2 tbsp kernels",
+      "calories": 30,
+      "protein": 1,
+      "carbs": 7,
+      "fat": 0
+    },
+    "image": "images/corn.webp"
+  },
+  {
+    "id": "cucumber",
+    "name": "cucumber",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "3-4 slices",
+      "calories": 5,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    "image": "images/cucumber.webp"
+  },
+  {
+    "id": "lettuce",
+    "name": "lettuce",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "1-2 leaves",
+      "calories": 3,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    "image": "images/lettuce.webp"
+  },
+  {
+    "id": "pepper",
+    "name": "pepper",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "2 tbsp diced",
+      "calories": 8,
+      "protein": 0,
+      "carbs": 2,
+      "fat": 0
+    },
+    "image": "images/pepper.webp"
+  },
+  {
+    "id": "potato",
+    "name": "potato",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "2 tbsp mashed",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 0
+    },
+    "image": "images/potato.webp"
+  },
+  {
+    "id": "sweet-potato",
+    "name": "sweet potato",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "2 tbsp mashed",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 0
+    },
+    "image": "images/sweet-potato.webp"
+  },
+  {
+    "id": "avocado",
+    "name": "avocado",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable",
+      "protein"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp mashed",
+      "calories": 50,
+      "protein": 1,
+      "carbs": 3,
+      "fat": 5
+    },
+    "image": "images/avocado.webp"
+  },
+  {
+    "id": "mushroom",
+    "name": "mushroom",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "2 tbsp sliced",
+      "calories": 5,
+      "protein": 1,
+      "carbs": 1,
+      "fat": 0
+    },
+    "image": "images/mushroom.webp"
+  },
+  {
+    "id": "peas",
+    "name": "peas",
+    "section": "Vegetables",
+    "categories": [
+      "vegetable",
+      "protein"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "2 tbsp",
+      "calories": 25,
+      "protein": 2,
+      "carbs": 4,
+      "fat": 0
+    },
+    "image": "images/peas.webp"
+  },
+  {
+    "id": "bread",
+    "name": "bread",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1/2 slice",
+      "calories": 40,
+      "protein": 2,
+      "carbs": 7,
+      "fat": 1
+    },
+    "image": "images/bread.webp"
+  },
+  {
+    "id": "rice",
+    "name": "rice",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp cooked",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 0
+    },
+    "image": "images/rice.webp"
+  },
+  {
+    "id": "pasta",
+    "name": "pasta",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "2 tbsp cooked",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 7,
+      "fat": 0
+    },
+    "image": "images/pasta.webp"
+  },
+  {
+    "id": "tortilla",
+    "name": "tortilla",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/2 small tortilla",
+      "calories": 45,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 1
+    },
+    "image": "images/tortilla.webp"
+  },
+  {
+    "id": "bagel",
+    "name": "bagel",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1/4 mini bagel",
+      "calories": 45,
+      "protein": 2,
+      "carbs": 9,
+      "fat": 0
+    },
+    "image": "images/bagel.webp"
+  },
+  {
+    "id": "croissant",
+    "name": "croissant",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "1/4 croissant",
+      "calories": 60,
+      "protein": 1,
+      "carbs": 6,
+      "fat": 3
+    },
+    "image": "images/croissant.webp"
+  },
+  {
+    "id": "pancakes",
+    "name": "pancakes",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1 silver dollar",
+      "calories": 50,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 2
+    },
+    "image": "images/pancakes.webp"
+  },
+  {
+    "id": "waffle",
+    "name": "waffle",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/4 waffle",
+      "calories": 45,
+      "protein": 1,
+      "carbs": 7,
+      "fat": 2
+    },
+    "image": "images/waffle.webp"
+  },
+  {
+    "id": "cereal",
+    "name": "cereal",
+    "section": "Carbs",
+    "categories": [
+      "grain",
+      "dairy"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "1/4 cup dry",
+      "calories": 35,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 0
+    },
+    "image": "images/cereal.webp"
+  },
+  {
+    "id": "oatmeal",
+    "name": "oatmeal",
+    "section": "Carbs",
+    "categories": [
+      "grain"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "2 tbsp cooked",
+      "calories": 25,
+      "protein": 1,
+      "carbs": 5,
+      "fat": 0
+    },
+    "image": "images/oatmeal.webp"
+  },
+  {
+    "id": "french-fries",
+    "name": "french fries",
+    "section": "Carbs",
+    "categories": [
+      "vegetable"
+    ],
+    "color": "red",
+    "nutrition": {
+      "portion": "5-6 fries",
+      "calories": 50,
+      "protein": 1,
+      "carbs": 6,
+      "fat": 3
+    },
+    "image": "images/french-fries.webp"
+  },
+  {
+    "id": "sandwich",
+    "name": "cheese sandwich",
+    "section": "And More",
+    "categories": [
+      "grain",
+      "protein"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/4 sandwich",
+      "calories": 70,
+      "protein": 4,
+      "carbs": 8,
+      "fat": 3
+    },
+    "image": "images/sandwich.webp"
+  },
+  {
+    "id": "pb-and-j",
+    "name": "PB&J",
+    "section": "And More",
+    "categories": [
+      "grain",
+      "protein"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/4 sandwich",
+      "calories": 100,
+      "protein": 4,
+      "carbs": 12,
+      "fat": 5
+    },
+    "image": "images/pb-and-j.webp"
+  },
+  {
+    "id": "pizza",
+    "name": "pizza",
+    "section": "And More",
+    "categories": [
+      "grain",
+      "dairy"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1/4 slice",
+      "calories": 70,
+      "protein": 3,
+      "carbs": 8,
+      "fat": 3
+    },
+    "image": "images/pizza.webp"
+  },
+  {
+    "id": "peanut-butter",
+    "name": "peanut butter",
+    "section": "And More",
+    "categories": [
+      "protein"
+    ],
+    "color": "blue",
+    "nutrition": {
+      "portion": "1 tbsp",
+      "calories": 95,
+      "protein": 4,
+      "carbs": 3,
+      "fat": 8
+    },
+    "image": "images/peanut-butter.webp"
+  },
+  {
+    "id": "soup",
+    "name": "soup",
+    "section": "And More",
+    "categories": [
+      "protein",
+      "vegetable"
+    ],
+    "color": "yellow",
+    "nutrition": {
+      "portion": "1/4 cup",
+      "calories": 40,
+      "protein": 2,
+      "carbs": 5,
+      "fat": 1
+    },
+    "image": "images/soup.webp"
+  },
+  {
+    "id": "popcorn",
+    "name": "popcorn",
+    "section": "And More",
+    "categories": [
+      "grain"
+    ],
+    "color": "green",
+    "nutrition": {
+      "portion": "1/2 cup popped",
+      "calories": 15,
+      "protein": 0,
+      "carbs": 3,
+      "fat": 0
+    },
+    "image": "images/popcorn.webp"
+  }
+]
