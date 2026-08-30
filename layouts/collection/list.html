@@ -285,6 +285,14 @@
       transform: scale(1.055) rotate(-2deg);
     }
 
+    .image-container img.source-photo-zoom {
+      transform: translateY(16%) scale(1.55);
+    }
+
+    .item-card:hover img.source-photo-zoom {
+      transform: translateY(16%) scale(1.62) rotate(-2deg);
+    }
+
     .item-title {
       font-size: 14px;
       font-weight: 700;
@@ -463,8 +471,8 @@
       <h1 id="collection-title">Cars, trucks,<br class="mobile-title-break"> aircraft &amp; spacecraft.</h1>
     </div>
     <div class="collection-stats" aria-label="Collection totals">
-      <span><strong id="visible-count">47</strong><br>showing</span>
-      <span><strong>31</strong><br>land</span>
+      <span><strong id="visible-count">48</strong><br>showing</span>
+      <span><strong>32</strong><br>land</span>
       <span><strong>16</strong><br>air + space</span>
     </div>
   </section>
@@ -474,7 +482,7 @@
   </main>
 
   <footer>
-    <div class="footer-copy">Household collection index · audited 2026-08-29</div>
+    <div class="footer-copy">Household collection index · audited 2026-08-30</div>
   </footer>
 
   <script>
@@ -678,6 +686,18 @@
         spec: "FedEx livery · 1:64",
         note: "Acquired May 30, 2026",
         ref: "BRIGHTDROP ZEVO 600"
+      },
+      {
+        name: "Porsche 904 Carrera GTS",
+        brand: "Hot Wheels",
+        type: "land",
+        image: "/collection/assets/hot-wheels-porsche-904-carrera-gts.png",
+        imageClass: "source-photo-zoom",
+        accent: "none",
+        series: "2025 HW Race Day · 3/10 · 180/250",
+        spec: "Green · 1:64",
+        note: "Gift from Grandma",
+        ref: "PORSCHE 904 CARRERA GTS"
       },
       {
         name: "Mickey Mouse “The Band Concert” Covelight",
@@ -1025,8 +1045,8 @@
       article.dataset.type = vehicle.type;
       article.dataset.search = searchable;
       const cardContent = `
-        <div class="image-container" data-accent="${accents[index % accents.length]}">
-          <img src="${escapeHtml(vehicle.image)}" alt="${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.name)} model" loading="lazy" decoding="async">
+        <div class="image-container" data-accent="${escapeHtml(vehicle.accent || accents[index % accents.length])}">
+          <img class="${escapeHtml(vehicle.imageClass || "")}" src="${escapeHtml(vehicle.image)}" alt="${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.name)} model" loading="lazy" decoding="async">
         </div>
         <div class="item-title">${escapeHtml(vehicle.name)}</div>
         <div class="item-separator" aria-hidden="true">×</div>
