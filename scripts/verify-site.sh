@@ -77,8 +77,8 @@ if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html";
 fi
 
 collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
-if [[ "$collection_image_count" != "46" ]]; then
-  echo "Expected 46 collection images; found $collection_image_count" >&2
+if [[ "$collection_image_count" != "47" ]]; then
+  echo "Expected 47 collection images; found $collection_image_count" >&2
   exit 1
 fi
 
@@ -101,7 +101,7 @@ for collection_title in 'Cars, trucks,<br class="mobile-title-break"> aircraft &
   fi
 done
 
-if ! grep -q 'footer-copy>Household collection index · audited 2026-08-26' "$site_dir/collection/index.html"; then
+if ! grep -q 'footer-copy>Household collection index · audited 2026-08-29' "$site_dir/collection/index.html"; then
   echo "Collection index footer is missing" >&2
   exit 1
 fi
@@ -127,6 +127,18 @@ if ! grep -q 'ref:"CESSNA 172 SKYHAWK",surprise:!0' "$site_dir/collection/index.
   echo "Cessna is not configured as the surprise model" >&2
   exit 1
 fi
+
+if ! grep -q 'ref:"GDG86 · B07DTMXT6Z",surprise:!0' "$site_dir/collection/index.html"; then
+  echo "Mickey Mouse Band Concert Covelight is not configured as a surprise model" >&2
+  exit 1
+fi
+
+for collection_total in 'visible-count>47</strong><br>showing' '<strong>31</strong><br>land' '<strong>16</strong><br>air + space'; do
+  if ! grep -q "$collection_total" "$site_dir/collection/index.html"; then
+    echo "Collection total is missing: $collection_total" >&2
+    exit 1
+  fi
+done
 
 for collection_scale in 'White · 1:69' 'Light blue · 1:61' 'White / gray · 1:99' 'non-uniform Sky Busters scale' 'approx. 1:480 from published dimensions' 'approx. 1:420 by length · toy proportions'; do
   if ! grep -q "$collection_scale" "$site_dir/collection/index.html"; then
