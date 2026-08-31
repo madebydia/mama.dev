@@ -77,8 +77,8 @@ if ! grep -q 'id:"build-action-switch-cards"' "$site_dir/worksheets/index.html";
 fi
 
 collection_image_count="$(find "$site_dir/collection/assets" -maxdepth 1 -type f -name '*.png' | wc -l | tr -d ' ')"
-if [[ "$collection_image_count" != "48" ]]; then
-  echo "Expected 48 collection images; found $collection_image_count" >&2
+if [[ "$collection_image_count" != "49" ]]; then
+  echo "Expected 49 collection images; found $collection_image_count" >&2
   exit 1
 fi
 
@@ -133,9 +133,16 @@ if ! grep -q 'ref:"GDG86 · B07DTMXT6Z",surprise:!0' "$site_dir/collection/index
   exit 1
 fi
 
-for collection_total in 'visible-count>48</strong><br>showing' '<strong>32</strong><br>land' '<strong>16</strong><br>air + space'; do
+for collection_total in 'visible-count>49</strong><br>showing' '<strong>33</strong><br>land' '<strong>16</strong><br>air + space'; do
   if ! grep -q "$collection_total" "$site_dir/collection/index.html"; then
     echo "Collection total is missing: $collection_total" >&2
+    exit 1
+  fi
+done
+
+for lightning_detail in '2022 Ford F-150 Lightning' '2025 Mainline · 38/125' 'Brittany blue · 1:64' 'note:"Gift from Grandma",ref:"2022 FORD F-150 LIGHTNING"'; do
+  if ! grep -q "$lightning_detail" "$site_dir/collection/index.html"; then
+    echo "Ford F-150 Lightning collection detail is missing: $lightning_detail" >&2
     exit 1
   fi
 done
