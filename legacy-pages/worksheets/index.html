@@ -680,6 +680,7 @@
     width: min(900px, calc(100vw - 28px));
     max-height: min(880px, calc(100vh - 28px));
     border: 0;
+    border-radius: 24px;
     padding: 0;
     background: transparent;
     color: var(--ink);
@@ -694,7 +695,8 @@
     display: grid;
     grid-template-columns: minmax(260px, 0.92fr) minmax(260px, 1fr);
     overflow: hidden;
-    border: 2px solid rgba(38, 61, 79, 0.18);
+    border: 1px solid var(--line-strong);
+    border-radius: 24px;
     background: var(--paper-raised);
     box-shadow: 0 26px 70px rgba(16, 26, 34, 0.32);
   }
@@ -704,11 +706,61 @@
     background: var(--paper-soft);
   }
 
+  .dialog-page {
+    position: relative;
+    aspect-ratio: var(--preview-aspect, 17 / 22);
+    display: grid;
+    place-items: center;
+  }
+
   .dialog-preview img {
+    position: absolute;
+    inset: 0;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: contain;
+  }
+
+  .preview-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+  }
+
+  .preview-controls[hidden],
+  .dialog-preview [hidden] {
+    display: none;
+  }
+
+  .preview-controls button {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--paper-raised);
+    color: var(--ink);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .preview-controls button:focus-visible {
+    outline: 2px solid var(--ink);
+    outline-offset: 2px;
+  }
+
+  .preview-counter {
+    font-size: 0.85rem;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .preview-error {
+    padding: 24px;
+    text-align: center;
   }
 
   .dialog-info {
@@ -752,6 +804,7 @@
 
   .detail-item {
     border: 1px solid var(--line);
+    border-radius: 12px;
     background: rgba(255, 255, 255, 0.34);
     padding: 10px 12px;
   }
@@ -1012,9 +1065,6 @@
       overflow-y: auto;
     }
 
-    .dialog-preview {
-      max-height: 44vh;
-    }
   }
 
   @media (max-width: 520px) {
@@ -1143,9 +1193,19 @@
     </section>
   </div>
 
-  <dialog id="preview-dialog" class="preview-dialog">
+  <dialog id="preview-dialog" class="preview-dialog" aria-labelledby="dialog-title">
     <div class="dialog-card">
-      <div class="dialog-preview"><img id="dialog-image" alt=""></div>
+      <div class="dialog-preview" role="region" aria-label="Worksheet pages" aria-roledescription="carousel">
+        <div class="dialog-page">
+          <img id="dialog-image" alt="">
+          <p id="preview-error" class="preview-error" role="status" hidden>This preview could not load. You can still download the full PDF.</p>
+        </div>
+        <div id="preview-controls" class="preview-controls" hidden>
+          <button id="preview-previous" type="button" aria-label="Previous page" aria-controls="dialog-image">← Previous</button>
+          <span id="preview-counter" class="preview-counter" aria-live="polite" aria-atomic="true"></span>
+          <button id="preview-next" type="button" aria-label="Next page" aria-controls="dialog-image">Next →</button>
+        </div>
+      </div>
       <div class="dialog-info">
         <button class="dialog-close" type="button" aria-label="Close preview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
         <span id="dialog-badge" class="badge"></span>
@@ -1427,7 +1487,7 @@
                   "Balloons",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/boat-and-balloon-two-maze-page.pdf",
             "thumbnail": "previews/boat-and-balloon-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1446,7 +1506,7 @@
                   "Airplanes",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/construction-and-airplane-two-maze-page.pdf",
             "thumbnail": "previews/construction-and-airplane-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1465,7 +1525,7 @@
                   "Ocean",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/fire-truck-and-submarine-two-maze-page.pdf",
             "thumbnail": "previews/fire-truck-and-submarine-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1484,7 +1544,7 @@
                   "Animals",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/mars-rover-and-safari-jeep-two-maze-page.pdf",
             "thumbnail": "previews/mars-rover-and-safari-jeep-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1503,7 +1563,7 @@
                   "Airplanes",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/ocean-and-air-two-maze-page.pdf",
             "thumbnail": "previews/ocean-and-air-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1522,7 +1582,7 @@
                   "Community",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/rocket-and-fire-truck-two-maze-page.pdf",
             "thumbnail": "previews/rocket-and-fire-truck-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1541,7 +1601,7 @@
                   "Emergency",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/space-and-emergency-two-maze-page.pdf",
             "thumbnail": "previews/space-and-emergency-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1560,7 +1620,7 @@
                   "Airplanes",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/submarine-and-helicopter-two-maze-page.pdf",
             "thumbnail": "previews/submarine-and-helicopter-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1579,7 +1639,7 @@
                   "Farm",
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/train-and-tractor-two-maze-page.pdf",
             "thumbnail": "previews/train-and-tractor-two-maze-page.jpg",
             "orientation": "portrait"
@@ -1596,7 +1656,7 @@
             "themes": [
                   "Vehicles"
             ],
-            "pages": 4,
+            "pages": 3,
             "file": "files/two-maze-pages-pack.pdf",
             "thumbnail": "previews/two-maze-pages-pack.jpg",
             "orientation": "portrait"
@@ -1630,7 +1690,7 @@
             "themes": [
                   "Vehicles"
             ],
-            "pages": 2,
+            "pages": 1,
             "file": "files/two-mazes-one-page.pdf",
             "thumbnail": "previews/two-mazes-one-page.jpg",
             "orientation": "portrait"
@@ -1791,7 +1851,7 @@
             "themes": [
                   "Words"
             ],
-            "pages": 1,
+            "pages": 2,
             "file": "files/long-vowel-words-tracing.pdf",
             "thumbnail": "previews/long-vowel-words-tracing.jpg",
             "orientation": "portrait"
@@ -1827,7 +1887,7 @@
             "themes": [
                   "Weather"
             ],
-            "pages": 1,
+            "pages": 2,
             "file": "files/weather-vocabulary-cut-and-paste.pdf",
             "thumbnail": "previews/weather-vocabulary-cut-and-paste.jpg",
             "orientation": "portrait"
@@ -2026,6 +2086,8 @@
 
     const state = {
       tab: "all",
+      preview: null,
+      previewPage: 1,
       query: "",
       filters: new Map()
     };
@@ -2041,6 +2103,11 @@
     const filterToggle = document.querySelector("#filter-toggle");
     const dialog = document.querySelector("#preview-dialog");
     const dialogClose = dialog.querySelector(".dialog-close");
+    const dialogImage = document.querySelector("#dialog-image");
+    const dialogPage = document.querySelector(".dialog-page");
+    const previewControls = document.querySelector("#preview-controls");
+    const previewCounter = document.querySelector("#preview-counter");
+    const previewError = document.querySelector("#preview-error");
 
     const iconDownload = '<svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M7 10l5 5 5-5"></path><path d="M12 15V3"></path></svg>';
     const iconEye = '<svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
@@ -2169,11 +2236,68 @@
       emptyState.classList.toggle("is-visible", items.length === 0);
     }
 
-    function openPreview(id) {
+    function updateUrl(method = "pushState") {
+      const url = new URL(window.location.href);
+      if (state.tab === "all") url.searchParams.delete("tab");
+      else url.searchParams.set("tab", state.tab);
+      if (state.preview) url.searchParams.set("preview", state.preview);
+      else url.searchParams.delete("preview");
+      if (state.preview && state.previewPage > 1) url.searchParams.set("page", state.previewPage);
+      else url.searchParams.delete("page");
+      if (url.href !== window.location.href) {
+        window.history[method](null, "", url);
+      }
+    }
+
+    function renderTabs() {
+      tabs.forEach((tab) => {
+        const selected = tab.dataset.tab === state.tab;
+        tab.classList.toggle("active", selected);
+        tab.setAttribute("aria-pressed", String(selected));
+      });
+    }
+
+    function restoreUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      state.tab = tabs.some((item) => item.dataset.tab === tab) ? tab : "all";
+      const preview = params.get("preview");
+      state.preview = worksheets.some((item) => item.id === preview) ? preview : null;
+      renderTabs();
+      render();
+      if (state.preview) openPreview(state.preview, false, Number(params.get("page")));
+      else if (dialog.open) dialog.close();
+      updateUrl("replaceState");
+    }
+
+    function showPreviewPage(page, updateHistory = true) {
+      const item = worksheets.find((worksheet) => worksheet.id === state.preview);
+      if (!item) return;
+      state.previewPage = Number.isSafeInteger(page) && page > 0 ? Math.min(page, item.pages) : 1;
+      dialogImage.hidden = false;
+      previewError.hidden = true;
+      // Fit the whole page without adding letterboxing or cropping PDF content.
+      dialogPage.style.setProperty("--preview-aspect", item.orientation === "landscape" ? "22 / 17" : "17 / 22");
+      // Multi-page images are rendered by scripts/build-worksheet-previews.py.
+      dialogImage.src = item.pages > 1
+        ? `previews/${item.id}-page-${state.previewPage}.jpg`
+        : item.thumbnail;
+      dialogImage.alt = `${item.title}, page ${state.previewPage} of ${item.pages}`;
+      previewCounter.textContent = `Page ${state.previewPage} of ${item.pages}`;
+      previewControls.hidden = item.pages < 2;
+      // Keep page turns in this preview's history entry; Back returns to the gallery.
+      if (updateHistory) updateUrl("replaceState");
+    }
+
+    function changePreviewPage(delta) {
+      const item = worksheets.find((worksheet) => worksheet.id === state.preview);
+      if (!item || item.pages < 2) return;
+      showPreviewPage((state.previewPage - 1 + delta + item.pages) % item.pages + 1);
+    }
+
+    function openPreview(id, updateHistory = true, page = 1) {
       const item = worksheets.find((worksheet) => worksheet.id === id);
       if (!item) return;
-      document.querySelector("#dialog-image").src = item.thumbnail;
-      document.querySelector("#dialog-image").alt = `Preview of ${item.title} worksheet`;
       document.querySelector("#dialog-badge").textContent = item.type;
       document.querySelector("#dialog-title").textContent = item.title;
       document.querySelector("#dialog-desc").textContent = item.description;
@@ -2182,9 +2306,12 @@
       document.querySelector("#dialog-pages").textContent = `${item.pages} page${item.pages === 1 ? "" : "s"}`;
       document.querySelector("#dialog-tags").innerHTML = [...item.skills, ...item.themes].map((tag) => `<span class="${tagClass(tag)}">${tag}</span>`).join("");
       document.querySelector("#dialog-download").href = item.file;
-      if (typeof dialog.showModal === "function") {
+      state.preview = item.id;
+      showPreviewPage(page, false);
+      if (typeof dialog.showModal === "function" && !dialog.open) {
         dialog.showModal();
       }
+      if (updateHistory) updateUrl();
     }
 
     function clearAll() {
@@ -2192,21 +2319,19 @@
       state.tab = "all";
       state.filters.clear();
       searchInput.value = "";
-      tabs.forEach((tab) => {
-        const selected = tab.dataset.tab === "all";
-        tab.classList.toggle("active", selected);
-        tab.setAttribute("aria-pressed", String(selected));
-      });
+      renderTabs();
       document.querySelectorAll("[data-filter-key]").forEach((input) => {
         input.checked = false;
       });
       document.body.classList.remove("filters-open");
       filterToggle?.setAttribute("aria-expanded", "false");
       render();
+      updateUrl();
     }
 
     renderFilters();
-    render();
+    restoreUrl();
+    window.addEventListener("popstate", restoreUrl);
 
     searchInput.addEventListener("input", () => {
       state.query = searchInput.value.trim().toLowerCase();
@@ -2216,12 +2341,9 @@
     tabs.forEach((tab) => {
       tab.addEventListener("click", () => {
         state.tab = tab.dataset.tab;
-        tabs.forEach((item) => {
-          const selected = item === tab;
-          item.classList.toggle("active", selected);
-          item.setAttribute("aria-pressed", String(selected));
-        });
+        renderTabs();
         render();
+        updateUrl();
       });
     });
 
@@ -2252,6 +2374,29 @@
     });
 
     dialogClose.addEventListener("click", () => dialog.close());
+    document.querySelector("#preview-previous").addEventListener("click", () => changePreviewPage(-1));
+    document.querySelector("#preview-next").addEventListener("click", () => changePreviewPage(1));
+    dialog.addEventListener("keydown", (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        changePreviewPage(event.key === "ArrowLeft" ? -1 : 1);
+      }
+    });
+    dialogImage.addEventListener("load", () => {
+      dialogPage.style.setProperty("--preview-aspect", `${dialogImage.naturalWidth} / ${dialogImage.naturalHeight}`);
+    });
+    dialogImage.addEventListener("error", () => {
+      dialogImage.hidden = true;
+      previewError.hidden = false;
+    });
+    dialog.addEventListener("close", () => {
+      // A history navigation may already have closed or reopened the preview.
+      if (dialog.open || !state.preview) return;
+      state.preview = null;
+      state.previewPage = 1;
+      updateUrl("replaceState");
+    });
     dialog.addEventListener("click", (event) => {
       if (event.target === dialog) dialog.close();
     });
