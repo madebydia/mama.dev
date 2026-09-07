@@ -6,6 +6,7 @@ plausible_script="pa-FbfZnrKrtH_PX4s12h-v-.js"
 html_count=0
 
 python3 scripts/verify-food-menu.py
+python3 scripts/verify-books.py "$site_dir"
 python3 scripts/build-worksheet-previews.py --check --site-dir "$site_dir/worksheets"
 
 while IFS= read -r -d '' html_file; do

@@ -247,3 +247,9 @@
   title: BelugaXL Aircraft Explorer
   description: Explore a 3D Airbus BelugaXL. Open the cargo door, pull apart the aircraft and its engines, and move and turn individual components.
   viewport: width=device-width, initial-scale=1, viewport-fit=cover
+
+- path: books
+  url: /books/
+  source: legacy-pages/books/index.html
+  title: Our Books
+  description: See which children’s books and older-reader stories are already in our family library.
