@@ -240,3 +240,10 @@
   source: legacy-pages/worksheets/index.html
   title: Worksheets
   description: Forty-four printable mazes, tracing pages, poster sets, and early-learning activities.
+
+- path: beluga
+  url: /beluga/
+  source: legacy-pages/beluga/index.html
+  title: BelugaXL Aircraft Explorer
+  description: Explore a 3D Airbus BelugaXL. Open the cargo door, pull apart the aircraft and its engines, and move and turn individual components.
+  viewport: width=device-width, initial-scale=1, viewport-fit=cover

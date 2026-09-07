@@ -36,6 +36,8 @@ fi
 
 for required_file in \
   index.html \
+  beluga/index.html \
+  beluga/THIRD-PARTY-NOTICES.txt \
   collection/index.html \
   collection/assets/lexus-lx.png \
   collection/assets/hot-wheels-limozeen.png \
@@ -192,3 +194,15 @@ if ! grep -q '@media(max-width:500px)' "$site_dir/collection/index.html" || ! gr
 fi
 
 echo "Verified $html_count HTML pages with one shared Plausible head each."
+
+# Beluga is a self-contained interactive page using the shared site head.
+python3 - "$site_dir/beluga/index.html" <<'PYBELUGA'
+from pathlib import Path
+import sys
+page = Path(sys.argv[1]).read_text()
+for required in ['<div id=root>', 'Look closer', 'Pull apart', 'Compressor', 'Turbine', 'For grown-ups', 'https://mama.dev/beluga/', 'basic visit counts']:
+    assert required in page, f'Beluga is missing {required}'
+for forbidden in ['127.0.0.1', '/Users/me/', 'No account, tracking, or internet connection is needed']:
+    assert forbidden not in page, f'Unexpected local-only content: {forbidden}'
+print('Verified Beluga explorer route, bundled app, and public-page copy.')
+PYBELUGA
